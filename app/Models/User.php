@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +46,47 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    
+    /**
+     * Check if the user has a specific role using the 'role' column
+     * This is a custom method that checks the role column directly
+     * 
+     * @param string $roleName
+     * @return bool
+     */
+    public function hasRoleAttribute(string $roleName): bool
+    {
+        return $this->role === $roleName;
+    }
+    
+    /**
+     * Check if the user is an admin
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRoleAttribute('admin');
+    }
+    
+    /**
+     * Check if the user is a coach
+     *
+     * @return bool
+     */
+    public function isCoach(): bool
+    {
+        return $this->hasRoleAttribute('coach');
+    }
+    
+    /**
+     * Check if the user is a player
+     *
+     * @return bool
+     */
+    public function isPlayer(): bool
+    {
+        return $this->hasRoleAttribute('player');
     }
 }

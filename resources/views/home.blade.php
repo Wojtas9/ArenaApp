@@ -7,23 +7,58 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes backgroundZoom {
             from { transform: scale(1); }
-            to { transform: scale(1.05); }
+            to { transform: scale(1.1); }
         }
         .animate-fade-in {
             opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
+            animation: fadeIn 0.5s ease-out forwards;
         }
         .animate-background {
-            animation: backgroundZoom 20s ease-in-out infinite alternate;
+            animation: backgroundZoom 10s ease-in-out infinite alternate;
         }
     </style>
 </head>
 <body class="dark:bg-gray-900 transition-colors duration-300">
+    <!-- Flash Messages -->
+    @if(session('error'))
+    <div class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50" id="flash-message">
+        {{ session('error') }}
+    </div>
+    <script>
+        setTimeout(function() {
+            document.getElementById('flash-message').style.display = 'none';
+        }, 5000);
+    </script>
+    @endif
+    <!-- Navigation -->
+    <nav class="absolute top-0 left-0 right-0 z-50 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="text-white text-2xl font-bold" ><img src="/images/logo.png" width="100px" height="100px"> App</div>
+                <div>
+                    @guest
+                        <a href="{{ route('login') }}" class="text-white hover:text-blue-200 mr-4 transition-colors">Login</a>
+                        <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">Register</a>
+                    @else
+                        <div class="flex items-center">
+                            <span class="text-white mr-4">Welcome, {{ auth()->user()->name }}</span>
+                            <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" 
+                               class="text-white hover:text-blue-200 mr-4 transition-colors">Dashboard</a>
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">Logout</button>
+                            </form>
+                        </div>
+                    @endguest
+                </div>
+            </div>
+        </div>
+    </nav>
     <!-- Hero Section -->
     <section class="relative bg-cover bg-center h-screen flex items-center animate-background" style="background-image: url('/images/bg_banner.jpg')">
         <div class="absolute inset-0 bg-black/50"></div>
@@ -31,8 +66,12 @@
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Manage Your Sports Venues</h1>
             <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">The ultimate platform for booking, managing, and optimizing your sports facilities</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105">Get Started</a>
-                <a href="#" class="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105">Learn More</a>
+                @guest
+                    <a href="{{ route('login') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105">Login</a>
+                    <a href="{{ route('register') }}" class="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105">Register</a>
+                @else
+                    <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105">Go to Dashboard</a>
+                @endguest
             </div>
         </div>
     </section>
@@ -76,9 +115,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
             <p class="text-xl mb-8 opacity-90">Join thousands of event organizers already using Arena</p>
-            <button class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105">
-                Create Free Account
-            </button>
+            @guest
+                <a href="{{ route('register') }}" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 inline-block">
+                    Create Free Account
+                </a>
+            @else
+                <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 inline-block">
+                    Go to Dashboard
+                </a>
+            @endguest
         </div>
     </section>
 </body>
