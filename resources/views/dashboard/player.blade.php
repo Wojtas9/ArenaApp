@@ -6,8 +6,13 @@
     <title>Player Dashboard</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-[#ebebeb] mt-25 p-6">
-    <div class="flex h-270 max-w-[1400px] mx-auto gap-6">
+<body class="bg-[#ebebeb] mt-25 p-6 relative overflow-hidden">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-0" style="min-width:100vw;min-height:100vh;">
+        <source src="/movies/hero_animation.mp4" type="video/mp4">
+    </video>
+    <div class="fixed inset-0 bg-black/50 z-10"></div>
+    <div class="flex h-270 max-w-[1400px] mx-auto gap-6 relative z-20">
         <!-- Sidebar -->
         <div class="w-64 bg-[#2E7D32] text-white p-6 rounded-2xl shadow-lg">
             <div class="flex items-center gap-3 mb-8">
@@ -52,7 +57,10 @@
                         <input type="text" placeholder="Search something..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-200">
                         <span class="absolute left-3 top-1/2 -translate-y-1/2">🔍</span>
                     </div>
-                    <button class="px-4 py-2 bg-[#EAAD59] text-white rounded-lg">Upgrade Plan</button>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">Logout</button>
+                    </form>
                 </div>
             </div>
 
