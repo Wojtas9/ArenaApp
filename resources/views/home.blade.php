@@ -60,7 +60,10 @@
         </div>
     </nav>
     <!-- Hero Section -->
-    <section class="relative bg-cover bg-center h-screen flex items-center animate-background" style="background-image: url('/images/bg_banner.jpg')">
+    <section class="relative h-screen flex items-center">
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover">
+            <source src="/movies/hero_animation.mp4" type="video/mp4">
+        </video>
         <div class="absolute inset-0 bg-black/50"></div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white z-10">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Manage Your Sports Venues</h1>
