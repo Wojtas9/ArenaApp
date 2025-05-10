@@ -26,9 +26,13 @@
             </div>
 
             <nav class="space-y-4">
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#4CAF50] transition-colors">
+                <a href="{{ route('player.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#4CAF50] transition-colors">
                     <span class="text-xl">📊</span>
                     <span>Dashboard</span>
+                </a>
+                <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#4CAF50] transition-colors">
+                    <span class="text-xl">📩</span>
+                    <span>Messages</span>
                 </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#4CAF50] transition-colors">
                     <span class="text-xl">📁</span>

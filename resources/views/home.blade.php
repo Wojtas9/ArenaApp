@@ -23,7 +23,7 @@
         }
     </style>
 </head>
-<body class="dark:bg-gray-900 transition-colors duration-300">
+<body class="dark:bg-gray-900 transition-colors duration-300 select-none">
     <!-- Flash Messages -->
     @if(session('error'))
     <div class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50" id="flash-message">
@@ -70,8 +70,8 @@
             <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">The ultimate platform for booking, managing, and optimizing your sports facilities</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 @guest
-                    <a href="{{ route('login') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105">Login</a>
-                    <a href="{{ route('register') }}" class="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105">Register</a>
+                <a href="{{ route('login') }}" class="bg-[#232325] hover:bg-[#ffc153] text-white px-4 py-2 rounded-lg transition-colors">Login</a>
+                <a href="{{ route('register') }}" class="bg-[#EAAD59] hover:bg-[#ffc153] text-white px-4 py-2 rounded-lg transition-colors">Register</a>
                 @else
                     <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105">Go to Dashboard</a>
                 @endguest
@@ -119,8 +119,7 @@
             <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
             <p class="text-xl mb-8 opacity-90">Join thousands of event organizers already using Arena</p>
             @guest
-                <a href="{{ route('register') }}" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 inline-block">
-                    Create Free Account
+            <a href="{{ route('register') }}" class="bg-[#232325] text-white shadow-xl/20 px-8 py-2 rounded-lg text-lg font-medium transition-all duration-300 transform  inline-block">                    Create Free Account
                 </a>
             @else
                 <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 inline-block">

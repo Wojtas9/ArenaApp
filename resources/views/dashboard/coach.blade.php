@@ -15,13 +15,13 @@
         </div>
 
         <nav class="space-y-4">
-            <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
+            <a href="{{ route('coach.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
                 <span class="text-xl">📊</span>
                 <span>Dashboard</span>
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
-                <span class="text-xl">📁</span>
-                <span>Folders</span>
+            <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
+                <span class="text-xl">📩</span>
+                <span>Messages</span>
             </a>
             <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
                 <span class="text-xl">⚙️</span>
@@ -139,6 +139,14 @@
                 <span class="text-xl">🏟️</span>
                 <span>Manage Sports Halls</span>
             </a>
+        </div>
+
+        <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+            <a href="{{ route('messages.index') }}" class="list-group-item list-group-item-action">
+                <span class="text-xl">📩</span>
+                <span>Messages</span>
+            </a>
+     
         </div>
     </div>
 </div>

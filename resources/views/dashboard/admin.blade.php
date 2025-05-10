@@ -1,35 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Admin Dashboard</div>
 
-                <div class="card-body">
-                    <div class="list-group">
-                        <a href="{{ route('spots.index') }}" class="list-group-item list-group-item-action">
-                            Manage Sports Halls
-                        </a>
-                        <!-- Add other admin options here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    @vite('resources/css/app.css')
-</head>
-<body class="bg-[#ebebeb] mt-25 p-6 relative overflow-hidden">
+<div class="bg-[#ebebeb] mt-25 p-6 relative overflow-hidden">
     <!-- Video Background -->
     <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-0" style="min-width:100vw;min-height:100vh;">
         <source src="/movies/hero_animation.mp4" type="video/mp4">
@@ -49,13 +23,17 @@
             </div>
 
             <nav class="space-y-4">
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
-                    <span class="text-xl">3</span>
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
+                    <span class="text-xl">📊</span>
                     <span>Dashboard</span>
                 </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                     <span class="text-xl">4</span>
                     <span>Folders</span>
+                </a>
+                <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
+                    <span class="text-xl">📩</span>
+                    <span>Messages</span>
                 </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                     <span class="text-xl">5</span>
@@ -100,12 +78,28 @@
                     <p class="text-sm opacity-70">124 MB</p>
                 </div>
                 <div class="p-6 bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center">
-                    <span class="text-4xl">10</span>
+                    <span class="text-4xl"> 
+                        <a href="{{ route('messages.index') }}" class="list-group-item list-group-item-action">
+                        Messages 
+                    </a>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Management Options -->
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="text-xl font-bold mb-4">Management Options</h3>
+                <div class="space-y-2">
+                    <a href="{{ route('spots.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] hover:text-white transition-colors">
+                        <span class="text-xl">🏟️</span>
+                        <span>Manage Sports Halls</span>
+                    </a>
+                    <!-- Other management options can be added here -->
                 </div>
             </div>
 
             <!-- Storage and Files Section -->
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-2 gap-6 mt-8">
                 <!-- Storage Overview -->
                 <div class="p-6 bg-white rounded-xl shadow-sm">
                     <div class="flex justify-between items-center mb-6">
@@ -162,5 +156,5 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection

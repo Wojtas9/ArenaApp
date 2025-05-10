@@ -10,7 +10,6 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
     /**
@@ -65,7 +64,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isAdmin(): bool
+public function isAdminRole(): bool
     {
         return $this->hasRoleAttribute('admin');
     }
@@ -75,7 +74,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isCoach(): bool
+    public function isCoachRole(): bool
     {
         return $this->hasRoleAttribute('coach');
     }
@@ -85,8 +84,57 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isPlayer(): bool
+    public function isPlayerRole(): bool
     {
         return $this->hasRoleAttribute('player');
+    }
+
+    /**
+     * Check if user is admin
+     */
+    /**
+     * Check if the user is an admin
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if the user is a coach
+     *
+     * @return bool
+     */
+    public function isCoach()
+    {
+        return $this->role === 'coach';
+    }
+
+    /**
+     * Check if the user is a player
+     *
+     * @return bool
+     */
+    public function isPlayer()
+    {
+        return $this->role === 'player';
+    }
+
+    /**
+     * Get messages sent by the user.
+     */
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
+     * Get messages received by the user.
+     */
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'recipient_id');
     }
 }
