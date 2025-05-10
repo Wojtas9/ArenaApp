@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CoachController;
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\SpotController;
 
 
 // Home route
@@ -33,11 +34,14 @@ Route::middleware('auth')->group(function () {
     // Admin routes
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::resource('spots', SpotController::class);
     });
     
     // Coach routes
     Route::middleware('role:coach')->group(function () {
         Route::get('/coach/dashboard', [CoachController::class, 'dashboard'])->name('coach.dashboard');
+        Route::resource('spots', SpotController::class)->except(['destroy']);
+        
     });
     
     // Player routes
