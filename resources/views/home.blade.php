@@ -71,7 +71,7 @@
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 @guest
                     <a href="{{ route('login') }}" class="btn-primary text-lg font-medium">Login</a>
-                    <a href="{{ route('register') }}" class="btn-primary text-lg font-medium">Register</a>
+                    <a href="{{ route('register') }}" class="btn-primary bg-[#232325] text-lg font-medium">Register</a>
                 @else
                     <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" class="btn-primary text-lg font-medium inline-block">Go to Dashboard</a>
                 @endguest
