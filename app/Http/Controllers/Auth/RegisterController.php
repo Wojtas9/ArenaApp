@@ -39,6 +39,12 @@ class RegisterController extends Controller
 
         // Assign Spatie role
         $user->assignRole($request->role);
+        
+        // Check if user is blocked before login (unlikely for new registrations, but added for completeness)
+        if ($user->is_blocked) {
+            return redirect()->route('login')
+                ->with('error', 'Your account has been blocked. Please contact the administrator.');
+        }
 
         Auth::login($user);
 

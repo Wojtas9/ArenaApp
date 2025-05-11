@@ -29,6 +29,14 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
+        // Check if user is blocked before authentication
+        $user = User::where('email', $request->email)->first();
+        if ($user && $user->is_blocked) {
+            return back()->withErrors([
+                'email' => 'Your account has been blocked. Please contact the administrator.',
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
