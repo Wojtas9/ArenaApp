@@ -33,6 +33,11 @@ Route::middleware('auth')->group(function () {
     // Admin routes
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+        Route::get('/admin/users/{id}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/admin/users/{id}', [AdminController::class, 'update'])->name('admin.users.update');
+        Route::delete('/admin/users/{id}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
+        Route::post('/admin/users/{id}/toggle-block', [AdminController::class, 'toggleBlock'])->name('admin.users.toggle-block');
     });
     
     // Coach routes

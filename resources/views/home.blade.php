@@ -43,7 +43,7 @@
                 <div>
                     @guest
                         <a href="{{ route('login') }}" class="text-white hover:text-blue-200 mr-4 transition-colors">Login</a>
-                        <a href="{{ route('register') }}" class="bg-[#EAAD59] hover:bg-[#ffc153] text-white px-4 py-2 rounded-lg transition-colors">Register</a>
+                        <a href="{{ route('register') }}" class="bg-[#EAAD59] hover:bg-[#ffc153] text-[#232325] px-4 py-2 rounded-lg transition-colors">Register</a>
                     @else
                         <div class="flex items-center">
                             <span class="text-white mr-4">Welcome, {{ auth()->user()->name }}</span>
@@ -71,7 +71,7 @@
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 @guest
                     <a href="{{ route('login') }}" class="bg-[#232325] hover:bg-[#ffc153] text-white px-4 py-2 rounded-lg transition-colors">Login</a>
-                    <a href="{{ route('register') }}" class="bg-[#EAAD59] hover:bg-[#ffc153] text-white px-4 py-2 rounded-lg transition-colors">Register</a>
+                    <a href="{{ route('register') }}" class="bg-[#EAAD59] hover:bg-[#ffc153] text-[#232325] px-4 py-2 rounded-lg transition-colors">Register</a>
                 @else
                     <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" class="btn-primary text-lg font-medium inline-block">Go to Dashboard</a>
                 @endguest

@@ -14,7 +14,7 @@
     <div class="fixed inset-0 bg-black/50 z-10"></div>
     <div class="flex h-270 max-w-[1400px] mx-auto gap-6 relative z-20">
         <!-- Sidebar -->
-        <div class="w-64 bg-[#2E7D32] text-white p-6 rounded-2xl shadow-lg">
+        <div class="w-64 bg-[#2E7D32] text-white border-1 border-solid border-[#232325]  p-6 rounded-2xl shadow-lg">
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-12 h-12 rounded-full bg-[#4CAF50] flex items-center justify-center">
                     <span class="text-xl">🏃</span>
