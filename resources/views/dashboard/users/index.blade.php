@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management - Admin Dashboard</title>
     @vite('resources/css/app.css')
+    <style>
+        .filter-btn.active {
+            outline: 2px solid white;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body class="bg-[#ebebeb] mt-25 p-6 relative overflow-hidden">
     <!-- Video Background -->
@@ -17,21 +23,21 @@
         <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-2xl shadow-lg">
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">
-                    <span class="text-xl">1</span>
+                    <span class="text-xl">👨‍💼</span>
                 </div>
                 <div>
                     <h3 class="font-semibold">Admin Name</h3>
-                    <p class="text-sm opacity-70">2</p>
+                    <p class="text-sm opacity-70">Admin</p>
                 </div>
             </div>
 
             <nav class="space-y-4">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
-                    <span class="text-xl">3</span>
+                    <span class="text-xl">📊</span>
                     <span>Dashboard</span>
                 </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">4</span>
+                    <span class="text-xl">📁</span>
                     <span>Folders</span>
                 </a>
                 <a href="{{ route('admin.users') }}" class="flex items-center gap-3 p-3 rounded bg-[#8C508F] transition-colors">
@@ -39,13 +45,13 @@
                     <span>User Management</span>
                 </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">5</span>
+                    <span class="text-xl">⚙️</span>
                     <span>Settings</span>
                 </a>
             </nav>
 
             <div class="mt-8 p-4 border border-[#8C508F] rounded-lg">
-                <span class="text-xl block mb-2">6</span>
+                <span class="text-xl block mb-2">📤</span>
                 <p class="text-sm">Add files</p>
                 <p class="text-xs opacity-70">Up to 20 GB</p>
             </div>
@@ -58,7 +64,7 @@
                 <h1 class="text-2xl font-bold">User Management</h1>
                 <div class="flex items-center gap-4">
                     <div class="relative">
-                        <input type="text" placeholder="Search users..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-200">
+                        <input type="text" id="searchInput" placeholder="Search users..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-200">
                         <span class="absolute left-3 top-1/2 -translate-y-1/2">🔍</span>
                     </div>
                     <form method="POST" action="{{ route('logout') }}">
@@ -66,6 +72,14 @@
                         <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">Logout</button>
                     </form>
                 </div>
+            </div>
+            
+            <!-- Role Filter Buttons -->
+            <div class="flex gap-3 mb-6">
+                <button id="show-all" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg filter-btn active">Show All</button>
+                <button id="show-admins" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg filter-btn">Show Admins</button>
+                <button id="show-coachs" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg filter-btn">Show Coaches</button>
+                <button id="show-players" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg filter-btn">Show Players</button>
             </div>
 
             <!-- Flash Messages -->
@@ -151,5 +165,50 @@
             </div>
         </div>
     </div>
+    <!-- Filter Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const searchInput = document.getElementById('searchInput');
+            const rows = document.querySelectorAll('tbody tr');
+            
+            function filterTable() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const activeRole = document.querySelector('.filter-btn.active').id.replace('show-', '');
+                
+                rows.forEach(row => {
+                    const name = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                    const email = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    const roleCell = row.querySelector('td:nth-child(3) span');
+                    const roleText = roleCell.textContent.trim().toLowerCase();
+                    
+                    let filterRole = activeRole === 'all' ? 'all' : activeRole;
+                    if (filterRole !== 'all' && filterRole.endsWith('s')) {
+                        filterRole = filterRole.slice(0, -1);
+                    }
+                    if (filterRole !== 'all') {
+                        filterRole = filterRole.toLowerCase();
+                    }
+                    
+                    const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                    const matchesRole = filterRole === 'all' || roleText === filterRole || 
+                        (filterRole === 'coach' && roleText.includes('coach'));
+                    
+                    row.style.display = matchesSearch && matchesRole ? '' : 'none';
+                });
+            }
+            
+            // Add event listeners
+            searchInput.addEventListener('input', filterTable);
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    filterTable();
+                });
+            });
+        });
+    </script>
 </body>
 </html>

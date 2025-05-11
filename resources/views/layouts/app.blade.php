@@ -9,6 +9,9 @@
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <!-- Additional styles -->
     <style>
         @keyframes fadeIn {
@@ -38,5 +41,35 @@
     <main>
         @yield('content')
     </main>
+
+    @if(isset($roleStats))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('rolesChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Admin', 'Coach', 'Player'],
+                        datasets: [{
+                            data: [{{ $roleStats['admin'] }}, {{ $roleStats['coach'] }}, {{ $roleStats['player'] }}],
+                            backgroundColor: ['#CF5B44', '#8C508F', '#0b2558'],
+                            borderWidth: 0,
+                            cutout: '70%'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    @endif
 </body>
 </html>

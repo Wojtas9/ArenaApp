@@ -40,21 +40,21 @@
         <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-4xl shadow-lg drop-shadow-xl/50">
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">
-                    <span class="text-xl">1</span>
+                    <span class="text-xl">👨‍💼</span>
                 </div>
                 <div>
                     <h3 class="font-semibold">Admin Name</h3>
-                    <p class="text-sm opacity-70">2</p>
+                    <p class="text-sm opacity-70"></p>
                 </div>
             </div>
 
             <nav class="space-y-4">
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
-                    <span class="text-xl">3</span>
+                    <span class="text-xl">📊</span>
                     <span>Dashboard</span>
                 </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">4</span>
+                    <span class="text-xl">📁</span>
                     <span>Folders</span>
                 </a>
                 <a href="{{ route('admin.users') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
@@ -62,7 +62,7 @@
                     <span>User Management</span>
                 </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">5</span>
+                    <span class="text-xl">⚙️</span>
                     <span>Settings</span>
                 </a>
             </nav>
@@ -113,29 +113,32 @@
                 <!-- Storage Overview -->
                 <div class="p-6 bg-white rounded-xl shadow-sm">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-semibold">Storage</h3>
-                        <span>11</span>
+                        <h3 class="font-semibold">User Roles Distribution</h3>
                     </div>
-                    <div class="relative w-32 h-32 mx-auto mb-6">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <span class="text-2xl font-bold">37%</span>
-                        </div>
-                        <span>12</span>
+                    <div class="relative w-64 h-64 mx-auto mb-6">
+                        <canvas id="rolesChart"></canvas>
                     </div>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
                             <span class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full bg-[#CF5B44]"></span>
-                                <span>Documents</span>
+                                <span>Admin</span>
                             </span>
-                            <span>68 GB</span>
+                            <span>{{ $roleStats['admin'] }} users</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full bg-[#8C508F]"></span>
-                                <span>Images</span>
+                                <span>Coach</span>
                             </span>
-                            <span>315 GB</span>
+                            <span>{{ $roleStats['coach'] }} users</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-[#0b2558]"></span>
+                                <span>Player</span>
+                            </span>
+                            <span>{{ $roleStats['player'] }} users</span>
                         </div>
                     </div>
                 </div>

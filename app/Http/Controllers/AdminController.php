@@ -16,7 +16,13 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
-        return view('dashboard.admin');
+        $roleStats = [
+            'admin' => User::where('role', 'admin')->count(),
+            'coach' => User::where('role', 'coach')->count(),
+            'player' => User::where('role', 'player')->count(),
+        ];
+        
+        return view('dashboard.admin', compact('roleStats'));
     }
     
     /**
