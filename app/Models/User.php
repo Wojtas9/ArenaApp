@@ -11,6 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
+
     use HasFactory, Notifiable, HasRoles;
 
     /**
@@ -23,7 +24,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+
         'is_blocked',
+
     ];
 
     /**
@@ -76,8 +79,9 @@ class User extends Authenticatable
      *
      * @return bool
      */
+
     public function isCoach(): bool
-    {
+   {
         return $this->hasRoleAttribute('coach');
     }
     
@@ -86,8 +90,10 @@ class User extends Authenticatable
      *
      * @return bool
      */
+    
     public function isPlayer(): bool
     {
         return $this->hasRoleAttribute('player');
     }
+
 }

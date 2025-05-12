@@ -29,6 +29,7 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
+
         // Check if user is blocked before authentication
         $user = User::where('email', $request->email)->first();
         if ($user && $user->is_blocked) {

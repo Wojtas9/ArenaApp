@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
+
 class AdminController extends Controller
 {
     /**
@@ -16,6 +17,7 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
+
         $roleStats = [
             'admin' => User::where('role', 'admin')->count(),
             'coach' => User::where('role', 'coach')->count(),
@@ -123,5 +125,7 @@ class AdminController extends Controller
         
         $message = $user->is_blocked ? 'User blocked successfully' : 'User unblocked successfully';
         return redirect()->route('admin.users')->with('success', $message);
+
+        return view('dashboard.admin');
     }
 }

@@ -39,11 +39,19 @@
     <nav class="absolute top-0 left-0 right-0 z-50 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
+<<<<<<< HEAD
                 <div class="text-white text-2xl font-bold" >ArenApp</div>
                 <div>
                     @guest
                         <a href="{{ route('login') }}" class="text-white hover:text-blue-200 mr-4 transition-colors">Login</a>
                         <a href="{{ route('register') }}" class="bg-[#EAAD59] hover:bg-[#ffc153] text-[#232325] px-4 py-2 rounded-lg transition-colors">Register</a>
+=======
+                <div class="text-white text-2xl font-bold" ><img src="/images/logo.png" width="100px" height="100px"> App</div>
+                <div>
+                    @guest
+                        <a href="{{ route('login') }}" class="text-white hover:text-blue-200 mr-4 transition-colors">Login</a>
+                        <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">Register</a>
+>>>>>>> Spot_Picture
                     @else
                         <div class="flex items-center">
                             <span class="text-white mr-4">Welcome, {{ auth()->user()->name }}</span>
@@ -70,17 +78,28 @@
             <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">The ultimate platform for booking, managing, and optimizing your sports facilities</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 @guest
+<<<<<<< HEAD
                     <a href="{{ route('login') }}" class="bg-[#232325] hover:bg-[#ffc153] text-white px-4 py-2 rounded-lg transition-colors">Login</a>
                     <a href="{{ route('register') }}" class="bg-[#EAAD59] hover:bg-[#ffc153] text-[#232325] px-4 py-2 rounded-lg transition-colors">Register</a>
                 @else
                     <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" class="btn-primary text-lg font-medium inline-block">Go to Dashboard</a>
+=======
+                <a href="{{ route('login') }}" class="bg-[#232325] hover:bg-[#ffc153] text-white px-4 py-2 rounded-lg transition-colors">Login</a>
+                <a href="{{ route('register') }}" class="bg-[#EAAD59] hover:bg-[#ffc153] text-white px-4 py-2 rounded-lg transition-colors">Register</a>
+                @else
+                    <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-105">Go to Dashboard</a>
+>>>>>>> Spot_Picture
                 @endguest
             </div>
         </div>
     </section>
 
     <!-- Features Grid -->
+<<<<<<< HEAD
     <section class="py-20 bg-[#232325] dark:bg-gray-800">
+=======
+    <section class="py-20 bg-[#232325] dark:bg-gray-800">
+>>>>>>> Spot_Picture
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <!-- Feature Card 1 -->
@@ -114,13 +133,21 @@
     </section>
 
     <!-- CTA Section -->
+<<<<<<< HEAD
     <section class="bg-gradient-to-r from-[#ffcc52] to-[#EAAD59] text-white py-20">
+=======
+    <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+>>>>>>> Spot_Picture
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
             <p class="text-xl mb-8 opacity-90">Join thousands of event organizers already using Arena</p>
             @guest
+<<<<<<< HEAD
                 <a href="{{ route('register') }}" class="bg-[#232325] text-white shadow-xl/20 px-8 py-2 rounded-lg text-lg font-medium transition-all duration-300 transform  inline-block">
                     Create Free Account
+=======
+            <a href="{{ route('register') }}" class="bg-[#232325] text-white shadow-xl/20 px-8 py-2 rounded-lg text-lg font-medium transition-all duration-300 transform  inline-block">                    Create Free Account
+>>>>>>> Spot_Picture
                 </a>
             @else
                 <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 inline-block">

@@ -46,6 +46,7 @@ class RegisterController extends Controller
                 ->with('error', 'Your account has been blocked. Please contact the administrator.');
         }
 
+
         Auth::login($user);
 
         // Redirect based on user role

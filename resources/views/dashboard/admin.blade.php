@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -30,11 +31,17 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-[#ebebeb] mt-15 p-6 relative overflow-hidden">
+
+
+
+<div class="bg-[#ebebeb] mt-25 p-6 relative overflow-hidden">
+
     <!-- Video Background -->
     <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-0" style="min-width:100vw;min-height:100vh;">
         <source src="/movies/hero_animation.mp4" type="video/mp4">
     </video>
     <div class="fixed inset-0 bg-black/50 z-10"></div>
+
     <div class="flex h-270 max-w-[1400px] mx-auto gap-5 relative z-20">
         <!-- Sidebar -->
         <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-4xl shadow-lg drop-shadow-xl/50">
@@ -45,17 +52,15 @@
                 <div>
                     <h3 class="font-semibold">Admin Name</h3>
                     <p class="text-sm opacity-70"></p>
+
                 </div>
             </div>
 
             <nav class="space-y-4">
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
+
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
                     <span class="text-xl">📊</span>
                     <span>Dashboard</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">📁</span>
-                    <span>Folders</span>
                 </a>
                 <a href="{{ route('admin.users') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                     <span class="text-xl">👥</span>
@@ -63,6 +68,13 @@
                 </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                     <span class="text-xl">⚙️</span>
+
+                <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
+                    <span class="text-xl">📩</span>
+                    <span>Messages</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
+                    <span class="text-xl">5</span>
                     <span>Settings</span>
                 </a>
             </nav>
@@ -75,7 +87,9 @@
         </div>
 
         <!-- Main Content -->
+
         <div class="flex-1 p-8 bg-white rounded-4xl shadow-lg drop-shadow-xl/50">
+
             <!-- Top Bar -->
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-2xl font-bold">Manage your folders</h1>
@@ -104,11 +118,28 @@
                     <p class="text-sm opacity-70">124 MB</p>
                 </div>
                 <div class="p-6 bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center">
-                    <span class="text-4xl">10</span>
+                    <span class="text-4xl"> 
+                        <a href="{{ route('messages.index') }}" class="list-group-item list-group-item-action">
+                        Messages 
+                    </a>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Management Options -->
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="text-xl font-bold mb-4">Management Options</h3>
+                <div class="space-y-2">
+                    <a href="{{ route('spots.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] hover:text-white transition-colors">
+                        <span class="text-xl">🏟️</span>
+                        <span>Manage Sports Halls</span>
+                    </a>
+                    <!-- Other management options can be added here -->
                 </div>
             </div>
 
             <!-- Storage and Files Section -->
+
             <div class="grid grid-cols-2 gap-6">
                 <!-- Storage Overview -->
                 <div class="p-6 bg-white rounded-xl shadow-sm">
@@ -117,18 +148,22 @@
                     </div>
                     <div class="relative w-64 h-64 mx-auto mb-6">
                         <canvas id="rolesChart"></canvas>
+
                     </div>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
                             <span class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full bg-[#CF5B44]"></span>
+
                                 <span>Admin</span>
                             </span>
                             <span>{{ $roleStats['admin'] }} users</span>
+
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full bg-[#8C508F]"></span>
+
                                 <span>Coach</span>
                             </span>
                             <span>{{ $roleStats['coach'] }} users</span>
@@ -169,5 +204,10 @@
             </div>
         </div>
     </div>
+
 </body>
 </html>
+
+</div>
+@endsection
+ Spot_Picture

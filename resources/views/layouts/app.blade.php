@@ -9,9 +9,12 @@
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+<<<<<<< HEAD
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+=======
+>>>>>>> Spot_Picture
     <!-- Additional styles -->
     <style>
         @keyframes fadeIn {
@@ -41,6 +44,7 @@
     <main>
         @yield('content')
     </main>
+<<<<<<< HEAD
 
     @if(isset($roleStats))
     <script>
@@ -71,5 +75,7 @@
         });
     </script>
     @endif
+=======
+>>>>>>> Spot_Picture
 </body>
 </html>

@@ -224,7 +224,7 @@
         
         <div class="login-image-section">
             <div class="login-image-content">
-            <h2 class="text-3xl font-bold mb-4">Find your place<br></h2>
+                <h2 class="text-3xl font-bold mb-4">Find your place<br></h2>
                 <p class="text-sm mt-2">in the world of arenas</p>
             </div>
         </div>

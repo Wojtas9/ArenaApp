@@ -40,6 +40,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckUserBlocked::class,
+
         ],
 
         'api' => [
@@ -74,5 +75,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'check.role' => \App\Http\Middleware\CheckRole::class,
         'check.blocked' => \App\Http\Middleware\CheckUserBlocked::class,
+
     ];
 }

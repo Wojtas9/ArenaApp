@@ -1,38 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coach Dashboard</title>
-    @vite('resources/css/app.css')
-</head>
-<body class="bg-[#ebebeb] mt-25 p-6">
-        <!-- Video Background -->
-        <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-0" style="min-width:100vw;min-height:100vh;">
-        <source src="/movies/hero_animation.mp4" type="video/mp4">
-    </video>
-    <div class="fixed inset-0 bg-black/50 z-10"></div>
-    <div class="flex h-270 max-w-[1400px] mx-auto gap-6 relative z-20">
-        <!-- Sidebar -->
-        <div class="w-64 bg-[#0B2558] text-white border-1 border-solid border-[#232325] p-6 rounded-2xl shadow-lg">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 rounded-full bg-[#1a3a7a] flex items-center justify-center">
-                    <span class="text-xl">👨‍🏫</span>
-                </div>
-                <div>
-                    <h3 class="font-semibold">Coach Name</h3>
-                    <p class="text-sm opacity-70">Coach</p>
-                </div>
+
+@extends('layouts.app')
+
+@section('content')
+<div class="flex h-270 max-w-[1400px] mx-auto gap-6">
+    <!-- Sidebar -->
+    <div class="w-64 bg-[#0B2558] text-white p-6 rounded-2xl shadow-lg">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-12 h-12 rounded-full bg-[#1a3a7a] flex items-center justify-center">
+                <span class="text-xl">👨‍🏫</span>
             </div>
+            <div>
+                <h3 class="font-semibold">Coach Name</h3>
+                <p class="text-sm opacity-70">Coach</p>
+            </div>
+        </div>
 
         <nav class="space-y-4">
-            <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
+            <a href="{{ route('coach.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
                 <span class="text-xl">📊</span>
                 <span>Dashboard</span>
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
-                <span class="text-xl">📁</span>
-                <span>Folders</span>
+            <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
+                <span class="text-xl">📩</span>
+                <span>Messages</span>
+
             </a>
             <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
                 <span class="text-xl">⚙️</span>
@@ -142,8 +133,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
+        </div>    
         <!-- Sports Halls Management Link -->
         <div class="mt-8 p-4 bg-gray-50 rounded-lg">
             <a href="{{ route('spots.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] hover:text-white transition-colors">
@@ -151,5 +141,15 @@
                 <span>Manage Sports Halls</span>
             </a>
         </div>
+
+        <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+            <a href="{{ route('messages.index') }}" class="list-group-item list-group-item-action">
+                <span class="text-xl">📩</span>
+                <span>Messages</span>
+            </a>
+     
+        </div>
     </div>
 </div>
+@endsection
+
