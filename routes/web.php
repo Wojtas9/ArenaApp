@@ -12,8 +12,6 @@ use App\Http\Controllers\SpotController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\DashboardController;
 
-
-
 // Home route
 Route::get('/', function () {
     return view('home');
@@ -35,42 +33,34 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 
 // Dashboard routes with role middleware
 Route::middleware('auth')->group(function () {
-
-    Route::middleware(['auth', 'check.role:coach'])->group(function () {
-        Route::get('/coach/dashboard', [DashboardController::class, 'coachDashboard'])->name('coach.dashboard');
+    // Coach dashboard route
+    Route::middleware('role:coach')->group(function () {
+        Route::get('/coach/dashboard', [CoachController::class, 'dashboard'])->name('coach.dashboard');
+    });
+    
+    // Shared routes for admin and coach
+    Route::middleware('role:admin|coach')->group(function () {
+        Route::resource('spots', SpotController::class);
     });
     
     // Admin routes
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-        Route::resource('spots', SpotController::class);
-
+        
         // User management routes
-
         Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
         Route::get('/admin/users/{id}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
         Route::put('/admin/users/{id}', [AdminController::class, 'update'])->name('admin.users.update');
         Route::delete('/admin/users/{id}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
         Route::post('/admin/users/{id}/toggle-block', [AdminController::class, 'toggleBlock'])->name('admin.users.toggle-block');
-
-    });
-    
-    // Coach routes
-    Route::middleware('role:coach')->group(function () {
-        Route::get('/coach/dashboard', [CoachController::class, 'dashboard'])->name('coach.dashboard');
-       Route::resource('spots', SpotController::class)->except(['destroy']);
-       Route::delete('spots/{spot}', [SpotController::class, 'destroy'])->name('spots.destroy');
-
     });
     
     // Player routes
     Route::middleware('role:player')->group(function () {
         Route::get('/player/dashboard', [PlayerController::class, 'dashboard'])->name('player.dashboard');
     });
-
     
     // Message routes (available to all authenticated users)
     Route::resource('messages', MessageController::class)->except(['edit', 'update']);
     Route::get('messages/{message}/reply', [MessageController::class, 'reply'])->name('messages.reply');
-
 });

@@ -21,29 +21,33 @@
             </div>
 
             <nav class="space-y-4">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
+                <a href="{{ route(auth()->user()->role . '.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
                     <span class="text-xl">📊</span>
-                    <span>Dashboard</span>
+                    <span>{{ ucfirst(auth()->user()->role) }} Dashboard</span>
                 </a>
-                <a href="{{ route('spots.index') }}" class="flex items-center gap-3 p-3 rounded bg-[#8C508F] transition-colors">
-                    <span class="text-xl">🏟️</span>
-                    <span>Sports Halls</span>
-                </a>
+
                 <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                     <span class="text-xl">📩</span>
                     <span>Messages</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">⚙️</span>
-                    <span>Settings</span>
+                <a href="{{ route('spots.index') }}" class="flex items-center gap-3 p-3 rounded bg-[#8C508F] transition-colors">
+                    <span class="text-xl">🏟️</span>
+                    <span>Spots </span>
                 </a>
+
+                <div class="mt-8">
+                    <form action="{{ route('logout') }}" method="POST" class="w-full">
+                        @csrf
+                        <button type="submit" class="w-full bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <span class="text-xl">🚪</span>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </div>
+
             </nav>
 
-            <div class="mt-8 p-4 border border-[#8C508F] rounded-lg">
-                <span class="text-xl block mb-2">📤</span>
-                <p class="text-sm">Add files</p>
-                <p class="text-xs opacity-70">Up to 20 GB</p>
-            </div>
+
         </div>
 
         <!-- Main Content -->
@@ -56,7 +60,6 @@
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">Logout</button>
                     </form>
                 </div>
             </div>

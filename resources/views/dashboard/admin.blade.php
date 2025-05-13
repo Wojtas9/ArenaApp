@@ -1,27 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Admin Dashboard</div>
-
-                <div class="card-body">
-                    <div class="list-group">
-                        <a href="{{ route('spots.index') }}" class="list-group-item list-group-item-action">
-                            Manage Sports Halls
-                        </a>
-                        <!-- Add other admin options here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,17 +45,17 @@
                     <span class="text-xl">👥</span>
                     <span>User Management</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">⚙️</span>
-
+                
                 <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                     <span class="text-xl">📩</span>
                     <span>Messages</span>
+
                 </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">5</span>
+                    <span class="text-xl">⚙️</span>
                     <span>Settings</span>
                 </a>
+         
             </nav>
 
             <div class="mt-8 p-4 border border-[#8C508F] rounded-lg">
@@ -210,4 +189,3 @@
 
 </div>
 @endsection
- Spot_Picture

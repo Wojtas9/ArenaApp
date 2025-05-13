@@ -134,19 +134,13 @@
                 </div>
             </div>
         </div>    
-        <!-- Sports Halls Management Link -->
+        <!-- Spots Management Link -->
         <div class="mt-8 p-4 bg-gray-50 rounded-lg">
             <a href="{{ route('spots.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] hover:text-white transition-colors">
                 <span class="text-xl">🏟️</span>
-                <span>Manage Sports Halls</span>
+                <span>Manage Spots</span>
             </a>
         </div>
-
-        <div class="mt-8 p-4 bg-gray-50 rounded-lg">
-            <a href="{{ route('messages.index') }}" class="list-group-item list-group-item-action">
-                <span class="text-xl">📩</span>
-                <span>Messages</span>
-            </a>
      
         </div>
     </div>
