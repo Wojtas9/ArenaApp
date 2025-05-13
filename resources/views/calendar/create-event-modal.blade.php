@@ -1,6 +1,7 @@
 <!-- Event Creation Modal -->
-<div id="create-event-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
-    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+<div id="create-event-modal" class="fixed inset-0 hidden overflow-y-auto h-full w-full z-50">
+    <div class="fixed inset-0 bg-opacity-50 backdrop-blur-sm transition-opacity" id="modal-backdrop"></div>
+    <div class="relative top-60 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white z-[60]">
         <div class="mt-3">
             <div class="flex justify-between items-center pb-3">
                 <h3 class="text-lg font-medium text-gray-900">Create New Event</h3>
@@ -80,6 +81,16 @@
     </div>
 </div>
 
+<!-- Success Notification -->
+<div id="success-notification" class="hidden fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[70] transform transition-all duration-300" style="transform: translateY(-100%)">
+    <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span>Event created successfully!</span>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const createButton = document.getElementById('create-event-button');
@@ -87,6 +98,9 @@
         const closeModal = document.getElementById('close-modal');
         const cancelEvent = document.getElementById('cancel-event');
         const eventForm = document.getElementById('event-form');
+        const notification = document.getElementById('success-notification');
+        
+        // Use the global calendar instance
         
         // Load categories
         fetch('/api/categories')
@@ -114,10 +128,24 @@
                     spotSelect.appendChild(option);
                 });
             });
+            
+        // Load instructors
+        fetch('/api/instructors')
+            .then(response => response.json())
+            .then(instructors => {
+                const instructorSelect = document.getElementById('event-instructor');
+                instructors.forEach(instructor => {
+                    const option = document.createElement('option');
+                    option.value = instructor.id;
+                    option.textContent = instructor.name;
+                    instructorSelect.appendChild(option);
+                });
+            });
         
         // Open modal when Create button is clicked
         createButton.addEventListener('click', function() {
             modal.classList.remove('hidden');
+            document.getElementById('calendar').classList.add('blur-effect');
             
             // Set default start and end times
             const now = new Date();
@@ -133,10 +161,22 @@
         // Close modal
         closeModal.addEventListener('click', function() {
             modal.classList.add('hidden');
+            document.getElementById('calendar').classList.remove('blur-effect');
+        });
+        
+        // Handle escape key press
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+                document.getElementById('calendar').classList.remove('blur-effect');
+                eventForm.reset();
+            }
         });
         
         cancelEvent.addEventListener('click', function() {
             modal.classList.add('hidden');
+            document.getElementById('calendar').classList.remove('blur-effect');
+            eventForm.reset();
         });
         
         // Handle form submission
@@ -182,26 +222,45 @@
             })
             .then(event => {
                 // Add the new event to the calendar
-                calendar.addEvent({
-                    id: event.id,
-                    title: event.title,
-                    start: event.start_time,
-                    end: event.end_time,
-                    allDay: event.is_all_day,
-                    backgroundColor: event.color,
-                    borderColor: event.color,
-                    extendedProps: {
-                        description: event.description,
-                        category: event.category.name,
-                        spot: event.spot ? event.spot.name : null,
-                        instructor: event.instructor ? event.instructor.name : null,
-                        priority: event.priority
-                    }
-                });
+                if (typeof window.calendar !== 'undefined') {
+                    window.calendar.addEvent({
+                        id: event.id,
+                        title: event.title,
+                        start: event.start_time,
+                        end: event.end_time,
+                        allDay: event.is_all_day,
+                        backgroundColor: event.color,
+                        borderColor: event.color,
+                        extendedProps: {
+                            description: event.description,
+                            category: event.category.name,
+                            spot: event.spot ? event.spot.name : null,
+                            instructor: event.instructor ? event.instructor.name : null,
+                            priority: event.priority
+                        }
+                    });
+                    
+                    // Make sure to refresh calendar to show the new event
+                    window.calendar.refetchEvents();
+                }
                 
                 // Close the modal and reset the form
                 modal.classList.add('hidden');
+                document.getElementById('calendar').classList.remove('blur-effect');
                 eventForm.reset();
+                
+                // Show success notification
+                notification.classList.remove('hidden');
+                notification.style.transform = 'translateY(0)';
+                
+                // Auto-hide notification after 3 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateY(-100%)';
+                    setTimeout(() => {
+                        notification.classList.add('hidden');
+                        notification.style.transform = '';
+                    }, 300);
+                }, 3000);
             })
             .catch(error => {
                 console.error('Error creating event:', error);

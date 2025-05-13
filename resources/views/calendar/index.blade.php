@@ -62,52 +62,6 @@
             <button id="create-event-button" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
                 Create
             </button>
-            
-            <!-- Create Event Modal -->
-            <div id="create-event-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-                <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-semibold">Create New Event</h3>
-                        <button id="close-modal" class="text-gray-500 hover:text-gray-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                    <form id="create-event-form">
-                        @csrf
-                        <div class="mb-4">
-                            <label for="event-title" class="block text-gray-700 text-sm font-medium mb-1">Title</label>
-                            <input type="text" id="event-title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="event-start" class="block text-gray-700 text-sm font-medium mb-1">Start Time</label>
-                                <input type="datetime-local" id="event-start" name="start_time" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
-                            </div>
-                            <div>
-                                <label for="event-end" class="block text-gray-700 text-sm font-medium mb-1">End Time</label>
-                                <input type="datetime-local" id="event-end" name="end_time" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label for="event-category" class="block text-gray-700 text-sm font-medium mb-1">Category</label>
-                            <select id="event-category" name="category_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
-                                <option value="">Select a category</option>
-                                <!-- Categories will be loaded dynamically -->
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="event-description" class="block text-gray-700 text-sm font-medium mb-1">Description</label>
-                            <textarea id="event-description" name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
-                        </div>
-                        <div class="flex justify-end">
-                            <button type="button" id="cancel-event" class="mr-2 px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">Cancel</button>
-                            <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">Create Event</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
 
         <div class="grid grid-cols-4 gap-6">
@@ -149,6 +103,12 @@
     /* Custom Calendar Styling */
     .fc-day-today {
         background-color: rgba(139, 92, 246, 0.1) !important;
+    }
+    
+    /* Blur effect for modal backdrop */
+    .blur-effect {
+        filter: blur(4px);
+        transition: filter 0.3s ease;
     }
     
     /* Event styling */
@@ -254,7 +214,7 @@
     .fc-timegrid-slot-lane[data-time^="14"],
     .fc-timegrid-slot-lane[data-time^="15"],
     .fc-timegrid-slot-lane[data-time^="16"] {
-        background-color: #ffffff;
+        background-color:rgb(234, 243, 255);
     }
     
     /* Event details panel styling */
@@ -340,7 +300,7 @@
             
         // Initialize FullCalendar
         const calendarEl = document.getElementById('calendar');
-        const calendar = new FullCalendar.Calendar(calendarEl, {
+        window.calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: [FullCalendar.dayGridPlugin, FullCalendar.timeGridPlugin, FullCalendar.interactionPlugin],
             initialView: 'timeGridWeek',
             headerToolbar: false,
@@ -389,6 +349,7 @@
                 // Handle date selection - open event creation modal
                 const modal = document.getElementById('create-event-modal');
                 modal.classList.remove('hidden');
+                document.getElementById('calendar').classList.add('blur-effect');
                 
                 // Set the start and end times in the form
                 document.getElementById('event-start').value = info.startStr.slice(0, 16);
@@ -722,9 +683,37 @@
                 });
             })
             .catch(error => console.error('Error loading categories:', error));
+            
+        // Load instructors into the select dropdown
+        fetch('/api/instructors')
+            .then(response => response.json())
+            .then(instructors => {
+                const select = document.getElementById('event-instructor');
+                instructors.forEach(instructor => {
+                    const option = document.createElement('option');
+                    option.value = instructor.id;
+                    option.textContent = instructor.name;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading instructors:', error));
+            
+        // Load venues/spots into the select dropdown
+        fetch('/api/spots')
+            .then(response => response.json())
+            .then(spots => {
+                const select = document.getElementById('event-spot');
+                spots.forEach(spot => {
+                    const option = document.createElement('option');
+                    option.value = spot.id;
+                    option.textContent = spot.name;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading spots:', error));
         
         // Handle form submission
-        document.getElementById('create-event-form').addEventListener('submit', function(e) {
+        document.getElementById('event-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const formData = new FormData(this);
@@ -733,6 +722,8 @@
                 start_time: formData.get('start_time'),
                 end_time: formData.get('end_time'),
                 category_id: formData.get('category_id'),
+                spot_id: formData.get('spot_id'),
+                instructor_id: formData.get('instructor_id'),
                 description: formData.get('description'),
                 created_by: {{ Auth::id() }}
             };
@@ -756,10 +747,10 @@
                 document.getElementById('create-event-modal').classList.add('hidden');
                 
                 // Reset the form
-                document.getElementById('create-event-form').reset();
+                document.getElementById('event-form').reset();
                 
                 // Refresh the calendar
-                calendar.refetchEvents();
+                window.calendar.refetchEvents();
             })
             .catch(error => {
                 console.error('Error creating event:', error);
@@ -779,7 +770,7 @@
             showNonCurrentDates: false,
             dateClick: function(info) {
                 // Handle date click
-                calendar.gotoDate(info.date);
+                window.calendar.gotoDate(info.date);
                 // Highlight selected date
                 document.querySelectorAll('.fc-day').forEach(el => {
                     el.classList.remove('selected-date');
