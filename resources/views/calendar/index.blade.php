@@ -63,8 +63,51 @@
                 Create
             </button>
             
-            <!-- Create Event Modal will be included at the end of the file -->
-
+            <!-- Create Event Modal -->
+            <div id="create-event-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">Create New Event</h3>
+                        <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="create-event-form">
+                        @csrf
+                        <div class="mb-4">
+                            <label for="event-title" class="block text-gray-700 text-sm font-medium mb-1">Title</label>
+                            <input type="text" id="event-title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="event-start" class="block text-gray-700 text-sm font-medium mb-1">Start Time</label>
+                                <input type="datetime-local" id="event-start" name="start_time" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                            </div>
+                            <div>
+                                <label for="event-end" class="block text-gray-700 text-sm font-medium mb-1">End Time</label>
+                                <input type="datetime-local" id="event-end" name="end_time" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="event-category" class="block text-gray-700 text-sm font-medium mb-1">Category</label>
+                            <select id="event-category" name="category_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                                <option value="">Select a category</option>
+                                <!-- Categories will be loaded dynamically -->
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="event-description" class="block text-gray-700 text-sm font-medium mb-1">Description</label>
+                            <textarea id="event-description" name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="button" id="cancel-event" class="mr-2 px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">Cancel</button>
+                            <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">Create Event</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div class="grid grid-cols-4 gap-6">
@@ -311,7 +354,6 @@
             nowIndicator: true,
             editable: true,
             selectable: true,
-            timeZone: 'local', // Use local browser timezone
             eventTimeFormat: {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -332,29 +374,10 @@
                         return response.json();
                     })
                     .then(events => {
-                        // Process events to ensure proper time handling
-                        const processedEvents = events.map(event => {
-                            // Convert to local timezone for display
-                            return {
-                                ...event,
-                                start: new Date(event.start_time),
-                                end: new Date(event.end_time),
-                                title: event.title,
-                                backgroundColor: event.category_color,
-                                borderColor: event.category_color,
-                                extendedProps: {
-                                    category: event.category_name,
-                                    category_id: event.category_id,
-                                    description: event.description,
-                                    created_by_name: event.created_by_name
-                                }
-                            };
-                        });
-                        
                         // Store all events for filtering
-                        allEvents = processedEvents;
+                        allEvents = events;
                         // Apply initial filtering
-                        const filteredEvents = filterEventsByCategories(processedEvents);
+                        const filteredEvents = filterEventsByCategories(events);
                         successCallback(filteredEvents);
                     })
                     .catch(error => {
@@ -370,9 +393,6 @@
                 // Set the start and end times in the form
                 document.getElementById('event-start').value = info.startStr.slice(0, 16);
                 document.getElementById('event-end').value = info.endStr.slice(0, 16);
-                
-                // Ensure categories are loaded for the form
-                loadEventFormData();
             },
             eventDrop: function(info) {
                 // Handle event drag and drop (update event dates)
@@ -449,95 +469,77 @@
                 if (!detailsPanel) {
                     detailsPanel = document.createElement('div');
                     detailsPanel.id = 'event-details-panel';
-                    detailsPanel.className = 'fixed bottom-0 left-0 right-0 bg-white rounded-t-lg shadow-lg z-50 transition-transform duration-300 transform translate-y-0';
                     document.body.appendChild(detailsPanel);
                 }
                 
                 // Populate event details
                 detailsPanel.innerHTML = `
-                    <div class="p-6 bg-white rounded-t-lg shadow-lg max-w-3xl mx-auto">
+                    <div class="p-4 bg-white rounded-lg shadow-lg">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xl font-semibold">${event.title}</h3>
+                            <h3 class="text-lg font-semibold">${event.title}</h3>
                             <div class="flex gap-2">
-                                <button id="edit-event" class="text-blue-500 hover:text-blue-700 p-1 rounded hover:bg-gray-100">
+                                <button id="edit-event" class="text-blue-500 hover:text-blue-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                     </svg>
                                 </button>
-                                <button id="delete-event" class="text-red-500 hover:text-red-700 p-1 rounded hover:bg-gray-100">
+                                <button id="delete-event" class="text-red-500 hover:text-red-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
-                                <button id="close-details" class="text-gray-500 hover:text-gray-700 p-1 rounded hover:bg-gray-100">
+                                <button id="close-details" class="text-gray-500 hover:text-gray-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="mb-3">
-                                <p class="text-gray-500 text-sm mb-1 font-medium">Time</p>
-                                <p class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    ${new Date(event.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${new Date(event.end).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                                </p>
-                            </div>
-                            <div class="mb-3">
-                                <p class="text-gray-500 text-sm mb-1 font-medium">Date</p>
-                                <p class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    ${new Date(event.start).toLocaleDateString([], {weekday: 'long', month: 'long', day: 'numeric'})}
-                                </p>
-                            </div>
-                            <div class="mb-3">
-                                <p class="text-gray-500 text-sm mb-1 font-medium">Category</p>
-                                <p class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full mr-2" style="background-color: ${event.backgroundColor}"></span>
-                                    ${props.category || 'Uncategorized'}
-                                </p>
-                            </div>
-                            <div class="mb-3">
-                                <p class="text-gray-500 text-sm mb-1 font-medium">Created by</p>
-                                <p class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                    ${props.created_by_name || 'Unknown'}
-                                </p>
-                            </div>
+                        <div class="mb-3">
+                            <p class="text-gray-500 text-sm mb-1">Time</p>
+                            <p>${event.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${event.end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-gray-500 text-sm mb-1">Category</p>
+                            <p class="flex items-center">
+                                <span class="w-3 h-3 rounded-full mr-2" style="background-color: ${event.backgroundColor}"></span>
+                                ${props.category || 'Uncategorized'}
+                            </p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-gray-500 text-sm mb-1">Location</p>
+                            <p>${props.spot || 'Not specified'}</p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-gray-500 text-sm mb-1">Instructor</p>
+                            <p>${props.instructor || 'Not assigned'}</p>
                         </div>
                         ${props.description ? `
-                        <div class="mt-4 border-t pt-4">
-                            <p class="text-gray-500 text-sm mb-2 font-medium">Description</p>
-                            <p class="text-gray-700">${props.description}</p>
+                        <div class="mb-3">
+                            <p class="text-gray-500 text-sm mb-1">Description</p>
+                            <p>${props.description}</p>
                         </div>
                         ` : ''}
-                        <div class="mt-4 flex justify-end">
-                            <button id="close-details-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">Close</button>
+                        ${props.priority > 0 ? `
+                        <div class="mb-3">
+                            <p class="text-gray-500 text-sm mb-1">Priority</p>
+                            <p>${['Low', 'Medium', 'High', 'Urgent'][props.priority]}</p>
                         </div>
+                        ` : ''}
                     </div>
                 `;
                 
                 detailsPanel.style.display = 'block';
                 
-                // Add close button event listeners
+                // Add close button event listener
                 document.getElementById('close-details').addEventListener('click', function() {
-                    detailsPanel.style.display = 'none';
-                });
-                
-                document.getElementById('close-details-btn').addEventListener('click', function() {
                     detailsPanel.style.display = 'none';
                 });
                 
                 // Add edit button event listener
                 document.getElementById('edit-event').addEventListener('click', function() {
                     // Here you would open a modal for editing the event
+                    // For now, we'll just log the event
                     console.log('Edit event:', event);
                     detailsPanel.style.display = 'none';
                 });
@@ -560,7 +562,7 @@
                         })
                         .catch(error => {
                             console.error('Error deleting event:', error);
-                            alert('Failed to delete event. Please try again.');
+                            // You could show an error notification here
                         });
                     }
                 });
@@ -588,40 +590,18 @@
             document.getElementById('calendar-title').textContent = title;
         }
         
-        // Update calendar title and header date on initial load
         updateCalendarTitle();
-        updateHeaderDate(calendar);
-
         
         // Connect main calendar navigation buttons
         document.getElementById('prev-week').addEventListener('click', function() {
             calendar.prev();
             updateCalendarTitle();
-            updateHeaderDate(calendar);
-            // Sync mini calendar if month changes
-            const calDate = calendar.getDate();
-            const miniDate = miniCalendar.getDate();
-            if (calDate.getMonth() !== miniDate.getMonth() || 
-                calDate.getFullYear() !== miniDate.getFullYear()) {
-                miniCalendar.gotoDate(calDate);
-                updateMiniCalendarTitle();
-            }
         });
         
         document.getElementById('next-week').addEventListener('click', function() {
             calendar.next();
             updateCalendarTitle();
-            updateHeaderDate(calendar);
-            // Sync mini calendar if month changes
-            const calDate = calendar.getDate();
-            const miniDate = miniCalendar.getDate();
-            if (calDate.getMonth() !== miniDate.getMonth() || 
-                calDate.getFullYear() !== miniDate.getFullYear()) {
-                miniCalendar.gotoDate(calDate);
-                updateMiniCalendarTitle();
-            }
         });
-
         // Connect category checkboxes to event filtering
         document.querySelectorAll('input[type="checkbox"][id^="cat"]').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
@@ -688,41 +668,20 @@
             const endDay = end.getDate();
             const year = start.getFullYear();
             
-            let dateRangeText;
-            if (startMonth === end.toLocaleString('default', { month: 'long' })) {
-                // Same month
-                dateRangeText = `${startMonth} ${startDay}-${endDay}, ${year}`;
-            } else {
-                // Different months
-                const endMonth = end.toLocaleString('default', { month: 'long' });
-                dateRangeText = `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${year}`;
-            }
-            
             // Update the header text
-            document.querySelector('.text-2xl.font-bold').textContent = dateRangeText;
+            document.querySelector('.text-2xl.font-bold').textContent = 
+                `${startMonth} ${startDay}-${endDay}, ${year}`;
             
             // Update week number
             const weekNum = getWeekNumber(start);
             document.querySelector('.text-gray-500').textContent = `Week ${weekNum}`;
         }
         
-        // Function to calculate ISO week number
+        // Function to calculate week number
         function getWeekNumber(date) {
-            // Copy date to avoid modifying the original
-            const target = new Date(date.valueOf());
-            // ISO week starts on Monday
-            const dayNr = (date.getDay() + 6) % 7;
-            // Set target date to the Thursday of current week (ISO week date definition)
-            target.setDate(target.getDate() - dayNr + 3);
-            // Get first day of the year
-            const firstThursday = new Date(target.getFullYear(), 0, 1);
-            // If January 1 is not a Thursday, find the first Thursday of the year
-            if (firstThursday.getDay() !== 4) {
-                firstThursday.setMonth(0, 1 + ((4 - firstThursday.getDay()) + 7) % 7);
-            }
-            // Calculate week number: Number of weeks between target date and first Thursday
-            const weekNumber = 1 + Math.ceil((target - firstThursday) / (7 * 24 * 60 * 60 * 1000));
-            return weekNumber;
+            const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+            const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+            return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
         }
 
         // Event creation modal handling
@@ -738,9 +697,6 @@
             
             document.getElementById('event-start').value = start.toISOString().slice(0, 16);
             document.getElementById('event-end').value = end.toISOString().slice(0, 16);
-            
-            // Ensure form data is loaded
-            loadEventFormData();
         });
         
         // Close modal buttons
@@ -752,100 +708,34 @@
             document.getElementById('create-event-modal').classList.add('hidden');
         });
         
-        // Function to load all data needed for the event form
-        function loadEventFormData() {
-            // Load categories into the select dropdown
-            fetch('/api/categories')
-                .then(response => response.json())
-                .then(categories => {
-                    const select = document.getElementById('event-category');
-                    // Clear existing options
-                    while (select.options.length > 0) {
-                        select.remove(0);
-                    }
-                    categories.forEach(category => {
-                        const option = document.createElement('option');
-                        option.value = category.id;
-                        option.textContent = category.name;
-                        option.style.color = category.color;
-                        select.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error loading categories:', error));
-                
-            // Load spots (venues)
-            fetch('/api/spots')
-                .then(response => response.json())
-                .then(spots => {
-                    const spotSelect = document.getElementById('event-spot');
-                    // Clear existing options
-                    while (spotSelect.options.length > 0) {
-                        spotSelect.remove(0);
-                    }
-                    spots.forEach(spot => {
-                        const option = document.createElement('option');
-                        option.value = spot.id;
-                        option.textContent = spot.name;
-                        spotSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error loading spots:', error));
-                
-            // Load instructors
-            fetch('/api/instructors')
-                .then(response => response.json())
-                .then(instructors => {
-                    const instructorSelect = document.getElementById('event-instructor');
-                    // Clear existing options
-                    while (instructorSelect.options.length > 0) {
-                        instructorSelect.remove(0);
-                    }
-                    instructors.forEach(instructor => {
-                        const option = document.createElement('option');
-                        option.value = instructor.id;
-                        option.textContent = instructor.name;
-                        instructorSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error loading instructors:', error));
-        }
-        
-        // Initial load of form data
-        loadEventFormData();
+        // Load categories into the select dropdown
+        fetch('/api/categories')
+            .then(response => response.json())
+            .then(categories => {
+                const select = document.getElementById('event-category');
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    option.style.color = category.color;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading categories:', error));
         
         // Handle form submission
-        document.getElementById('event-form').addEventListener('submit', function(e) {
+        document.getElementById('create-event-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const formData = new FormData(this);
-            
-            // Fix timezone issues by adjusting the dates
-            const startTime = new Date(formData.get('start_time'));
-            const endTime = new Date(formData.get('end_time'));
-            
             const eventData = {
                 title: formData.get('title'),
-                start_time: startTime.toISOString(),
-                end_time: endTime.toISOString(),
+                start_time: formData.get('start_time'),
+                end_time: formData.get('end_time'),
                 category_id: formData.get('category_id'),
-                spot_id: formData.get('spot_id') || null,
-                instructor_id: formData.get('instructor_id') || null,
-                priority: formData.get('priority') || 0,
                 description: formData.get('description'),
-                is_all_day: formData.get('is_all_day') === 'on',
                 created_by: {{ Auth::id() }}
             };
-            
-            // Validate form data
-            if (!eventData.title) {
-                alert('Please enter a title for the event');
-                return;
-            }
-            
-            if (!eventData.category_id) {
-                alert('Please select a category for the event');
-                return;
-            }
             
             fetch('/api/events', {
                 method: 'POST',
@@ -857,24 +747,19 @@
             })
             .then(response => {
                 if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error('Failed to create event: ' + text);
-                    });
+                    throw new Error('Failed to create event');
                 }
                 return response.json();
             })
-            .then(event => {
+            .then(data => {
                 // Close the modal
                 document.getElementById('create-event-modal').classList.add('hidden');
                 
                 // Reset the form
-                document.getElementById('event-form').reset();
+                document.getElementById('create-event-form').reset();
                 
                 // Refresh the calendar
                 calendar.refetchEvents();
-                
-                // Show success message
-                alert('Event created successfully!');
             })
             .catch(error => {
                 console.error('Error creating event:', error);
@@ -885,82 +770,46 @@
         // Initialize Mini Calendar
         const miniCalendarEl = document.getElementById('mini-calendar');
         const miniCalendar = new FullCalendar.Calendar(miniCalendarEl, {
-            plugins: [FullCalendar.dayGridPlugin],
+            plugins: [ 'dayGrid' ],
             initialView: 'dayGridMonth',
             headerToolbar: false, // We'll use our custom header
             height: 'auto',
             dayHeaderFormat: { weekday: 'narrow' },
             fixedWeekCount: false,
             showNonCurrentDates: false,
-            initialDate: calendar.getDate(), // Sync with main calendar
             dateClick: function(info) {
-                // Handle date click - navigate main calendar to this date
+                // Handle date click
                 calendar.gotoDate(info.date);
-                updateCalendarTitle();
-                
                 // Highlight selected date
-                document.querySelectorAll('#mini-calendar .fc-day').forEach(el => {
+                document.querySelectorAll('.fc-day').forEach(el => {
                     el.classList.remove('selected-date');
                 });
                 info.dayEl.classList.add('selected-date');
-            },
-            datesSet: function(info) {
-                // Highlight current date when view changes
-                const today = new Date();
-                if (info.view.currentStart <= today && today < info.view.currentEnd) {
-                    setTimeout(() => {
-                        const todayEl = miniCalendar.el.querySelector('.fc-day-today');
-                        if (todayEl) {
-                            todayEl.classList.add('selected-date');
-                        }
-                    }, 0);
-                }
             }
         });
         miniCalendar.render();
         
-        // Highlight current date on initial load
-        setTimeout(() => {
-            const todayEl = miniCalendar.el.querySelector('.fc-day-today');
-            if (todayEl) {
-                todayEl.classList.add('selected-date');
-            }
-        }, 0);
-        
         // Connect mini calendar navigation buttons
         document.getElementById('mini-prev').addEventListener('click', function() {
             miniCalendar.prev();
-            updateMiniCalendarTitle();
+            updateMiniCalendarTitle(miniCalendar);
         });
         
         document.getElementById('mini-next').addEventListener('click', function() {
             miniCalendar.next();
-            updateMiniCalendarTitle();
+            updateMiniCalendarTitle(miniCalendar);
         });
         
         // Function to update mini calendar title
-        function updateMiniCalendarTitle() {
-            const date = miniCalendar.getDate();
+        function updateMiniCalendarTitle(calendar) {
+            const date = calendar.getDate();
             const monthName = date.toLocaleString('default', { month: 'long' });
             const year = date.getFullYear();
             document.getElementById('mini-calendar-title').textContent = `${monthName} ${year}`;
-            
-            // Sync main calendar with mini calendar when month changes
-            if (calendar.view.type === 'timeGridWeek') {
-                // Find the first day of the selected month in the mini calendar
-                const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-                // Only update main calendar if the month is different
-                const currentMainDate = calendar.getDate();
-                if (currentMainDate.getMonth() !== date.getMonth() || 
-                    currentMainDate.getFullYear() !== date.getFullYear()) {
-                    calendar.gotoDate(firstDayOfMonth);
-                    updateCalendarTitle();
-                }
-            }
         }
         
         // Initialize with current month/year
-        updateMiniCalendarTitle();
+        updateMiniCalendarTitle(miniCalendar);
     });
 </script>
     <!-- Include Event Creation Modal -->
