@@ -52,9 +52,9 @@
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-2">
                     <button id="prev-week" class="text-gray-500 hover:text-gray-700 text-xl">❮</button>
-                    <div>
-                        <h1 class="text-2xl font-bold"></h1>
-                        <p class="text-gray-500"></p>
+                    <div class="text-center">
+                        
+                        
                     </div>
                     <button id="next-week" class="text-gray-500 hover:text-gray-700 text-xl">❯</button>
                 </div>
@@ -186,12 +186,7 @@
     }
     
     /* Week number indicator */
-    .fc-toolbar-title::after {
-        content: " - Week 16";
-        font-size: 0.9rem;
-        opacity: 0.7;
-        margin-left: 5px;
-    }
+    
     
     /* Improve calendar container */
     #calendar {
