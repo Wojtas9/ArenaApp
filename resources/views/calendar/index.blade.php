@@ -53,8 +53,8 @@
                 <div class="flex items-center gap-2">
                     <button id="prev-week" class="text-gray-500 hover:text-gray-700 text-xl">❮</button>
                     <div>
-                        <h1 class="text-2xl font-bold">April 13-19, 2020</h1>
-                        <p class="text-gray-500">Week 16</p>
+                        <h1 class="text-2xl font-bold"></h1>
+                        <p class="text-gray-500"></p>
                     </div>
                     <button id="next-week" class="text-gray-500 hover:text-gray-700 text-xl">❯</button>
                 </div>
@@ -298,7 +298,9 @@
                 `;
             });
             
-        // Initialize FullCalendar
+      
+        
+        // Initialize main calendar
         const calendarEl = document.getElementById('calendar');
         window.calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: [FullCalendar.dayGridPlugin, FullCalendar.timeGridPlugin, FullCalendar.interactionPlugin],
@@ -530,6 +532,9 @@
             }
         });
         calendar.render();
+        
+        // Initialize header date on page load
+        updateHeaderDate(calendar);
 
         // Update calendar title
         function updateCalendarTitle() {
@@ -551,18 +556,31 @@
             document.getElementById('calendar-title').textContent = title;
         }
         
-        updateCalendarTitle();
-        
         // Connect main calendar navigation buttons
         document.getElementById('prev-week').addEventListener('click', function() {
             calendar.prev();
             updateCalendarTitle();
+            updateHeaderDate(calendar);
+            
+            // Sync mini calendar with main calendar
+            const mainDate = calendar.getDate();
+            miniCalendar.gotoDate(mainDate);
+            updateMiniCalendarTitle(miniCalendar);
         });
         
         document.getElementById('next-week').addEventListener('click', function() {
             calendar.next();
             updateCalendarTitle();
+            updateHeaderDate(calendar);
+            
+            // Sync mini calendar with main calendar
+            const mainDate = calendar.getDate();
+            miniCalendar.gotoDate(mainDate);
+            updateMiniCalendarTitle(miniCalendar);
         });
+        
+        // Initialize header date on load
+        updateHeaderDate(calendar);
         // Connect category checkboxes to event filtering
         document.querySelectorAll('input[type="checkbox"][id^="cat"]').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
@@ -636,6 +654,9 @@
             // Update week number
             const weekNum = getWeekNumber(start);
             document.querySelector('.text-gray-500').textContent = `Week ${weekNum}`;
+            
+            // Also update the mini calendar title
+            document.getElementById('mini-calendar-title').textContent = `${startMonth} ${year}`;
         }
         
         // Function to calculate week number
@@ -758,27 +779,7 @@
             });
         });
         
-        // Initialize Mini Calendar
-        const miniCalendarEl = document.getElementById('mini-calendar');
-        const miniCalendar = new FullCalendar.Calendar(miniCalendarEl, {
-            plugins: [ 'dayGrid' ],
-            initialView: 'dayGridMonth',
-            headerToolbar: false, // We'll use our custom header
-            height: 'auto',
-            dayHeaderFormat: { weekday: 'narrow' },
-            fixedWeekCount: false,
-            showNonCurrentDates: false,
-            dateClick: function(info) {
-                // Handle date click
-                window.calendar.gotoDate(info.date);
-                // Highlight selected date
-                document.querySelectorAll('.fc-day').forEach(el => {
-                    el.classList.remove('selected-date');
-                });
-                info.dayEl.classList.add('selected-date');
-            }
-        });
-        miniCalendar.render();
+        // Mini Calendar already initialized at the beginning of the script
         
         // Connect mini calendar navigation buttons
         document.getElementById('mini-prev').addEventListener('click', function() {
