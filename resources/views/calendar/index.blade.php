@@ -5,10 +5,10 @@
         <source src="/movies/hero_animation.mp4" type="video/mp4">
     </video>
     <div class="fixed inset-0 bg-black/50 z-1"></div>
-<div class="flex mt-30 mb-30 h-240 max-w-[1400px] mx-auto gap-6 relative z-20">
+<div class="flex h-screen max-w-[1400px] mx-auto gap-6 relative z-20 py-8">
 
     <!-- Sidebar -->
-    <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-2xl shadow-lg drop-shadow-xl/50">
+    <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-2xl shadow-lg drop-shadow-xl/50 h-full">
         <div class="flex items-center gap-3 mb-8">
             <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">
                 <span class="text-xl">👨‍💼</span>
@@ -47,8 +47,8 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg drop-shadow-xl/50">
-        <div class="flex justify-between items-center">
+    <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg drop-shadow-xl/50 flex flex-col h-full">
+        <div class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-2">
                     <button id="prev-week" class="text-gray-500 hover:text-gray-700 text-xl">❮</button>
@@ -63,10 +63,10 @@
             </button>
         </div>
 
-        <div class="grid grid-cols-4 gap-6">
+        <div class="grid grid-cols-4 gap-6 flex-1 min-h-0">
             <!-- Main Calendar -->
-            <div class="col-span-3">
-                <div id="calendar"></div>
+            <div class="col-span-3 h-full">
+                <div id="calendar" class="h-full"></div>
                 
             </div>
 
@@ -179,7 +179,14 @@
     }
     
     .fc-timegrid-now-indicator-line {
-        border-color: #8b5cf6;
+        border-color: #ff4444;
+        left: 0 !important;
+        right: 0 !important;
+        border-width: 2px;
+        z-index: 999;
+        width: 100%;
+        height:2px;
+        pointer-events: none;
     }
     
     .fc-timegrid-now-indicator-arrow {
@@ -215,17 +222,7 @@
         background-color: #fafafa;
     }
     
-    /* Highlight business hours */
-    .fc-timegrid-slot-lane[data-time^="09"],
-    .fc-timegrid-slot-lane[data-time^="10"],
-    .fc-timegrid-slot-lane[data-time^="11"],
-    .fc-timegrid-slot-lane[data-time^="12"],
-    .fc-timegrid-slot-lane[data-time^="13"],
-    .fc-timegrid-slot-lane[data-time^="14"],
-    .fc-timegrid-slot-lane[data-time^="15"],
-    .fc-timegrid-slot-lane[data-time^="16"] {
-        background-color:rgb(234, 243, 255);
-    }
+
     
     /* Event details panel styling */
     #event-details-panel {
@@ -350,10 +347,10 @@
             plugins: [FullCalendar.dayGridPlugin, FullCalendar.timeGridPlugin, FullCalendar.interactionPlugin],
             initialView: 'timeGridWeek',
             headerToolbar: false,
-            height: 'auto',
+            height: '100%',
             allDaySlot: false,
             slotMinTime: '08:00:00',
-            slotMaxTime: '18:00:00',
+            slotMaxTime: '24:00:00',
             expandRows: true,
             slotDuration: '01:00:00',
             dayHeaderFormat: { weekday: 'short', day: 'numeric' },
