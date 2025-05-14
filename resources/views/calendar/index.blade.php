@@ -116,9 +116,25 @@
         padding: 3px 6px;
         font-size: 0.9rem;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        border: none !important;
         position: relative;
         overflow: visible !important;
+        /* Create a darker left border using pseudo-element */
+        border-left: none !important;
+    }
+    
+    /* Add darker border using pseudo-element */
+    .fc-event::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background-color: inherit;
+        filter: brightness(0.7) saturate(1.2);
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+        z-index: 1; /* Ensure it's above the background but below content */
     }
     
     .category-indicator {
