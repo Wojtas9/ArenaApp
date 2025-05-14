@@ -53,8 +53,7 @@
                 <div class="flex items-center gap-2">
                     <button id="prev-week" class="text-gray-500 hover:text-gray-700 text-xl">❮</button>
                     <div class="text-center">
-                        
-                        
+                        <div id="calendar-range" class="text-sm text-gray-600"></div>
                     </div>
                     <button id="next-week" class="text-gray-500 hover:text-gray-700 text-xl">❯</button>
                 </div>
@@ -237,6 +236,27 @@
         // Track active categories for filtering
         let activeCategories = [];
         let allEvents = [];
+
+        // Function to update calendar title and range
+        function updateCalendarTitle() {
+            const currentDate = calendar.getDate();
+            const weekStart = new Date(currentDate);
+            weekStart.setDate(currentDate.getDate() - currentDate.getDay());
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+
+            // Get week number
+            const weekNumber = Math.ceil((((weekStart - new Date(weekStart.getFullYear(), 0, 1)) / 86400000) + 1) / 7);
+            
+            // Format dates
+            const formatDate = (date) => {
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            };
+
+            // Update displays
+            document.getElementById('calendar-week').textContent = `Week ${weekNumber}`;
+            document.getElementById('calendar-range').textContent = `${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
+        }
         
         // Fetch categories from API
         fetch('/api/categories')
@@ -297,7 +317,21 @@
         
         // Initialize main calendar
         const calendarEl = document.getElementById('calendar');
+        
+        // Add event listeners for navigation buttons
+        // Connect main calendar navigation buttons
+        document.getElementById('prev-week').addEventListener('click', function() {
+            calendar.prev();
+            updateCalendarTitle();
+        });
+        
+        document.getElementById('next-week').addEventListener('click', function() {
+            calendar.next();
+            updateCalendarTitle();
+        });
+        
         window.calendar = new FullCalendar.Calendar(calendarEl, {
+           
             plugins: [FullCalendar.dayGridPlugin, FullCalendar.timeGridPlugin, FullCalendar.interactionPlugin],
             initialView: 'timeGridWeek',
             headerToolbar: false,
@@ -318,7 +352,6 @@
                 hour12: false
             },
             eventDisplay: 'block',
-            eventBorderRadius: 6,
             eventMaxStack: 3,
             slotEventOverlap: false,
             events: function(info, successCallback, failureCallback) {
@@ -382,6 +415,9 @@
             eventResize: function(info) {
                 // Handle event resize (update event duration)
                 const event = info.event;
+                
+                // Update calendar title when event is resized
+                updateCalendarTitle();
                 
                 fetch(`/api/events/${event.id}`, {
                     method: 'PUT',
@@ -464,15 +500,7 @@
                                 ${props.category || 'Uncategorized'}
                             </p>
                         </div>
-                        <div class="mb-3">
-                            <p class="text-gray-500 text-sm mb-1">Location</p>
-                            <p>${props.spot || 'Not specified'}</p>
-                        </div>
-                        <div class="mb-3">
-                            <p class="text-gray-500 text-sm mb-1">Instructor</p>
-                            <p>${props.instructor || 'Not assigned'}</p>
-                        </div>
-                        ${props.description ? `
+                               ${props.description ? `
                         <div class="mb-3">
                             <p class="text-gray-500 text-sm mb-1">Description</p>
                             <p>${props.description}</p>
@@ -557,10 +585,7 @@
             updateCalendarTitle();
             updateHeaderDate(calendar);
             
-            // Sync mini calendar with main calendar
-            const mainDate = calendar.getDate();
-            miniCalendar.gotoDate(mainDate);
-            updateMiniCalendarTitle(miniCalendar);
+   
         });
         
         document.getElementById('next-week').addEventListener('click', function() {
@@ -568,10 +593,7 @@
             updateCalendarTitle();
             updateHeaderDate(calendar);
             
-            // Sync mini calendar with main calendar
-            const mainDate = calendar.getDate();
-            miniCalendar.gotoDate(mainDate);
-            updateMiniCalendarTitle(miniCalendar);
+
         });
         
         // Initialize header date on load
@@ -629,29 +651,29 @@
         
         // Initialize Mini Calendar
 
-        // Function to update the header date display
         function updateHeaderDate(calendar) {
-            const view = calendar.view;
-            const start = new Date(view.activeStart);
-            const end = new Date(view.activeEnd);
-            end.setDate(end.getDate() - 1); // Adjust to get the last day of the visible range
-            
-            // Format: April 13-19, 2020
+            const date = calendar.getDate();
+            const weekNum = getWeekNumber(date);
+            const start = calendar.view.activeStart;
+            const end = calendar.view.activeEnd;
             const startMonth = start.toLocaleString('default', { month: 'long' });
-            const startDay = start.getDate();
-            const endDay = end.getDate();
+            const endMonth = end.toLocaleString('default', { month: 'long' });
             const year = start.getFullYear();
+
             
-            // Update the header text
-            document.querySelector('.text-2xl.font-bold').textContent = 
-                `${startMonth} ${startDay}-${endDay}, ${year}`;
-            
-            // Update week number
-            const weekNum = getWeekNumber(start);
-            document.querySelector('.text-gray-500').textContent = `Week ${weekNum}`;
-            
-            // Also update the mini calendar title
-            document.getElementById('mini-calendar-title').textContent = `${startMonth} ${year}`;
+           
+
+            // Update date range
+            let dateRange;
+            if (startMonth === endMonth) {
+                dateRange = `${startMonth} ${start.getDate()}-${end.getDate()}, ${year}`;
+            } else {
+                dateRange = `${startMonth} ${start.getDate()} - ${endMonth} ${end.getDate()}, ${year}`;
+            }
+            document.getElementById('calendar-range').textContent = dateRange;
+
+            // Update mini calendar title
+           
         }
         
         // Function to calculate week number
@@ -700,92 +722,14 @@
             })
             .catch(error => console.error('Error loading categories:', error));
             
-        // Load instructors into the select dropdown
-        fetch('/api/instructors')
-            .then(response => response.json())
-            .then(instructors => {
-                const select = document.getElementById('event-instructor');
-                instructors.forEach(instructor => {
-                    const option = document.createElement('option');
-                    option.value = instructor.id;
-                    option.textContent = instructor.name;
-                    select.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error loading instructors:', error));
-            
-        // Load venues/spots into the select dropdown
-        fetch('/api/spots')
-            .then(response => response.json())
-            .then(spots => {
-                const select = document.getElementById('event-spot');
-                spots.forEach(spot => {
-                    const option = document.createElement('option');
-                    option.value = spot.id;
-                    option.textContent = spot.name;
-                    select.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error loading spots:', error));
+
         
-        // Handle form submission
-        document.getElementById('event-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const eventData = {
-                title: formData.get('title'),
-                start_time: formData.get('start_time'),
-                end_time: formData.get('end_time'),
-                category_id: formData.get('category_id'),
-                spot_id: formData.get('spot_id'),
-                instructor_id: formData.get('instructor_id'),
-                description: formData.get('description'),
-                created_by: {{ Auth::id() }}
-            };
-            
-            fetch('/api/events', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify(eventData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to create event');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Close the modal
-                document.getElementById('create-event-modal').classList.add('hidden');
-                
-                // Reset the form
-                document.getElementById('event-form').reset();
-                
-                // Refresh the calendar
-                window.calendar.refetchEvents();
-            })
-            .catch(error => {
-                console.error('Error creating event:', error);
-                alert('Failed to create event. Please try again.');
-            });
-        });
+        // Note: Form submission is handled in create-event-modal.blade.php
+        // We removed the duplicate event listener here to prevent double submissions
         
         // Mini Calendar already initialized at the beginning of the script
         
-        // Connect mini calendar navigation buttons
-        document.getElementById('mini-prev').addEventListener('click', function() {
-            miniCalendar.prev();
-            updateMiniCalendarTitle(miniCalendar);
-        });
-        
-        document.getElementById('mini-next').addEventListener('click', function() {
-            miniCalendar.next();
-            updateMiniCalendarTitle(miniCalendar);
-        });
+    
         
         // Function to update mini calendar title
         function updateMiniCalendarTitle(calendar) {
@@ -795,8 +739,7 @@
             document.getElementById('mini-calendar-title').textContent = `${monthName} ${year}`;
         }
         
-        // Initialize with current month/year
-        updateMiniCalendarTitle(miniCalendar);
+
     });
 </script>
     <!-- Include Event Creation Modal -->
