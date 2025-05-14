@@ -101,7 +101,7 @@
 <style>
     /* Custom Calendar Styling */
     .fc-day-today {
-        background-color: rgba(139, 92, 246, 0.1) !important;
+        background-color: rgba(114, 215, 255, 0.25) !important;
     }
     
     /* Blur effect for modal backdrop */
@@ -112,7 +112,7 @@
     
     /* Event styling */
     .fc-event {
-        border-radius: 6px;
+        border-radius: 0px 15px 15px 0px;
         padding: 3px 6px;
         font-size: 0.9rem;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -132,8 +132,8 @@
         width: 6px;
         background-color: inherit;
         filter: brightness(0.7) saturate(1.2);
-        border-top-left-radius: 6px;
-        border-bottom-left-radius: 6px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
         z-index: 1; /* Ensure it's above the background but below content */
     }
     
@@ -190,7 +190,7 @@
     }
     
     .fc-timegrid-now-indicator-arrow {
-        border-color: #8b5cf6;
+        border-color:rgb(246, 92, 92);
         border-width: 5px;
     }
     
@@ -199,12 +199,64 @@
         border-radius: 50%;
     }
     
+    /* Style for today's date in mini calendar */
+    #mini-calendar .fc-day-today .fc-daygrid-day-number {
+        font-weight: bold;
+    }
+    
+    /* Style for selected date in mini calendar */
+    #mini-calendar .selected-date {
+        background-color: rgba(139, 92, 246, 0.2);
+        border-radius: 50%;
+    }
+    
+    /* Mini calendar specific styling */
+    #mini-calendar {
+        font-size: 0.6rem;
+        border: none;
+    }
+
+    
+
+    #mini-calendar .fc-daygrid-day-top {
+        justify-content: center;
+    }
+    
+    #mini-calendar .fc-daygrid-day-number {
+        padding: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Style for dates with events (dots) */
+    .date-has-event {
+        position: relative;
+        border: none;
+    }
+    
+    .date-has-event::after {
+        content: '';
+        position: absolute;
+        
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background-color: #8b5cf6;
+        border-radius: 50%;
+        border: none;
+    }
+    
     #mini-calendar .fc-daygrid-day {
         cursor: pointer;
+        border: none;
     }
     
     #mini-calendar .fc-col-header-cell {
         padding: 4px 0;
+        border: none;
+
     }
     
     /* Week number indicator */
@@ -214,12 +266,12 @@
     #calendar {
         border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        
     }
     
     /* Improve time slots appearance */
     .fc-timegrid-slot-lane {
-        background-color: #fafafa;
+        background-color: #ffffff;
     }
     
 
@@ -233,7 +285,7 @@
     }
     
     #event-details-panel h3 {
-        color: #4B5563;
+        color:rgb(255, 255, 255);
     }
     
     #event-details-panel .text-gray-500 {
@@ -329,6 +381,8 @@
         
         // Initialize main calendar
         const calendarEl = document.getElementById('calendar');
+
+        
         
         // Add event listeners for navigation buttons
         // Connect main calendar navigation buttons
@@ -571,6 +625,9 @@
         // Initialize header date on page load
         updateHeaderDate(calendar);
 
+        
+        updateMiniCalendarTitle(calendar);
+
         // Update calendar title
         function updateCalendarTitle() {
             const currentDate = calendar.getDate();
@@ -639,6 +696,7 @@
         // Initialize the calendar
         calendar.render();
         
+        
         // Update the calendar title when the page loads
         updateCalendarTitle();
         
@@ -648,7 +706,87 @@
         });
         
         // Initialize Mini Calendar
-
+        const miniCalendarEl = document.getElementById('mini-calendar');
+        const miniCalendar = new FullCalendar.Calendar(miniCalendarEl, {
+            plugins: [FullCalendar.dayGridPlugin],
+            initialView: 'dayGridMonth',
+            headerToolbar: false,
+            height: 'auto',
+            dayMaxEvents: 0,
+            showNonCurrentDates: true,
+            fixedWeekCount: false,
+            dateClick: function(info) {
+                // Remove selected class from all dates
+                document.querySelectorAll('#mini-calendar .selected-date').forEach(el => {
+                    el.classList.remove('selected-date');
+                });
+                
+                // Add selected class to clicked date
+                info.dayEl.classList.add('selected-date');
+                
+                // Navigate main calendar to this date
+                calendar.gotoDate(info.date);
+            }
+        });
+        miniCalendar.render();
+        
+        // Connect mini calendar navigation buttons
+        document.getElementById('mini-prev').addEventListener('click', function() {
+            miniCalendar.prev();
+            updateMiniCalendarTitle(miniCalendar);
+        });
+        
+        document.getElementById('mini-next').addEventListener('click', function() {
+            miniCalendar.next();
+            updateMiniCalendarTitle(miniCalendar);
+        });
+        
+        // Initialize mini calendar title
+        updateMiniCalendarTitle(miniCalendar);
+        
+        // Add event markers to mini calendar
+        function addEventMarkersToMiniCalendar() {
+            // Get all events from the main calendar
+            const events = calendar.getEvents();
+            const eventDates = {};
+            
+            // Collect unique dates that have events
+            events.forEach(event => {
+                const dateStr = event.start.toISOString().split('T')[0];
+                eventDates[dateStr] = true;
+            });
+            
+            // Add markers to dates with events
+            document.querySelectorAll('#mini-calendar .fc-daygrid-day').forEach(dayEl => {
+                const date = dayEl.getAttribute('data-date');
+                if (eventDates[date]) {
+                    dayEl.querySelector('.fc-daygrid-day-number').classList.add('date-has-event');
+                }
+            });
+        }
+        
+        // Call this function after events are loaded
+        calendar.on('eventSourceSuccess', function() {
+            addEventMarkersToMiniCalendar();
+        });
+        
+        // Also call when mini calendar month changes
+        miniCalendar.on('datesSet', function() {
+            // Wait for the DOM to update
+            setTimeout(addEventMarkersToMiniCalendar, 100);
+        });
+        
+        // Mark specific dates with events as shown in the image (for demo purposes)
+        setTimeout(function() {
+            const demoEventDates = ['2020-04-02', '2020-04-10', '2020-04-14', '2020-04-16', '2020-04-17', '2020-04-21', '2020-04-30'];
+            document.querySelectorAll('#mini-calendar .fc-daygrid-day').forEach(dayEl => {
+                const date = dayEl.getAttribute('data-date');
+                if (demoEventDates.includes(date)) {
+                    dayEl.querySelector('.fc-daygrid-day-number').classList.add('date-has-event');
+                }
+            });
+        }, 500);
+        
         function updateHeaderDate(calendar) {
             const date = calendar.getDate();
             const weekNum = getWeekNumber(date);
