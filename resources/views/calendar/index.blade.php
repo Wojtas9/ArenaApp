@@ -253,9 +253,8 @@
                 return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             };
 
-            // Update displays
-            document.getElementById('calendar-week').textContent = `Week ${weekNumber}`;
-            document.getElementById('calendar-range').textContent = `${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
+            // Update display - only update the calendar range since calendar-week element doesn't exist
+            document.getElementById('calendar-range').textContent = `Week ${weekNumber}: ${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
         }
         
         // Fetch categories from API
@@ -561,22 +560,22 @@
 
         // Update calendar title
         function updateCalendarTitle() {
-            const view = calendar.view;
-            const start = new Date(view.activeStart);
-            const end = new Date(view.activeEnd);
-            end.setDate(end.getDate() - 1); // Adjust to get the last day of the visible range
+            const currentDate = calendar.getDate();
+            const weekStart = new Date(currentDate);
+            weekStart.setDate(currentDate.getDate() - currentDate.getDay());
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+
+            // Get week number
+            const weekNumber = Math.ceil((((weekStart - new Date(weekStart.getFullYear(), 0, 1)) / 86400000) + 1) / 7);
             
-            const startMonth = start.toLocaleString('default', { month: 'long' });
-            const endMonth = end.toLocaleString('default', { month: 'long' });
-            
-            let title;
-            if (startMonth === endMonth) {
-                title = `${startMonth} ${start.getDate()}-${end.getDate()}, ${start.getFullYear()}`;
-            } else {
-                title = `${startMonth} ${start.getDate()} - ${endMonth} ${end.getDate()}, ${start.getFullYear()}`;
-            }
-            
-            document.getElementById('calendar-title').textContent = title;
+            // Format dates
+            const formatDate = (date) => {
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            };
+
+            // Update display
+            document.getElementById('calendar-range').textContent = `Week ${weekNumber}: ${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
         }
         
         // Connect main calendar navigation buttons
@@ -605,31 +604,6 @@
             });
         });
         
-        // Function to filter events based on selected categories
-        function filterEvents() {
-            const categoryColors = {
-                'cat1': '#10B981', // Product Design - green
-                'cat2': '#3B82F6', // Software Engineering - blue
-                'cat4': '#EF4444', // Marketing - red
-            };
-            
-            // Get all checked categories
-            const checkedCategories = [];
-            document.querySelectorAll('input[type="checkbox"][id^="cat"]:checked').forEach(checkbox => {
-                checkedCategories.push(categoryColors[checkbox.id]);
-            });
-            
-            // Filter events
-            const allEvents = calendar.getEvents();
-            allEvents.forEach(event => {
-                if (checkedCategories.includes(event.backgroundColor)) {
-                    event.setProp('display', 'block');
-                } else {
-                    event.setProp('display', 'none');
-                }
-            });
-        }
-        
         // Function to filter events based on active categories
         function filterEvents() {
             const filteredEvents = filterEventsByCategories(allEvents);
@@ -649,6 +623,17 @@
             });
         }
         
+        // Initialize the calendar
+        calendar.render();
+        
+        // Update the calendar title when the page loads
+        updateCalendarTitle();
+        
+        // Call updateCalendarTitle whenever the view changes
+        calendar.on('datesSet', function() {
+            updateCalendarTitle();
+        });
+        
         // Initialize Mini Calendar
 
         function updateHeaderDate(calendar) {
@@ -659,21 +644,12 @@
             const startMonth = start.toLocaleString('default', { month: 'long' });
             const endMonth = end.toLocaleString('default', { month: 'long' });
             const year = start.getFullYear();
-
             
-           
-
-            // Update date range
-            let dateRange;
-            if (startMonth === endMonth) {
-                dateRange = `${startMonth} ${start.getDate()}-${end.getDate()}, ${year}`;
-            } else {
-                dateRange = `${startMonth} ${start.getDate()} - ${endMonth} ${end.getDate()}, ${year}`;
-            }
-            document.getElementById('calendar-range').textContent = dateRange;
-
-            // Update mini calendar title
-           
+            // We don't update calendar-range here anymore as it's handled by updateCalendarTitle
+            // This prevents conflicts between the two functions
+            
+            // Update mini calendar title if needed
+            updateMiniCalendarTitle(calendar);
         }
         
         // Function to calculate week number
