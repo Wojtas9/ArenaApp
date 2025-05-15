@@ -104,6 +104,11 @@
         background-color: rgba(114, 215, 255, 0.25) !important;
     }
     
+    /* Ensure calendar is below modals */
+    #calendar {
+        z-index: 1;
+    }
+    
     /* Blur effect for modal backdrop */
     .blur-effect {
         filter: blur(4px);
@@ -278,14 +283,21 @@
     
     /* Event details panel styling */
     #event-details-panel {
-        transform: translateY(100%);
-        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
-        max-height: 300px;
-        overflow-y: auto;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
     
-    #event-details-panel h3 {
-        color:rgb(255, 255, 255);
+    #event-details-panel:not([style*="display: none"]) {
+        opacity: 1;
+    }
+    
+    .animate-fade-in {
+        animation: modalFadeIn 0.3s ease-out forwards;
+    }
+    
+    @keyframes modalFadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
     }
     
     #event-details-panel .text-gray-500 {
@@ -469,13 +481,33 @@
                 .then(response => {
                     if (!response.ok) {
                         info.revert(); // Revert the drag if there was an error
-                        throw new Error('Failed to update event');
+                        return response.text().then(text => {
+                            throw new Error(text || 'Failed to update event');
+                        });
                     }
                     return response.json();
                 })
                 .catch(error => {
                     console.error('Error updating event:', error);
-                    // You could show an error notification here
+                    // Show error notification
+                    const errorNotification = document.getElementById('update-error-notification');
+                    if (errorNotification) {
+                        const errorMessage = document.getElementById('update-error-message');
+                        if (errorMessage) {
+                            errorMessage.textContent = error.message || 'Failed to update event';
+                        }
+                        
+                        errorNotification.classList.remove('hidden');
+                        errorNotification.style.transform = 'translateY(0)';
+                        
+                        // Hide notification after 5 seconds
+                        setTimeout(function() {
+                            errorNotification.style.transform = 'translateY(-100%)';
+                            setTimeout(function() {
+                                errorNotification.classList.add('hidden');
+                            }, 300);
+                        }, 5000);
+                    }
                 });
             },
             eventResize: function(info) {
@@ -498,13 +530,33 @@
                 .then(response => {
                     if (!response.ok) {
                         info.revert(); // Revert the resize if there was an error
-                        throw new Error('Failed to update event');
+                        return response.text().then(text => {
+                            throw new Error(text || 'Failed to update event');
+                        });
                     }
                     return response.json();
                 })
                 .catch(error => {
                     console.error('Error updating event:', error);
-                    // You could show an error notification here
+                    // Show error notification
+                    const errorNotification = document.getElementById('update-error-notification');
+                    if (errorNotification) {
+                        const errorMessage = document.getElementById('update-error-message');
+                        if (errorMessage) {
+                            errorMessage.textContent = error.message || 'Failed to update event';
+                        }
+                        
+                        errorNotification.classList.remove('hidden');
+                        errorNotification.style.transform = 'translateY(0)';
+                        
+                        // Hide notification after 5 seconds
+                        setTimeout(function() {
+                            errorNotification.style.transform = 'translateY(-100%)';
+                            setTimeout(function() {
+                                errorNotification.classList.add('hidden');
+                            }, 300);
+                        }, 5000);
+                    }
                 });
             },
             eventDidMount: function(info) {
@@ -529,75 +581,128 @@
                 if (!detailsPanel) {
                     detailsPanel = document.createElement('div');
                     detailsPanel.id = 'event-details-panel';
+                    detailsPanel.className = 'fixed top-0 left-0 w-full h-full flex items-center justify-center z-50';
                     document.body.appendChild(detailsPanel);
                 }
                 
+                // Create backdrop for clicking outside to close
+                const backdrop = document.createElement('div');
+                backdrop.className = 'absolute inset-0 bg-black/30 backdrop-blur-sm';
+                backdrop.id = 'event-details-backdrop';
+                backdrop.addEventListener('click', function() {
+                    detailsPanel.style.display = 'none';
+                });
+                
                 // Populate event details
-                detailsPanel.innerHTML = `
-                    <div class="p-4 bg-white rounded-lg shadow-lg">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold">${event.title}</h3>
-                            <div class="flex gap-2">
-                                <button id="edit-event" class="text-blue-500 hover:text-blue-700">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                    </svg>
-                                </button>
-                                <button id="delete-event" class="text-red-500 hover:text-red-700">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                                <button id="close-details" class="text-gray-500 hover:text-gray-700">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
+                detailsPanel.innerHTML = '';
+                detailsPanel.appendChild(backdrop);
+                
+                const modalContent = document.createElement('div');
+                modalContent.className = 'relative bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 overflow-hidden z-10 transform transition-all';
+                modalContent.innerHTML = `
+                    <div class="p-4 text-white" style="background-color: ${event.backgroundColor}">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-semibold">${event.title}</h3>
+                            <button id="close-details" class="text-white hover:text-gray-200 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <p class="text-gray-500 text-sm font-medium uppercase tracking-wide mb-1">Time</p>
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                </svg>
+                                <p class="text-gray-700">${event.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${event.end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <p class="text-gray-500 text-sm mb-1">Time</p>
-                            <p>${event.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${event.end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+                        <div class="mb-4">
+                            <p class="text-gray-500 text-sm font-medium uppercase tracking-wide mb-1">Category</p>
+                            <div class="flex items-center">
+                                <span class="w-4 h-4 rounded-full mr-2" style="background-color: ${event.backgroundColor}"></span>
+                                <p class="text-gray-700">${props.category || 'Uncategorized'}</p>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <p class="text-gray-500 text-sm mb-1">Category</p>
-                            <p class="flex items-center">
-                                <span class="w-3 h-3 rounded-full mr-2" style="background-color: ${event.backgroundColor}"></span>
-                                ${props.category || 'Uncategorized'}
-                            </p>
-                        </div>
-                               ${props.description ? `
-                        <div class="mb-3">
-                            <p class="text-gray-500 text-sm mb-1">Description</p>
-                            <p>${props.description}</p>
+                        ${props.description ? `
+                        <div class="mb-4">
+                            <p class="text-gray-500 text-sm font-medium uppercase tracking-wide mb-1">Description</p>
+                            <p class="text-gray-700 whitespace-pre-line">${props.description}</p>
                         </div>
                         ` : ''}
                         ${props.priority > 0 ? `
-                        <div class="mb-3">
-                            <p class="text-gray-500 text-sm mb-1">Priority</p>
-                            <p>${['Low', 'Medium', 'High', 'Urgent'][props.priority]}</p>
+                        <div class="mb-4">
+                            <p class="text-gray-500 text-sm font-medium uppercase tracking-wide mb-1">Priority</p>
+                            <div class="flex items-center">
+                                <span class="inline-block px-2 py-1 text-xs font-medium rounded ${['bg-blue-100 text-blue-800', 'bg-yellow-100 text-yellow-800', 'bg-orange-100 text-orange-800', 'bg-red-100 text-red-800'][props.priority - 1]}">                                
+                                    ${['Low', 'Medium', 'High', 'Urgent'][props.priority - 1]}
+                                </span>
+                            </div>
                         </div>
                         ` : ''}
+                        <div class="flex justify-end gap-3 mt-6">
+                            <button id="delete-event" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                                Delete
+                            </button>
+                            <button id="edit-event" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                </svg>
+                                Edit
+                            </button>
+                        </div>
                     </div>
                 `;
                 
-                detailsPanel.style.display = 'block';
+                detailsPanel.appendChild(modalContent);
+                detailsPanel.style.display = 'flex';
+                
+                // Add animation class
+                modalContent.classList.add('animate-fade-in');
                 
                 // Add close button event listener
-                document.getElementById('close-details').addEventListener('click', function() {
+                document.getElementById('close-details').addEventListener('click', function(e) {
+                    e.stopPropagation();
                     detailsPanel.style.display = 'none';
                 });
                 
                 // Add edit button event listener
-                document.getElementById('edit-event').addEventListener('click', function() {
-                    // Here you would open a modal for editing the event
-                    // For now, we'll just log the event
-                    console.log('Edit event:', event);
+                document.getElementById('edit-event').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // Open the edit event modal
+                    const editModal = document.getElementById('edit-event-modal');
+                    editModal.classList.remove('hidden');
+                    document.getElementById('calendar').classList.add('blur-effect');
                     detailsPanel.style.display = 'none';
+                    
+                    // Call the populateEditForm function defined in edit-event-modal.blade.php
+                    document.getElementById('calendar').classList.add('blur-effect');
+                    window.populateEditForm(event);
+                    
+                    // Load categories with colors
+                    loadSelectOptions('/api/categories', 'edit-event-category', props.category_id, true);
+                    
+                    // Load spots/venues if applicable
+                    if (typeof loadSpots === 'function') {
+                        loadSpots('edit-event-spot', props.spot_id);
+                    }
+                    
+                    // Load instructors if applicable
+                    if (typeof loadInstructors === 'function') {
+                        loadInstructors('edit-event-instructor', props.instructor_id);
+                    }
                 });
                 
                 // Add delete button event listener
-                document.getElementById('delete-event').addEventListener('click', function() {
+                document.getElementById('delete-event').addEventListener('click', function(e) {
+                    e.stopPropagation();
+
                     if (confirm('Are you sure you want to delete this event?')) {
                         fetch(`/api/events/${event.id}`, {
                             method: 'DELETE',
@@ -704,6 +809,56 @@
         calendar.on('datesSet', function() {
             updateCalendarTitle();
         });
+        
+        // Helper function to adjust color brightness
+        function adjustColor(color, amount) {
+            return '#' + color.replace(/^#/, '').replace(/../g, color => ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+        }
+        
+        // Function to load select options from API
+        function loadSelectOptions(url, selectId, selectedValue, includeColors = false) {
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch from ${url}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const select = document.getElementById(selectId);
+                    
+                    // Keep the first option (placeholder)
+                    const firstOption = select.options[0];
+                    select.innerHTML = '';
+                    select.appendChild(firstOption);
+                    
+                    // Add options from API
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item.name;
+                        
+                        // Store color data for categories
+                        if (includeColors && item.color) {
+                            option.dataset.color = item.color;
+                            option.style.color = item.color;
+                        }
+                        
+                        if (item.id == selectedValue) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                    
+                    // Trigger change event if a value is selected to update colors
+                    if (selectedValue && includeColors) {
+                        select.dispatchEvent(new Event('change'));
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error loading ${selectId} options:`, error);
+                });
+        }
         
         // Initialize Mini Calendar
         const miniCalendarEl = document.getElementById('mini-calendar');
@@ -871,4 +1026,7 @@
 </script>
     <!-- Include Event Creation Modal -->
     @include('calendar.create-event-modal')
+    
+    <!-- Include Event Edit Modal -->
+    @include('calendar.edit-event-modal')
 @endsection

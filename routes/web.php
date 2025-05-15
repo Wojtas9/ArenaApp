@@ -74,6 +74,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show']);
     Route::put('/api/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'update']);
     Route::delete('/api/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
+    
+    // Spot routes
+    Route::get('/api/spots', [\App\Http\Controllers\SpotController::class, 'apiIndex']);
+    
+    // Instructor routes
+    Route::get('/api/instructors', [\App\Http\Controllers\AdminController::class, 'getCoaches']);
 });
     
     // Generic dashboard route that redirects based on role
