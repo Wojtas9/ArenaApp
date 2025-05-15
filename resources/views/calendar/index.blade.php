@@ -38,7 +38,7 @@
             </a>
             <form action="{{ route('logout') }}" method="POST" class="mt-auto">
                 @csrf
-                <button type="submit" class="cursor-pointer flex items-center gap-3 p-3 rounded hover:bg-red-700 transition-colors w-full text-left">
+                <button type="submit" class="flex items-center gap-3 p-3 rounded hover:bg-red-700 transition-colors w-full text-left">
                     <span class="text-xl">🚪</span>
                     <span>Logout</span>
                 </button>
@@ -53,7 +53,7 @@
                 <div class="flex items-center gap-2">
                     <button id="prev-week" class="text-gray-500 hover:text-gray-700 text-xl">❮</button>
                     <div class="text-center">
-                        <div id="calendar-range" class="text-l text-gray-600"></div>
+                        <div id="calendar-range" class="text-sm text-gray-600"></div>
                     </div>
                     <button id="next-week" class="text-gray-500 hover:text-gray-700 text-xl">❯</button>
                 </div>
@@ -232,13 +232,13 @@
     /* Style for dates with events (dots) */
     .date-has-event {
         position: relative;
-        
+        border: none;
     }
     
     .date-has-event::after {
         content: '';
         position: absolute;
-        top: 50%;
+        
         left: 50%;
         transform: translateX(-50%);
         width: 4px;
@@ -278,55 +278,21 @@
     
     /* Event details panel styling */
     #event-details-panel {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 50;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-
-    #event-details-panel.show {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    #event-details-panel .panel-content {
-        background: white;
-        border-radius: 1rem;
-        padding: 2rem;
-        width: 90%;
-        max-width: 500px;
-        max-height: 80vh;
+        transform: translateY(100%);
+        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        max-height: 300px;
         overflow-y: auto;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        transform: scale(0.95);
-        transition: transform 0.3s ease;
     }
-
-    #event-details-panel.show .panel-content {
-        transform: scale(1);
-    }
-
+    
     #event-details-panel h3 {
-        color: #1a1a1a;
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
+        color:rgb(255, 255, 255);
     }
-
+    
     #event-details-panel .text-gray-500 {
-        font-size: 0.875rem;
+        font-size: 0.8rem;
         font-weight: 500;
-        color: #6b7280;
-        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 </style>
 
@@ -568,31 +534,10 @@
                 
                 // Populate event details
                 detailsPanel.innerHTML = `
-                    <div class="panel-content">
+                    <div class="p-4 bg-white rounded-lg shadow-lg">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold">${event.title}</h3>
-                            <button class="close-panel text-gray-500 hover:text-gray-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                
-                // Add click event for close button
-                const closeButton = detailsPanel.querySelector('.close-panel');
-                closeButton.addEventListener('click', () => {
-                    detailsPanel.classList.remove('show');
-                });
-                
-                // Show the panel
-                detailsPanel.classList.add('show');
-                
-                // Close panel when clicking outside
-                detailsPanel.addEventListener('click', (e) => {
-                    if (e.target === detailsPanel) {
-                        detailsPanel.classList.remove('show');
-                    }
-                });
+                            <div class="flex gap-2">
                                 <button id="edit-event" class="text-blue-500 hover:text-blue-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
