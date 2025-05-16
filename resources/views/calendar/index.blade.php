@@ -73,11 +73,11 @@
             <!-- Sidebar -->
             <div class="col-span-1">
                 <!-- Mini Calendar -->
-                <div class="mb-6 bg-gray-50 p-4 rounded-lg shadow-sm">
+                <div class="mb-6 bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-100">
                     <div class="flex justify-between items-center mb-3">
-                        <button id="mini-prev" class="text-gray-500 hover:text-gray-700">❮</button>
-                        <h3 id="mini-calendar-title" class="text-lg font-semibold">April 2020</h3>
-                        <button id="mini-next" class="text-gray-500 hover:text-gray-700">❯</button>
+                        <button id="mini-prev" class="text-gray-500 hover:text-gray-700 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors">❮</button>
+                        <h3 id="mini-calendar-title" class="text-lg font-semibold text-gray-800">May 2025</h3>
+                        <button id="mini-next" class="text-gray-500 hover:text-gray-700 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors">❯</button>
                     </div>
                     <div id="mini-calendar"></div>
                 </div>
@@ -207,61 +207,90 @@
     /* Style for today's date in mini calendar */
     #mini-calendar .fc-day-today .fc-daygrid-day-number {
         font-weight: bold;
+        background-color: rgba(207, 91, 68, 0.2);
+        border-radius: 50%;
+        color: #cf5b44;
     }
     
     /* Style for selected date in mini calendar */
     #mini-calendar .selected-date {
-        background-color: rgba(139, 92, 246, 0.2);
+        background-color: rgba(139, 92, 246, 0.3);
         border-radius: 50%;
+        font-weight: 600;
     }
     
     /* Mini calendar specific styling */
     #mini-calendar {
-        font-size: 0.6rem;
+        font-size: 0.8rem;
         border: none;
     }
-
-    
 
     #mini-calendar .fc-daygrid-day-top {
         justify-content: center;
     }
     
     #mini-calendar .fc-daygrid-day-number {
-        padding: 0px;
+        padding: 4px;
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
     
-    /* Style for dates with events (dots) */
-    .date-has-event {
-        position: relative;
-        border: none;
+    /* Style for mini-calendar event markers */
+    .mini-calendar-event-marker {
+        display: inline-block;
+        margin-top:5px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        margin: 0 1px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
     
-    .date-has-event::after {
-        content: '';
+    .mini-calendar-marker-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 6px;
         position: absolute;
-        
-        left: 50%;
-        transform: translateX(-50%);
-        width: 4px;
-        height: 4px;
-        background-color: #8b5cf6;
-        border-radius: 50%;
-        border: none;
+        bottom: 1px;
+        left: 0;
+        right: 0;
+    }
+    
+    /* Mini calendar container adjustments to fit markers */
+    #mini-calendar .fc-daygrid-day-bottom {
+        padding: 0;
+        margin-top: 4px;
+    }
+    
+    #mini-calendar .fc-daygrid-day-events {
+        display: none; /* Hide default event rendering */
     }
     
     #mini-calendar .fc-daygrid-day {
         cursor: pointer;
         border: none;
+        position: relative;
+        min-height: 32px;
+        padding: 1px;
+    }
+    
+    #mini-calendar table {
+        border-spacing: 2px;
+        border-collapse: separate;
     }
     
     #mini-calendar .fc-col-header-cell {
-        padding: 4px 0;
+        padding: 6px 0;
         border: none;
-
+        font-weight: 600;
+    }
+    
+    #mini-calendar .fc-col-header-cell-cushion {
+        color: #555;
+        font-size: 0.85rem;
     }
     
     /* Week number indicator */
@@ -627,20 +656,40 @@
                                 <p class="text-gray-700">${props.category || 'Uncategorized'}</p>
                             </div>
                         </div>
+                        ${props.spot ? `
+                        <div class="mb-4">
+                            <p class="text-gray-500 text-sm font-medium uppercase tracking-wide mb-1">Venue</p>
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                </svg>
+                                <p class="text-gray-700">${props.spot}</p>
+                            </div>
+                        </div>
+                        ` : ''}
+                        ${props.instructor ? `
+                        <div class="mb-4">
+                            <p class="text-gray-500 text-sm font-medium uppercase tracking-wide mb-1">Coach</p>
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                                <p class="text-gray-700">${props.instructor}</p>
+                            </div>
+                        </div>
+                        ` : ''}
+                        <div class="mb-4">
+                            <p class="text-gray-500 text-sm font-medium uppercase tracking-wide mb-1">Priority</p>
+                            <div class="flex items-center">
+                                <span class="inline-block px-2 py-1 text-xs font-medium rounded ${props.priority > 0 ? ['bg-blue-100 text-blue-800', 'bg-yellow-100 text-yellow-800', 'bg-orange-100 text-orange-800', 'bg-red-100 text-red-800'][props.priority - 1] : 'bg-gray-100 text-gray-800'}">                                
+                                    ${props.priority > 0 ? ['Low', 'Medium', 'High', 'Urgent'][props.priority - 1] : 'None'}
+                                </span>
+                            </div>
+                        </div>
                         ${props.description ? `
                         <div class="mb-4">
                             <p class="text-gray-500 text-sm font-medium uppercase tracking-wide mb-1">Description</p>
                             <p class="text-gray-700 whitespace-pre-line">${props.description}</p>
-                        </div>
-                        ` : ''}
-                        ${props.priority > 0 ? `
-                        <div class="mb-4">
-                            <p class="text-gray-500 text-sm font-medium uppercase tracking-wide mb-1">Priority</p>
-                            <div class="flex items-center">
-                                <span class="inline-block px-2 py-1 text-xs font-medium rounded ${['bg-blue-100 text-blue-800', 'bg-yellow-100 text-yellow-800', 'bg-orange-100 text-orange-800', 'bg-red-100 text-red-800'][props.priority - 1]}">                                
-                                    ${['Low', 'Medium', 'High', 'Urgent'][props.priority - 1]}
-                                </span>
-                            </div>
                         </div>
                         ` : ''}
                         <div class="flex justify-end gap-3 mt-6">
@@ -758,16 +807,24 @@
             calendar.prev();
             updateCalendarTitle();
             updateHeaderDate(calendar);
-            
-   
+            // Update mini calendar to show the same month as main calendar
+            const mainDate = calendar.getDate();
+            miniCalendar.gotoDate(mainDate);
+            updateMiniCalendarTitle(miniCalendar);
+            // Highlight the selected date
+            highlightSelectedDateInMiniCalendar();
         });
         
         document.getElementById('next-week').addEventListener('click', function() {
             calendar.next();
             updateCalendarTitle();
             updateHeaderDate(calendar);
-            
-
+            // Update mini calendar to show the same month as main calendar
+            const mainDate = calendar.getDate();
+            miniCalendar.gotoDate(mainDate);
+            updateMiniCalendarTitle(miniCalendar);
+            // Highlight the selected date
+            highlightSelectedDateInMiniCalendar();
         });
         
         // Initialize header date on load
@@ -800,6 +857,11 @@
         
         // Initialize the calendar
         calendar.render();
+        
+        // Ensure event markers are added immediately after calendar is rendered
+        setTimeout(function() {
+            addEventMarkersToMiniCalendar();
+        }, 100);
         
         
         // Update the calendar title when the page loads
@@ -881,6 +943,10 @@
                 
                 // Navigate main calendar to this date
                 calendar.gotoDate(info.date);
+                
+                // Update calendar title after navigation
+                updateCalendarTitle();
+                updateHeaderDate(calendar);
             }
         });
         miniCalendar.render();
@@ -899,23 +965,64 @@
         // Initialize mini calendar title
         updateMiniCalendarTitle(miniCalendar);
         
-        // Add event markers to mini calendar
+        // Ensure event markers are added after mini calendar is rendered
+        miniCalendar.on('datesSet', function() {
+            addEventMarkersToMiniCalendar();
+        });
+        
+        // Add event markers to mini calendar with category colors
         function addEventMarkersToMiniCalendar() {
             // Get all events from the main calendar
             const events = calendar.getEvents();
-            const eventDates = {};
+            const eventDatesByCategory = {};
             
-            // Collect unique dates that have events
+            // Collect unique dates that have events, grouped by category color
             events.forEach(event => {
                 const dateStr = event.start.toISOString().split('T')[0];
-                eventDates[dateStr] = true;
+                if (!eventDatesByCategory[dateStr]) {
+                    eventDatesByCategory[dateStr] = [];
+                }
+                // Add category color to the date if not already added
+                const color = event.backgroundColor;
+                if (!eventDatesByCategory[dateStr].includes(color)) {
+                    eventDatesByCategory[dateStr].push(color);
+                }
             });
             
             // Add markers to dates with events
             document.querySelectorAll('#mini-calendar .fc-daygrid-day').forEach(dayEl => {
                 const date = dayEl.getAttribute('data-date');
-                if (eventDates[date]) {
-                    dayEl.querySelector('.fc-daygrid-day-number').classList.add('date-has-event');
+                if (!date) return; // Skip if no date attribute
+                
+                // Clear any existing event markers
+                const existingMarkerContainer = dayEl.querySelector('.mini-calendar-marker-container');
+                if (existingMarkerContainer) {
+                    existingMarkerContainer.remove();
+                }
+                
+                // If this date has events, add colored markers
+                if (eventDatesByCategory[date] && eventDatesByCategory[date].length > 0) {
+                    const colors = eventDatesByCategory[date];
+                    const markerContainer = document.createElement('div');
+                    markerContainer.className = 'mini-calendar-marker-container flex justify-center mt-1';
+                    
+                    // Add up to 3 colored dots
+                    colors.slice(0, 3).forEach(color => {
+                        const marker = document.createElement('div');
+                        marker.className = 'mini-calendar-event-marker rounded-full mx-0.5';
+                        marker.style.backgroundColor = color;
+                        markerContainer.appendChild(marker);
+                    });
+                    
+                    // Add a '+' indicator if there are more than 3 categories
+                    if (colors.length > 3) {
+                        const moreIndicator = document.createElement('div');
+                        moreIndicator.className = 'text-xs text-gray-500 ml-0.5';
+                        moreIndicator.textContent = '+';
+                        markerContainer.appendChild(moreIndicator);
+                    }
+                    
+                    dayEl.appendChild(markerContainer);
                 }
             });
         }
@@ -925,22 +1032,55 @@
             addEventMarkersToMiniCalendar();
         });
         
+        // Also call when events are added or removed
+        calendar.on('eventAdd', function() {
+            setTimeout(addEventMarkersToMiniCalendar, 100);
+        });
+        
+        calendar.on('eventRemove', function() {
+            setTimeout(addEventMarkersToMiniCalendar, 100);
+        });
+        
         // Also call when mini calendar month changes
         miniCalendar.on('datesSet', function() {
             // Wait for the DOM to update
             setTimeout(addEventMarkersToMiniCalendar, 100);
+            // Highlight the current date in mini calendar if it's visible
+            highlightSelectedDateInMiniCalendar();
         });
         
-        // Mark specific dates with events as shown in the image (for demo purposes)
-        setTimeout(function() {
-            const demoEventDates = ['2020-04-02', '2020-04-10', '2020-04-14', '2020-04-16', '2020-04-17', '2020-04-21', '2020-04-30'];
-            document.querySelectorAll('#mini-calendar .fc-daygrid-day').forEach(dayEl => {
-                const date = dayEl.getAttribute('data-date');
-                if (demoEventDates.includes(date)) {
-                    dayEl.querySelector('.fc-daygrid-day-number').classList.add('date-has-event');
-                }
+        // Initial call to add markers - call immediately and also with a delay as backup
+        addEventMarkersToMiniCalendar();
+        setTimeout(addEventMarkersToMiniCalendar, 500);
+        
+        // Refresh markers when calendar view changes and update mini calendar selection
+        calendar.on('datesSet', function() {
+            setTimeout(addEventMarkersToMiniCalendar, 100);
+            // Highlight the selected date in mini calendar
+            highlightSelectedDateInMiniCalendar();
+        });
+        
+        // Function to highlight the selected date in mini calendar
+        function highlightSelectedDateInMiniCalendar() {
+            // Remove selected class from all dates
+            document.querySelectorAll('#mini-calendar .selected-date').forEach(el => {
+                el.classList.remove('selected-date');
             });
-        }, 500);
+            
+            // Get current date from main calendar
+            const currentDate = calendar.getDate();
+            const dateStr = currentDate.toISOString().split('T')[0];
+            
+            // Find the date cell in mini calendar and add selected class
+            const dateCell = document.querySelector(`#mini-calendar .fc-daygrid-day[data-date="${dateStr}"]`);
+            if (dateCell) {
+                dateCell.classList.add('selected-date');
+            }
+        }
+        
+        // Initial call to highlight selected date
+        highlightSelectedDateInMiniCalendar();
+
         
         function updateHeaderDate(calendar) {
             const date = calendar.getDate();
@@ -1013,7 +1153,7 @@
         
     
         
-        // Function to update mini calendar title
+        // Function to update mini calendar title and highlight the selected date
         function updateMiniCalendarTitle(calendar) {
             const date = calendar.getDate();
             const monthName = date.toLocaleString('default', { month: 'long' });
