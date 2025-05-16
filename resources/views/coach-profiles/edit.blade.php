@@ -28,6 +28,11 @@
                         <span class="text-xl">📊</span>
                         <span>Dashboard</span>
                     </a>
+                    <a href="{{ route('coach-profiles.show', auth()->id()) }}"
+                        class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
+                        <span class="text-xl">👤</span>
+                        <span>My Profile</span>
+                    </a>
                     <a href="{{ route('messages.index') }}"
                         class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                         <span class="text-xl">📩</span>
@@ -42,11 +47,6 @@
                         class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                         <span class="text-xl">📚</span>
                         <span>Training Programs</span>
-                    </a>
-                    <a href="{{ route('coach-profiles.show', ['id' => auth()->id()]) }}"
-                        class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                        <span class="text-xl">👤</span>
-                        <span>My Profile</span>
                     </a>
                 </nav>
 
@@ -67,15 +67,15 @@
                 <!-- Top Bar -->
                 <div class="flex justify-between items-center mb-8">
                     <h1 class="text-2xl font-bold">{{ isset($coachProfile) ? 'Edit' : 'Create' }} Coach Profile</h1>
-                   
+
                 </div>
 
                 <!-- Form -->
-                <form action="{{ route('coach-profiles.update', $coachProfile->user_id ?? auth()->id()) }}"
-                    method="POST" enctype="multipart/form-data" class="space-y-6">
+                <form action="{{ route('coach-profiles.update', $coachProfile->user_id ?? auth()->id()) }}" method="POST"
+                    enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     <!-- Remove @method('PUT') directive -->
-                    
+
                     <!-- Profile Image -->
                     <div class="bg-gray-50 p-6 rounded-xl shadow-sm">
                         <h3 class="font-semibold text-lg mb-4">Profile Image</h3>
@@ -92,13 +92,28 @@
                                 @endif
                             </div>
                             <div>
-                                <label for="photo" class="block text-sm font-medium text-gray-700 mb-2">Upload New Image</label>
-                                <input type="file" name="photo" id="photo"
-                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#8C508F] file:text-white hover:file:bg-[#734072]">
+                                <label for="photo" class="block text-sm font-medium text-gray-700 mb-2">Upload New
+                                    Image</label>
+                                <div class="relative">
+                                    <input type="file" name="photo" id="photo" accept="image/*"
+                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" lang="en">
+                                    <div
+                                        class="bg-[#8C508F] text-white px-4 py-2 rounded-full inline-flex items-center gap-2 hover:bg-[#734072] transition-colors">
+                                        <span>Choose File</span>
+                                    </div>
+                                    <span class="ml-3 text-sm text-gray-500" id="file-name">No file chosen</span>
+                                </div>
                                 @error('photo')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            <script>
+                                document.getElementById('photo').addEventListener('change', function(e) {
+                                    const fileName = e.target.files[0]?.name || 'No file chosen';
+                                    document.getElementById('file-name').textContent = fileName;
+                                });
+                            </script>
                         </div>
                     </div>
 
@@ -120,8 +135,8 @@
                     <div class="bg-gray-50 p-6 rounded-xl shadow-sm">
                         <h3 class="font-semibold text-lg mb-4">Specializations</h3>
                         <div>
-                            <label for="specialty"
-                                class="block text-sm font-medium text-gray-700 mb-2">Specializations (comma
+                            <label for="specialty" class="block text-sm font-medium text-gray-700 mb-2">Specializations
+                                (comma
                                 separated)</label>
                             <input type="text" name="specialty" id="specialty"
                                 value="{{ old('specialty', $coachProfile->specialty ?? '') }}"
@@ -137,21 +152,33 @@
                     <div class="bg-gray-50 p-6 rounded-xl shadow-sm">
                         <h3 class="font-semibold text-lg mb-4">Favorite Halls</h3>
                         <div>
-                            <label for="favorite_halls" class="block text-sm font-medium text-gray-700 mb-2">Favorite Sports Halls</label>
-                            <textarea name="favorite_halls" id="favorite_halls" rows="3"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8C508F] focus:ring focus:ring-[#8C508F] focus:ring-opacity-50"
-                                placeholder="List your favorite sports halls...">{{ old('favorite_halls', $coachProfile->favorite_halls ?? '') }}</textarea>
+                            <label for="favorite_halls" class="block text-sm font-medium text-gray-700 mb-2">Favorite Sports
+                                Halls</label>
+                            <select name="favorite_halls" id="favorite_halls" multiple
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8C508F] focus:ring focus:ring-[#8C508F] focus:ring-opacity-50 h-32 overflow-y-auto"
+                                onchange="updateFavoriteHalls(this)">
+                                @foreach ($spots as $spot)
+                                    <option value="{{ $spot->name }}"
+                                        {{ in_array($spot->name, explode(',', $coachProfile->favorite_halls ?? '')) ? 'selected' : '' }}>
+                                        {{ $spot->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" name="favorite_halls" id="favorite_halls_input"
+                                value="{{ old('favorite_halls', $coachProfile->favorite_halls ?? '') }}">
+                            <p class="mt-2 text-sm text-gray-500">Hold Ctrl (Windows) or Command (Mac) to select multiple
+                                halls</p>
                             @error('favorite_halls')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
-
                     <!-- Accessibility -->
                     <div class="bg-gray-50 p-6 rounded-xl shadow-sm">
                         <h3 class="font-semibold text-lg mb-4">Accessibility</h3>
                         <div>
-                            <label for="accessibility" class="block text-sm font-medium text-gray-700 mb-2">Availability & Accessibility</label>
+                            <label for="accessibility" class="block text-sm font-medium text-gray-700 mb-2">Availability &
+                                Accessibility</label>
                             <textarea name="accessibility" id="accessibility" rows="3"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8C508F] focus:ring focus:ring-[#8C508F] focus:ring-opacity-50"
                                 placeholder="Describe your availability and accessibility...">{{ old('accessibility', $coachProfile->accessibility ?? '') }}</textarea>
@@ -162,17 +189,19 @@
                     </div>
 
 
-                    <!-- Submit Button -->
-                    <div class="flex justify-end">
+                    <!-- Add Save Button -->
+                    <div class="mt-6">
                         <button type="submit"
-                            class="bg-[#8C508F] hover:bg-[#734072] text-white px-6 py-3 rounded-lg transition-colors flex items-center gap-2">
-                            <span class="text-xl">💾</span>
-                            <span>{{ isset($coachProfile) ? 'Update' : 'Create' }} Profile</span>
+                            class="w-full bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors">
+                            Save Changes
                         </button>
                     </div>
-                </form>
             </div>
+
+          
+            </form>
         </div>
+    </div>
     </div>
 
     <script>
@@ -194,5 +223,11 @@
                 reader.readAsDataURL(file);
             }
         });
+    </script>
+    <script>
+        function updateFavoriteHalls(selectElement) {
+            const selectedOptions = Array.from(selectElement.selectedOptions).map(option => option.value);
+            document.getElementById('favorite_halls_input').value = selectedOptions.join(',');
+        }
     </script>
 @endsection

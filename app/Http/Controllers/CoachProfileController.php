@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CoachProfile;
 use App\Models\User;
+use App\Models\Spot;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-
 
 class CoachProfileController extends Controller
 {
@@ -43,10 +43,10 @@ class CoachProfileController extends Controller
     {
         // Find the coach by ID
         $coach = User::where('role', 'coach')->findOrFail($coachProfile);
-        
+
         // Load the coach profile relationship if it exists
         $coach->load('coachProfile');
-        
+
         // Pass the coach variable to the view
         return view('coach-profiles.show', compact('coach'));
     }
@@ -54,18 +54,10 @@ class CoachProfileController extends Controller
     /**
      * Show the form for editing the specified coach profile.
      */
-    public function edit($id)
+    public function edit(CoachProfile $profile)
     {
-        // Find the coach by ID
-        $coach = User::where('role', 'coach')->findOrFail($id);
-        
-        // Load the coach profile relationship if it exists
-        $coach->load('coachProfile');
-        
-        // Get the coach profile or create a new one
-        $coachProfile = $coach->coachProfile ?? new CoachProfile(['user_id' => $id]);
-        
-        return view('coach-profiles.edit', compact('coachProfile'));
+        $spots = Spot::all(); 
+        return view('coach-profiles.edit', compact('profile', 'spots'));
     }
 
     /**
@@ -82,7 +74,7 @@ class CoachProfileController extends Controller
             'accessibility' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
+
         $coachProfile = CoachProfile::updateOrCreate(
             ['user_id' => $id],
             [
@@ -94,7 +86,7 @@ class CoachProfileController extends Controller
                 'accessibility' => $validated['accessibility'] ?? null,
             ]
         );
-        
+
         if ($request->hasFile('photo')) {
             if ($coachProfile->photo) {
                 Storage::delete('public/' . $coachProfile->photo);
@@ -103,7 +95,7 @@ class CoachProfileController extends Controller
             $coachProfile->photo = $path;
             $coachProfile->save();
         }
-        
+
         return redirect()->route('coach-profiles.show', $id)
             ->with('success', 'Coach profile updated successfully');
     }
@@ -118,20 +110,20 @@ class CoachProfileController extends Controller
             'accessibility' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
+
         $coachProfile = CoachProfile::where('user_id', Auth::id())->first();
         if (!$coachProfile) {
             $coachProfile = new CoachProfile();
             $coachProfile->user_id = Auth::id();
         }
-    
+
         // Map the validated data to the database fields
         $coachProfile->name = $validated['name'];
         $coachProfile->description = $validated['description'] ?? null;
         $coachProfile->specialty = $validated['specialty'] ?? null;
         $coachProfile->favorite_halls = $validated['favorite_halls'] ?? null;
         $coachProfile->accessibility = $validated['accessibility'] ?? null;
-    
+
         if ($request->hasFile('photo')) {
             if ($coachProfile->photo) {
                 Storage::delete('public/' . $coachProfile->photo);
@@ -139,9 +131,9 @@ class CoachProfileController extends Controller
             $path = $request->file('photo')->store('coach-profiles', 'public');
             $coachProfile->photo = $path;
         }
-    
+
         $coachProfile->save();
-    
+
         return redirect()->route('coach-profiles.show', ['id' => $coachProfile->id])
             ->with('success', 'Coach profile updated successfully');
     }

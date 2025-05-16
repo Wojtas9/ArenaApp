@@ -26,6 +26,11 @@
                     <span class="text-xl">📊</span>
                     <span>Dashboard</span>
                 </a>
+                <a href="{{ route('coach-profiles.show', auth()->id()) }}"
+                    class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
+                    <span class="text-xl">👤</span>
+                    <span>My Profile</span>
+                </a>
                 <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                     <span class="text-xl">📩</span>
                     <span>Messages</span>
@@ -37,10 +42,6 @@
                 <a href="{{ route('training-programs.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                     <span class="text-xl">📚</span>
                     <span>Training Programs</span>
-                </a>
-                <a href="{{ route('coach-profiles.show', auth()->id()) }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">👤</span>
-                    <span>My Profile</span>
                 </a>
             </nav>
 

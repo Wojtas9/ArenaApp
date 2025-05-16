@@ -28,6 +28,11 @@
                         <span class="text-xl">📊</span>
                         <span>Dashboard</span>
                     </a>
+                    <a href="{{ route('coach-profiles.show', auth()->id()) }}"
+                        class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
+                        <span class="text-xl">👤</span>
+                        <span>My Profile</span>
+                    </a>
                     <a href="{{ route('messages.index') }}"
                         class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                         <span class="text-xl">📩</span>
@@ -42,11 +47,6 @@
                         class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                         <span class="text-xl">📚</span>
                         <span>Training Programs</span>
-                    </a>
-                    <a href="{{ route('coach-profiles.show', auth()->id()) }}"
-                        class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                        <span class="text-xl">👤</span>
-                        <span>My Profile</span>
                     </a>
                 </nav>
 
@@ -93,8 +93,9 @@
                                 @endif
                                 <h2 class="text-xl font-bold">{{ $coach->name }}</h2>
                                 @if ($coach->coachProfile)
-                                    <p class="text-gray-600 mt-2">{{ $coach->coachProfile->title ?? 'No title specified' }}
-                                    </p>
+                                    @if($coach->coachProfile->title)
+                                        <p class="text-gray-600 mt-2">{{ $coach->coachProfile->title }}</p>
+                                    @endif
                                     <p class="text-gray-600 mt-1">{{ $coach->email }}</p>
                                     @if ($coach->coachProfile->phone)
                                         <p class="text-gray-600 mt-1">Phone: {{ $coach->coachProfile->phone }}</p>
