@@ -79,9 +79,8 @@ class User extends Authenticatable
      *
      * @return bool
      */
-
     public function isCoach(): bool
-   {
+    {
         return $this->hasRoleAttribute('coach');
     }
     
@@ -90,10 +89,14 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    
     public function isPlayer(): bool
     {
         return $this->hasRoleAttribute('player');
+    }
+
+    public function coachProfile()
+    {
+        return $this->hasOne(CoachProfile::class);
     }
 
 }

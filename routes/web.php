@@ -11,6 +11,7 @@ use App\Http\Controllers\SpotController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TrainingProgramsController;
+use App\Http\Controllers\CoachProfileController;
 
 // Home route
 Route::get('/', function () {
@@ -67,4 +68,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('training-programs', TrainingProgramsController::class);
     Route::post('training-programs/{trainingProgram}/add-training', [TrainingProgramsController::class, 'addTraining'])->name('training-programs.add-training');
     Route::delete('training-programs/{trainingProgram}/remove-training', [TrainingProgramsController::class, 'removeTraining'])->name('training-programs.remove-training');
+
+    // Coach Profile Routes
+    Route::get('/coach-profiles', [CoachProfileController::class, 'index'])->name('coach-profiles.index');
+    Route::get('/coach-profiles/create', [CoachProfileController::class, 'create'])->name('coach-profiles.create');
+    Route::post('/coach-profiles', [CoachProfileController::class, 'store'])->name('coach-profiles.store');
+    Route::get('/coach-profiles/{id}', [CoachProfileController::class, 'show'])->name('coach-profiles.show');
+    Route::get('/coach-profiles/{id}/edit', [CoachProfileController::class, 'edit'])->name('coach-profiles.edit');
+    Route::post('/coach-profiles/{id}', [CoachProfileController::class, 'update'])->name('coach-profiles.update');
+    Route::delete('/coach-profiles/{id}', [CoachProfileController::class, 'destroy'])->name('coach-profiles.destroy');
 });
