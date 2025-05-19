@@ -39,6 +39,10 @@
                     <span class="text-xl">📁</span>
                     <span>Folders</span>
                 </a>
+                <a href="{{ route('calendar') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#4CAF50] transition-colors">
+                    <span class="text-xl">📅</span>
+                    <span>Calendar</span>
+                </a>
                 <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#4CAF50] transition-colors">
                     <span class="text-xl">⚙️</span>
                     <span>Settings</span>

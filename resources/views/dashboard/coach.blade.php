@@ -28,8 +28,12 @@
                 </a>
                 <a href="{{ route('coach-profiles.show', auth()->id()) }}"
                     class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">👤</span>
+                    <span class="text-xl">📁👤</span>
                     <span>My Profile</span>
+                </a>
+                <a href="{{ route('calendar') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
+                <span class="text-xl">📅</span>
+                <span>Calendar</span>
                 </a>
                 <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                     <span class="text-xl">📩</span>

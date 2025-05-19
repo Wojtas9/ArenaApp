@@ -28,6 +28,17 @@ class AdminController extends Controller
     }
     
     /**
+     * Get all coaches for API.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCoaches()
+    {
+        $coaches = User::where('role', 'coach')->get(['id', 'name']);
+        return response()->json($coaches);
+    }
+    
+    /**
      * Display a listing of users.
      *
      * @return \Illuminate\View\View

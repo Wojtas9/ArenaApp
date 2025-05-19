@@ -17,6 +17,15 @@ class SpotController extends Controller
         $spots = Spot::all();
         return view('spots.index', compact('spots'));
     }
+    
+    /**
+     * Return spots as JSON for API.
+     */
+    public function apiIndex()
+    {
+        $spots = Spot::all();
+        return response()->json($spots);
+    }
 
     /**
      * Show the form for creating a new spot.

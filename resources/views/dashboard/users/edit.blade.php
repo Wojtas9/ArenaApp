@@ -12,7 +12,7 @@
         <source src="/movies/hero_animation.mp4" type="video/mp4">
     </video>
     <div class="fixed inset-0 bg-black/50 z-10"></div>
-    <div class="flex h-270 max-w-[1400px] mx-auto gap-6 relative z-20">
+    <div class="flex mb-30 h-240 max-w-[1400px] mx-auto gap-6 relative z-20">
         <!-- Sidebar -->
         <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-2xl shadow-lg">
             <div class="flex items-center gap-3 mb-8">
