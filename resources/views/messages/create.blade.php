@@ -19,7 +19,6 @@
                 ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
                 ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'admin.settings'] // Assuming a route name like admin.settings
             ],
-            // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
         ])
 
         <!-- Main Content -->
@@ -41,32 +40,35 @@
             </div>
             @endif
 
-            <form action="{{ route('messages.store') }}" method="POST" class="space-y-6">
+            <form method="POST" action="{{ route('messages.store') }}" class="space-y-4">
                 @csrf
+                
                 <div class="mb-4">
-                    <label for="recipient" class="block text-gray-700 dark:text-gray-300 mb-2">Recipient</label>
-                    <select name="recipient_id" id="recipient" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <option value="">Select Recipient</option>
+                    <label for="recipient_id" class="block text-sm font-medium text-gray-700">Recipient</label>
+                    <select name="recipient_id" id="recipient_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 
+                <!-- Subject field -->
                 <div class="mb-4">
-                    <label for="subject" class="block text-gray-700 dark:text-gray-300 mb-2">Subject</label>
-                    <input type="text" name="subject" id="subject" value="{{ old('subject') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
+                    <input type="text" name="subject" id="subject" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
                 
+                <!-- Content field -->
                 <div class="mb-4">
-                    <label for="message" class="block text-gray-700 dark:text-gray-300 mb-2">Message</label>
-                    <textarea name="message" id="message" rows="6" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>{{ old('message') }}</textarea>
+                    <label for="content" class="block text-sm font-medium text-gray-700">Message Content</label>
+                    <textarea name="content" id="content" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required></textarea>
+                    @error('content')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
                 
                 <div class="flex justify-end">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                        Send Message
-                    </button>
+                    <button type="submit" class="px-4 py-2 bg-[#cf5b44] text-white rounded-lg hover:bg-[#b84c37]">Send Message</button>
                 </div>
             </form>
         </div>

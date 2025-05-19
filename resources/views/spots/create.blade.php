@@ -20,21 +20,7 @@
                 ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
                 ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'admin.settings'] // Assuming a route name like admin.settings
             ],
-            // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
         ])
-
-
-            
-            <div class="mt-8">
-                <form action="{{ route('logout') }}" method="POST" class="w-full">
-                    @csrf
-                    <button type="submit" class="w-full bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
-                        <span class="text-xl">🚪</span>
-                        <span>Logout</span>
-                    </button>
-                </form>
-            </div>
-        </div>
 
         <!-- Main Content -->
         <div class="flex-1 p-8 bg-white rounded-4xl shadow-lg drop-shadow-xl/50">

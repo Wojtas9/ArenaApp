@@ -59,16 +59,47 @@
                         <div class="mb-4">
                             <h3 class="text-lg font-medium mb-2">To-Do List</h3>
                             <div class="bg-white p-4 rounded-lg border border-gray-200">
-                                @if(!empty($trainingProgram->todo_list))
-                                    <ul class="list-disc pl-5 space-y-1">
-                                        @foreach($trainingProgram->todo_list as $item)
-                                            <li class="flex items-start gap-2">
-                                                <span>{{ $item }}</span>
+                                @if(is_array($trainingProgram->todo_list) && !empty($trainingProgram->todo_list))
+                                    <ol class="space-y-3 list-none pl-0">
+                                        @foreach($trainingProgram->todo_list as $index => $item)
+                                            <li class="flex items-start gap-3 p-3 bg-gray-50 rounded-md">
+                                                <span class="flex-shrink-0 bg-[#8C508F] text-white rounded-full h-6 w-6 flex items-center justify-center font-semibold">
+                                                    {{ $index + 1 }}
+                                                </span>
+                                                <span class="text-gray-700 pt-0.5">{{ $item }}</span>
                                             </li>
                                         @endforeach
-                                    </ul>
+                                    </ol>
+                                @elseif(is_string($trainingProgram->todo_list) && !empty($trainingProgram->todo_list))
+                                    @php
+                                        $todoItems = json_decode($trainingProgram->todo_list, true) ?? [];
+                                    @endphp
+                                    @if(!empty($todoItems))
+                                        <ol class="space-y-3 list-none pl-0">
+                                            @foreach($todoItems as $index => $item)
+                                                <li class="flex items-start gap-3 p-3 bg-gray-50 rounded-md">
+                                                    <span class="flex-shrink-0 bg-[#8C508F] text-white rounded-full h-6 w-6 flex items-center justify-center font-semibold">
+                                                        {{ $index + 1 }}
+                                                    </span>
+                                                    <span class="text-gray-700 pt-0.5">{{ $item }}</span>
+                                                </li>
+                                            @endforeach
+                                        </ol>
+                                    @else
+                                        <p class="text-gray-500 italic flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            No to-do items added yet.
+                                        </p>
+                                    @endif
                                 @else
-                                    <p class="text-gray-500">No to-do items added yet.</p>
+                                    <p class="text-gray-500 italic flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        No to-do items added yet.
+                                    </p>
                                 @endif
                             </div>
                         </div>

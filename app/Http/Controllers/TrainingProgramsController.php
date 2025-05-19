@@ -40,13 +40,18 @@ class TrainingProgramsController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,completed,cancelled',
+            'todo_list' => 'nullable|string', // Change from 'json' to 'string'
         ]);
+        
+        // Decode the JSON string to an array before saving
+        $todoList = $request->todo_list ? json_decode($request->todo_list, true) : [];
         
         $program = TrainingProgram::create([
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
             'coach_id' => Auth::id(),
+            'todo_list' => $todoList, // Use the decoded array
         ]);
         
         return redirect()->route('training-programs.show', $program)
@@ -82,14 +87,17 @@ class TrainingProgramsController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,completed,cancelled',
-            // Remove the todo_list validation
+            'todo_list' => 'nullable|string', // Change from 'json' to 'string'
         ]);
+        
+        // Decode the JSON string to an array before saving
+        $todoList = $request->todo_list ? json_decode($request->todo_list, true) : [];
         
         $trainingProgram->update([
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
-            // Remove the todo_list assignment
+            'todo_list' => $todoList, // Use the decoded array
         ]);
         
         return redirect()->route('training-programs.show', $trainingProgram)

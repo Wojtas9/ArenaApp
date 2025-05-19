@@ -15,6 +15,7 @@ class TrainingProgram extends Model
         'coach_id',
         'status',
         'total_sessions',
+        'todo_list', 
     ];
 
     public function coach()
@@ -22,4 +23,7 @@ class TrainingProgram extends Model
         return $this->belongsTo(User::class, 'coach_id');
     }
     
+    protected $casts = [
+        'todo_list' => 'array',
+    ];
 }

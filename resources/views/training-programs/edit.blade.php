@@ -133,6 +133,7 @@
         const form = document.getElementById('program-form');
         form.addEventListener('submit', function() {
             document.getElementById('description').value = quill.root.innerHTML;
+            updateTodoListInput(); // Add this line to ensure todo list is updated before submission
         });
         
         // Todo List Functionality
@@ -174,28 +175,27 @@
             todoItems.innerHTML = '';
             todoList.forEach((item, index) => {
                 const todoItem = document.createElement('div');
-                todoItem.className = 'flex items-center justify-between bg-gray-50 p-3 rounded';
+                todoItem.className = 'flex items-center justify-between bg-gray-100 p-2 rounded';
                 todoItem.innerHTML = `
                     <span>${item}</span>
-                    <button type="button" class="text-red-500 hover:text-red-700" data-index="${index}">
+                    <button type="button" class="text-red-500 hover:text-red-700" onclick="removeTodoItem(${index})">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 `;
                 todoItems.appendChild(todoItem);
-                
-                // Add delete event listener
-                todoItem.querySelector('button').addEventListener('click', function() {
-                    const index = parseInt(this.getAttribute('data-index'));
-                    todoList.splice(index, 1);
-                    renderTodoItems();
-                    updateTodoListInput();
-                });
             });
         }
         
-        // Update hidden input with JSON todo list
+        // Remove todo item
+        function removeTodoItem(index) {
+            todoList.splice(index, 1);
+            renderTodoItems();
+            updateTodoListInput();
+        }
+        
+        // Update hidden input with JSON string
         function updateTodoListInput() {
             todoListInput.value = JSON.stringify(todoList);
         }

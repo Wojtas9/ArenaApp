@@ -37,6 +37,11 @@
 
             {{-- Coach Links --}}
             @if(Auth::user()->role == 'coach')
+                <a href="{{ route('coach-profiles.show', auth()->id()) }}"
+                   class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('coach-profiles.show') ? 'bg-[#0B2558]' : '' }}">
+                    <span class="text-xl">👤</span>
+                    <span>My Profile</span>
+                </a>
                 <a href="{{ route('spots.index') }}"
                    class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('spots.index') ? 'bg-[#0B2558]' : '' }}">
                     <span class="text-xl">🏟️</span>
