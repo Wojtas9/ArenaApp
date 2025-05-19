@@ -10,16 +10,6 @@
     <div class="fixed inset-0 bg-black/50 z-10"></div>
     <div class="flex h-270 max-w-[1400px] mx-auto gap-6 relative z-20">
         <!-- Sidebar -->
-        <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-4xl shadow-lg drop-shadow-xl/50">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">
-                    <span class="text-xl">👨‍🏫</span>
-                </div>
-                <div>
-                    <h3 class="font-semibold">{{ auth()->user()->name }}</h3>
-                    <p class="text-sm opacity-70">Coach</p>
-                </div>
-            </div>
 
             @include('layouts.partials.sidebar', [
             'sidebarIcon' => '👨‍💼',

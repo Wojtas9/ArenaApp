@@ -42,9 +42,8 @@
                     <span class="text-xl">🏟️</span>
                     <span>Spot Management</span>
                 </a>
-                {{-- Assuming 'coach.training_sets' is the route name for Training Sets --}}
-                <a href="{{ route('coach.training_sets') }}"
-                   class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('coach.training_sets') ? 'bg-[#0B2558]' : '' }}">
+                <a href="{{ route('training-programs.index') }}"
+                   class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('training-programs.index') ? 'bg-[#0B2558]' : '' }}">
                     <span class="text-xl">🏋️</span>
                     <span>Training Sets</span>
                 </a>
