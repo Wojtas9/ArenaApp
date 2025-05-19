@@ -7,44 +7,15 @@
     <div class="fixed inset-0 bg-black/50 z-1"></div>
 <div class="flex h-screen max-w-[1400px] mx-auto gap-6 relative z-20 py-8">
 
-    <!-- Sidebar -->
-    <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-2xl shadow-lg drop-shadow-xl/50 h-full">
-        <div class="flex items-center gap-3 mb-8">
-            <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">
-                <span class="text-xl">👨‍💼</span>
-            </div>
-            <div>
-                <h3 class="font-semibold">{{ Auth::user()->name }}</h3>
-                <p class="text-sm opacity-70">{{ ucfirst(Auth::user()->role) }}</p>
-            </div>
-        </div>
+        @include('layouts.partials.sidebar', [
+            'sidebarIcon' => '📅',
+            'sidebarTitle' => Auth::user()->name,
+            'sidebarSubtitle' => ucfirst(Auth::user()->role),
+            'navLinks' => [
+                ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'settings']
+            ]
+        ])
 
-        <nav class="space-y-4">
-            <a href="{{ route('dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#e57373] transition-colors">
-                <span class="text-xl">📊</span>
-                <span>Dashboard</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#e57373] transition-colors">
-                <span class="text-xl">📁</span>
-                <span>Folders</span>
-            </a>
-            <a href="{{ route('calendar') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#e57373] transition-colors">
-                <span class="text-xl">📅</span>
-                <span>Calendar</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#e57373] transition-colors">
-                <span class="text-xl">⚙️</span>
-                <span>Settings</span>
-            </a>
-            <form action="{{ route('logout') }}" method="POST" class="mt-auto">
-                @csrf
-                <button type="submit" class="flex items-center gap-3 p-3 rounded hover:bg-red-700 transition-colors w-full text-left">
-                    <span class="text-xl">🚪</span>
-                    <span>Logout</span>
-                </button>
-            </form>
-        </nav>
-    </div>
 
     <!-- Main Content -->
     <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg drop-shadow-xl/50 flex flex-col h-full">
@@ -70,7 +41,6 @@
                 
             </div>
 
-            <!-- Sidebar -->
             <div class="col-span-1">
                 <!-- Mini Calendar -->
                 <div class="mb-6 bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-100">

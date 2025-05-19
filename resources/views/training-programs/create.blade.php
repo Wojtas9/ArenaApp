@@ -9,6 +9,18 @@
     <div class="fixed inset-0 bg-black/50 z-10"></div>
     <div class="flex flex-col md:flex-row max-w-[1400px] mx-auto gap-6 relative z-20">
         <!-- Sidebar -->
+        @include('layouts.partials.sidebar', [
+            'sidebarIcon' => '👨‍💼',
+            'sidebarTitle' => Auth::user()->name,
+            'sidebarSubtitle' => ucfirst(Auth::user()->role),
+            'navLinks' => [
+                ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],
+                ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
+                ['icon' => '📚', 'text' => 'Training Programs', 'href' => '#', 'active_check_route_name' => 'training-programs.settings'] 
+            ],
+            // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
+        ])
+        
         <div class="w-full md:w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-4xl shadow-lg drop-shadow-xl/50 flex-shrink-0">
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">

@@ -51,10 +51,7 @@
                             <span class="text-white mr-4">Welcome, {{ auth()->user()->name }}</span>
                             <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isCoach() ? route('coach.dashboard') : route('player.dashboard')) }}" 
                                class="text-white hover:text-blue-200 mr-4 transition-colors">Dashboard</a>
-                            <form action="{{ route('logout') }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">Logout</button>
-                            </form>
+                            
                         </div>
                     @endguest
                 </div>

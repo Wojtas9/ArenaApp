@@ -20,42 +20,17 @@
     <div class="fixed inset-0 bg-black/50 z-10"></div>
     <div class="flex mb-30 h-240 max-w-[1400px] mx-auto gap-6 relative z-20">
         <!-- Sidebar -->
-        <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-2xl shadow-lg">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">
-                    <span class="text-xl">👨‍💼</span>
-                </div>
-                <div>
-                    <h3 class="font-semibold">Admin Name</h3>
-                    <p class="text-sm opacity-70">Admin</p>
-                </div>
-            </div>
-
-            <nav class="space-y-4">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
-                    <span class="text-xl">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">📁</span>
-                    <span>Folders</span>
-                </a>
-                <a href="{{ route('admin.users') }}" class="flex items-center gap-3 p-3 rounded bg-[#8C508F] transition-colors">
-                    <span class="text-xl">👥</span>
-                    <span>User Management</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">⚙️</span>
-                    <span>Settings</span>
-                </a>
-            </nav>
-
-            <div class="mt-8 p-4 border border-[#8C508F] rounded-lg">
-                <span class="text-xl block mb-2">📤</span>
-                <p class="text-sm">Add files</p>
-                <p class="text-xs opacity-70">Up to 20 GB</p>
-            </div>
-        </div>
+        @include('layouts.partials.sidebar', [
+            'sidebarIcon' => '👨‍💼',
+            'sidebarTitle' => Auth::user()->name,
+            'sidebarSubtitle' => ucfirst(Auth::user()->role),
+            'navLinks' => [
+                ['icon' => '📊', 'text' => 'Dashboard', 'href' => route('admin.dashboard'), 'active_check_route_name' => 'admin.dashboard'],
+                ['icon' => '📁', 'text' => 'Folders', 'href' => '#', 'active_check_route_name' => 'admin.folders'], 
+                ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],
+                ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'admin.settings'] 
+            ]
+        ])
 
         <!-- Main Content -->
         <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg">

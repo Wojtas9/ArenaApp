@@ -23,52 +23,17 @@
 
     <div class="flex mt-30 mb-30 h-240 max-w-[1400px] mx-auto gap-5 relative z-20">
         <!-- Sidebar -->
-        <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-2xl shadow-lg drop-shadow-xl/50">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">
-                    <span class="text-xl">👨‍💼</span>
-                </div>
-                <div>
-                    <h3 class="font-semibold">{{ Auth::user()->name }}</h3>
-                    <p class="text-sm opacity-70">{{ ucfirst(Auth::user()->role) }}</p>
-
-                </div>
-            </div>
-
-            <nav class="space-y-4">
-
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#e57373] transition-colors">
-                    <span class="text-xl">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#e57373] transition-colors">
-                    <span class="text-xl">📁</span>
-                    <span>Folders</span>
-                </a>
-                
-                <a href="{{ route('admin.users') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">👥</span>
-                    <span>User Management</span>
-                </a>
-                
-                <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">📩</span>
-                    <span>Messages</span>
-
-                </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">⚙️</span>
-                    <span>Settings</span>
-                </a>
-         
-            </nav>
-
-            <div class="mt-8 p-4 border border-[#8C508F] rounded-lg">
-                <span class="text-xl block mb-2">6</span>
-                <p class="text-sm">Add files</p>
-                <p class="text-xs opacity-70">Up to 20 GB</p>
-            </div>
-        </div>
+        @include('layouts.partials.sidebar', [
+            'sidebarIcon' => '👨‍💼',
+            'sidebarTitle' => Auth::user()->name,
+            'sidebarSubtitle' => ucfirst(Auth::user()->role),
+            'navLinks' => [
+                ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],
+                ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
+                ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'admin.settings'] // Assuming a route name like admin.settings
+            ],
+            // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
+        ])
 
         <!-- Main Content -->
 
@@ -107,18 +72,6 @@
                         Messages 
                     </a>
                     </span>
-                </div>
-            </div>
-
-            <!-- Management Options -->
-            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
-                <h3 class="text-xl font-bold mb-4">Management Options</h3>
-                <div class="space-y-2">
-                    <a href="{{ route('spots.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] hover:text-white transition-colors">
-                        <span class="text-xl">🏟️</span>
-                        <span>Manage Sports Halls</span>
-                    </a>
-                    <!-- Other management options can be added here -->
                 </div>
             </div>
 

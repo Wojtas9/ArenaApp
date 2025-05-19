@@ -21,44 +21,17 @@
                 </div>
             </div>
 
-            <nav class="space-y-4">
-                <a href="{{ route('coach.dashboard') }}" class="flex items-center gap-3 p-3 rounded bg-[#0B2558] transition-colors">
-                    <span class="text-xl">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="{{ route('coach-profiles.show', auth()->id()) }}"
-                    class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">📁👤</span>
-                    <span>My Profile</span>
-                </a>
-                <a href="{{ route('calendar') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a3a7a] transition-colors">
-                <span class="text-xl">📅</span>
-                <span>Calendar</span>
-                </a>
-                <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">📩</span>
-                    <span>Messages</span>
-                </a>
-                <a href="{{ route('spots.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">🏟️</span>
-                    <span>Sports Halls</span>
-                </a>
-                <a href="{{ route('training-programs.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">📚</span>
-                    <span>Training Programs</span>
-                </a>
-            </nav>
-
-            <div class="mt-8">
-                <form action="{{ route('logout') }}" method="POST" class="w-full">
-                    @csrf
-                    <button type="submit" class="w-full bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
-                        <span class="text-xl">🚪</span>
-                        <span>Logout</span>
-                    </button>
-                </form>
-            </div>
-        </div>
+            @include('layouts.partials.sidebar', [
+            'sidebarIcon' => '👨‍💼',
+            'sidebarTitle' => Auth::user()->name,
+            'sidebarSubtitle' => ucfirst(Auth::user()->role),
+            'navLinks' => [
+                ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],
+                ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
+                ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'admin.settings'] // Assuming a route name like admin.settings
+            ],
+            // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
+        ])
 
         <!-- Main Content -->
         <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg">

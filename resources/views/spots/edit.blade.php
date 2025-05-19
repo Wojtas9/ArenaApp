@@ -8,60 +8,17 @@
     </video>
     <div class="fixed inset-0 bg-black/50 z-10"></div>
     <div class="flex h-270 max-w-[1400px] mx-auto gap-6 relative z-20">
-        <!-- Sidebar -->
-        <div class="w-64 bg-[#cf5b44] text-white border-1 border-solid border-[#232325] p-6 rounded-4xl shadow-lg drop-shadow-xl/50">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">
-                    <span class="text-xl">🏟️</span>
-                </div>
-                <div>
-                    <h3 class="font-semibold">Spots</h3>
-                    <p class="text-sm opacity-70">Management</p>
-                </div>
-            </div>
-
-            <nav class="space-y-4">
-                @if(auth()->user()->role === 'coach')
-                    <a href="{{ route('coach.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
-                        <span class="text-xl">📊</span>
-                        <span>Coach Dashboard</span>
-                    </a>
-                @elseif(auth()->user()->role === 'player')
-                    <a href="{{ route('player.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
-                        <span class="text-xl">📊</span>
-                        <span>Player Dashboard</span>
-                    </a>
-                @else
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors">
-                        <span class="text-xl">📊</span>
-                        <span>Admin Dashboard</span>
-                    </a>
-                @endif
-                <a href="{{ route('messages.index') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">📩</span>
-                    <span>Messages</span>
-                </a>
-                <a href="{{ route('spots.index') }}" class="flex items-center gap-3 p-3 rounded bg-[#8C508F] transition-colors">
-                    <span class="text-xl">🏟️</span>
-                    <span>Sports</span>
-                </a>
-                <a href="{{ route('spots.create') }}" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">➕</span>
-                    <span>Create New Spots</span>
-                </a>
-
-                <div class="mt-8">
-                    <form action="{{ route('logout') }}" method="POST" class="w-full">
-                        @csrf
-                        <button type="submit" class="w-full bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
-                            <span class="text-xl">🚪</span>
-                            <span>Logout</span>
-                        </button>
-                    </form>
-                </div>
-        
-            </nav>
-        </div>
+    @include('layouts.partials.sidebar', [
+            'sidebarIcon' => '👨‍💼',
+            'sidebarTitle' => Auth::user()->name,
+            'sidebarSubtitle' => ucfirst(Auth::user()->role),
+            'navLinks' => [
+                ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],
+                ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
+                ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'admin.settings'] // Assuming a route name like admin.settings
+            ],
+            // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
+        ])
             
         <!-- Main Content -->
         <div class="flex-1 p-8 bg-white rounded-4xl shadow-lg drop-shadow-xl/50">

@@ -51,14 +51,7 @@
                 </nav>
 
                 <div class="mt-8">
-                    <form action="{{ route('logout') }}" method="POST" class="w-full">
-                        @csrf
-                        <button type="submit"
-                            class="w-full bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
-                            <span class="text-xl">🚪</span>
-                            <span>Logout</span>
-                        </button>
-                    </form>
+                    
                 </div>
             </div>
 
