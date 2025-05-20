@@ -7,11 +7,9 @@
         <source src="/movies/hero_animation.mp4" type="video/mp4">
     </video>
     <div class="fixed inset-0 bg-black/50 z-10"></div>
-
     <div class="flex h-270 max-w-[1400px] mx-auto gap-5 relative z-20">
+      
         <!-- Sidebar -->
-        
-
             @include('layouts.partials.sidebar', [
             'sidebarIcon' => '👨‍💼',
             'sidebarTitle' => Auth::user()->name,
@@ -42,86 +40,121 @@
                     {{ session('success') }}
                 </div>
             @endif
-
-            <div class="mb-6">
-                <div class="flex border-b border-gray-200">
-                    <button class="px-4 py-2 border-b-2 border-blue-500 text-blue-500 font-medium" id="inbox-tab" data-bs-toggle="tab" data-bs-target="#inbox">Inbox</button>
-                    <button class="px-4 py-2 border-b-2 border-transparent hover:text-blue-500 hover:border-blue-500" id="sent-tab" data-bs-toggle="tab" data-bs-target="#sent">Sent Messages</button>
-                </div>
-            </div>
-
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="inbox">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white dark:bg-gray-800">
-                            <thead>
-                                <tr class="bg-gray-100 dark:bg-gray-700">
-                                    <th class="py-3 px-4 text-left">From</th>
-                                    <th class="py-3 px-4 text-left">Subject</th>
-                                    <th class="py-3 px-4 text-left">Date</th>
-                                    <th class="py-3 px-4 text-left">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($receivedMessages as $message)
-                                <tr class="border-b border-gray-200 dark:border-gray-700 {{ $message->read_at ? '' : 'bg-blue-50 dark:bg-blue-900' }}">
-                                    <td class="py-3 px-4">{{ $message->sender->name }}</td>
-                                    <td class="py-3 px-4">{{ $message->subject }}</td>
-                                    <td class="py-3 px-4">{{ $message->created_at->format('M d, Y h:i A') }}</td>
-                                    <td class="py-3 px-4 flex space-x-2">
-                                        <a href="{{ route('messages.show', $message) }}" class="text-blue-600 hover:text-blue-800">View</a>
-                                        <form action="{{ route('messages.destroy', $message) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Are you sure you want to delete this message?')">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="py-3 px-4 text-center">No messages found</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- Tabs -->
+                <div class="mb-4 border-b border-gray-200">
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+                        <li class="mr-2">
+                            <a href="#" id="inbox-tab" class="inline-block p-4 border-b-2 border-blue-500 rounded-t-lg active" 
+                               onclick="showTab('inbox'); return false;">Inbox</a>
+                        </li>
+                        <li class="mr-2">
+                            <a href="#" id="sent-tab" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:border-gray-300"
+                               onclick="showTab('sent'); return false;">Sent Messages</a>
+                        </li>
+                    </ul>
                 </div>
                 
-                <div class="tab-pane fade" id="sent">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white dark:bg-gray-800">
-                            <thead>
-                                <tr class="bg-gray-100 dark:bg-gray-700">
-                                    <th class="py-3 px-4 text-left">To</th>
-                                    <th class="py-3 px-4 text-left">Subject</th>
-                                    <th class="py-3 px-4 text-left">Date</th>
-                                    <th class="py-3 px-4 text-left">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($sentMessages as $message)
-                                <tr class="border-b border-gray-200 dark:border-gray-700">
-                                    <td class="py-3 px-4">{{ $message->recipient->name }}</td>
-                                    <td class="py-3 px-4">{{ $message->subject }}</td>
-                                    <td class="py-3 px-4">{{ $message->created_at->format('M d, Y h:i A') }}</td>
-                                    <td class="py-3 px-4 flex space-x-2">
-                                        <a href="{{ route('messages.show', $message) }}" class="text-blue-600 hover:text-blue-800">View</a>
-                                        <form action="{{ route('messages.destroy', $message) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Are you sure you want to delete this message?')">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="py-3 px-4 text-center">No sent messages found</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- Inbox Tab Content -->
+                <div id="inbox-content" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">Received Messages</h2>
+                    
+                    @if($receivedMessages->isEmpty())
+                        <p class="text-gray-500">No messages received.</p>
+                    @else
+                        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">From</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach($receivedMessages as $message)
+                                        <tr class="{{ $message->read ? '' : 'font-bold bg-blue-50' }}">
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $message->sender->name }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $message->subject }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $message->created_at->format('M d, Y H:i') }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <a href="{{ route('messages.show', $message) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
+                                                <form action="{{ route('messages.destroy', $message) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this message?')">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </div>
+                
+                <!-- Sent Tab Content -->
+                <div id="sent-content" class="tab-content hidden">
+                    <h2 class="text-xl font-semibold mb-4">Sent Messages</h2>
+                    
+                    @if($sentMessages->isEmpty())
+                        <p class="text-gray-500">No messages sent.</p>
+                    @else
+                        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">To</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach($sentMessages as $message)
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $message->recipient->name }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $message->subject }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ $message->created_at->format('M d, Y H:i') }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <a href="{{ route('messages.show', $message) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
+                                                <form action="{{ route('messages.destroy', $message) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this message?')">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+                
+                <!-- JavaScript for tab switching -->
+                <script>
+                    function showTab(tabName) {
+                        // Hide all tab contents
+                        document.querySelectorAll('.tab-content').forEach(tab => {
+                            tab.classList.add('hidden');
+                        });
+                        
+                        // Remove active class from all tabs
+                        document.querySelectorAll('a[id$="-tab"]').forEach(tab => {
+                            tab.classList.remove('active', 'border-blue-500');
+                            tab.classList.add('border-transparent');
+                        });
+                        
+                        // Show the selected tab content
+                        document.getElementById(tabName + '-content').classList.remove('hidden');
+                        
+                        // Add active class to the clicked tab
+                        const activeTab = document.getElementById(tabName + '-tab');
+                        activeTab.classList.add('active', 'border-blue-500');
+                        activeTab.classList.remove('border-transparent');
+                    }
+                </script>
             </div>
         </div>
     </div>

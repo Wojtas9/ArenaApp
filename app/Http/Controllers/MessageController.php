@@ -46,6 +46,7 @@ class MessageController extends Controller
         $request->validate([
             'recipient_id' => 'required|exists:users,id',
             'content' => 'required|string',
+            'subject' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:messages,id'
         ]);
 
@@ -53,6 +54,7 @@ class MessageController extends Controller
             'sender_id' => Auth::id(),
             'recipient_id' => $request->recipient_id,
             'content' => $request->content,
+            'subject' => $request->subject,
             'parent_id' => $request->parent_id
         ]);
 
