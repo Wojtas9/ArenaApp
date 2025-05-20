@@ -24,17 +24,6 @@ return new class extends Migration
             });
         }
 
-        // Only try to modify the trainings table if it exists
-        if (Schema::hasTable('trainings')) {
-            Schema::table('trainings', function (Blueprint $table) {
-                if (!Schema::hasColumn('trainings', 'program_id')) {
-                    $table->foreignId('program_id')->nullable()->constrained('training_programs')->onDelete('cascade');
-                }
-                if (!Schema::hasColumn('trainings', 'session_number')) {
-                    $table->integer('session_number')->nullable();
-                }
-            });
-        }
     }
 
     /**
@@ -42,13 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        if (Schema::hasTable('trainings')) {
-            Schema::table('trainings', function (Blueprint $table) {
-                $table->dropForeign(['program_id']);
-                $table->dropColumn(['program_id', 'session_number']);
-            });
-        }
-
         Schema::dropIfExists('training_programs');
     }
 };
