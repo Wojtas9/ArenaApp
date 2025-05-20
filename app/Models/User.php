@@ -99,4 +99,14 @@ class User extends Authenticatable
         return $this->hasOne(CoachProfile::class);
     }
 
+    public function nutritionalGoals()
+    {
+        return $this->hasMany(NutritionalGoal::class);
+    }
+
+    public function dietPlans()
+    {
+        return $this->hasMany(DietPlan::class);
+    }
+
 }

@@ -1,6 +1,6 @@
-<div class="w-64 bg-[#cf5b44] text-white p-6 rounded-2xl shadow-lg">
+<div class="w-64 bg-[#f2b957] text-white p-6 rounded-2xl shadow-lg">
     <div class="flex items-center gap-3 mb-8">
-        <div class="w-12 h-12 rounded-full bg-[#8C508F] flex items-center justify-center">
+        <div class="w-12 h-12 rounded-full bg-[#3f3f3f] shadow-sm flex items-center justify-center">
             {{-- Placeholder for dynamic icon based on section or user role --}}
             <span class="text-xl">{{ $sidebarIcon ?? '🚀' }}</span>
         </div>
@@ -16,7 +16,7 @@
         @if(Auth::check())
             {{-- Dashboard Link --}}
             <a href="{{ route(auth()->user()->role . '.dashboard') }}"
-               class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs(auth()->user()->role . '.dashboard') ? 'bg-[#0B2558]' : '' }}">
+               class="flex items-center gap-3 p-3 rounded hover:bg-[#24262b] transition-colors {{ request()->routeIs(auth()->user()->role . '.dashboard') ? 'bg-[#24262b]' : '' }}">
                 <span class="text-xl">📊</span>
                 <span>{{ ucfirst(auth()->user()->role) }} Dashboard</span>
             </a>
