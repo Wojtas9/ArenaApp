@@ -131,4 +131,20 @@ class CoachProfileController extends Controller
         return redirect()->route('coach-profiles.show', ['id' => $coachProfile->id])
             ->with('success', 'Coach profile updated successfully');
     }
+
+    /**
+     * Display a listing of all coach profiles for searching.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search()
+    {
+        // Get all users with the coach role who have profiles
+        $coaches = User::role('coach')
+            ->with('coachProfile')
+            ->whereHas('coachProfile')
+            ->get();
+        
+        return view('coach-profiles.search', compact('coaches'));
+    }
 }

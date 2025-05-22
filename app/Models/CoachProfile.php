@@ -17,4 +17,12 @@ class CoachProfile extends Model
         'favorite_halls',
         'accessibility',
     ];
+
+    /**
+     * Get the user that owns the coach profile.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

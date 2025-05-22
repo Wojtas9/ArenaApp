@@ -52,6 +52,7 @@
                     <span class="text-xl">🏋️</span>
                     <span>Training Sets</span>
                 </a>
+               
             @endif
 
             {{-- Player Links --}}
@@ -61,6 +62,11 @@
                     <span class="text-xl">📝</span>
                     <span>Training Notes</span>
                 </a>
+                <a href="{{ route('coach-profiles.search') }}"
+                class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('training-notes.index')? 'bg-[#0B2558]' : '' }}">
+                 <span class="text-xl">👨‍🏫</span>
+                 <span>Find Coaches</span>
+             </a>
             @endif
 
             {{-- Links for Admin, Coach, and Player --}}

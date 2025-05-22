@@ -43,11 +43,15 @@
             <form method="POST" action="{{ route('messages.store') }}" class="space-y-4">
                 @csrf
                 
+                <!-- Add this to your existing message create form -->
                 <div class="mb-4">
                     <label for="recipient_id" class="block text-sm font-medium text-gray-700">Recipient</label>
-                    <select name="recipient_id" id="recipient_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <select name="recipient_id" id="recipient_id" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#8C508F] focus:border-[#8C508F] sm:text-sm rounded-md" required>
+                        <option value="">Select a recipient</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            <option value="{{ $user->id }}" {{ isset($recipient_id) && $recipient_id == $user->id ? 'selected' : '' }}>
+                                {{ $user->name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>

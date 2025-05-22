@@ -116,6 +116,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/coach-profiles/{id}/edit', [CoachProfileController::class, 'edit'])->name('coach-profiles.edit');
     Route::post('/coach-profiles/{id}', [CoachProfileController::class, 'update'])->name('coach-profiles.update');
     Route::delete('/coach-profiles/{id}', [CoachProfileController::class, 'destroy'])->name('coach-profiles.destroy');
+    Route::get('/coach-profiles-search', [CoachProfileController::class, 'search'])->name('coach-profiles.search');
 
     Route::get('/coach/profile/{profile}/edit', [CoachProfileController::class, 'edit'])
         ->name('coach.profile.edit');

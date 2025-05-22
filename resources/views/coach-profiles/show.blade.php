@@ -24,19 +24,20 @@
             ])
 
             <!-- Main Content -->
-            <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg">
-                <!-- Top Bar -->
-                <div class="flex justify-between items-center mb-8">
-                    <h1 class="text-2xl font-bold">Coach Profile</h1>
+            <div class="flex-1 p-8 bg-white rounded-4xl shadow-lg drop-shadow-xl/50 min-h-[500px]">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-bold text-gray-900">Coach Profile</h1>
                     <div class="flex items-center gap-4">
-                        <a href="{{ route('coach-profiles.edit', ['id' => $coach->id]) }}"
+                        @if(Auth::check() && Auth::id() == $coach->id)
+
+                        <a href="{{ route('coach-profiles.edit', $coach->coachProfile->id) }}"
                             class="bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                             <span class="text-xl">✏️</span>
                             <span>Edit Profile</span>
                         </a>
+                        @endif
                     </div>
                 </div>
-
                 <!-- Profile Content -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Profile Image -->

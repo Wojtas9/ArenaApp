@@ -32,10 +32,12 @@ class MessageController extends Controller
     /**
      * Show the form for creating a new message.
      */
-    public function create()
+    public function create(Request $request)
     {
         $users = User::where('id', '!=', Auth::id())->get();
-        return view('messages.create', compact('users'));
+        $recipient_id = $request->input('recipient_id');
+        
+        return view('messages.create', compact('users', 'recipient_id'));
     }
 
     /**
