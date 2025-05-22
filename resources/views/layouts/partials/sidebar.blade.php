@@ -54,6 +54,15 @@
                 </a>
             @endif
 
+            {{-- Player Links --}}
+            @if(Auth::user()->role == 'player')
+                <a href="{{ route('training-notes.index') }}"
+                   class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('training-notes.index') ? 'bg-[#0B2558]' : '' }}">
+                    <span class="text-xl">📝</span>
+                    <span>Training Notes</span>
+                </a>
+            @endif
+
             {{-- Links for Admin, Coach, and Player --}}
             {{-- Calendar Link --}}
             <a href="{{ route('calendar') }}"

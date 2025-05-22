@@ -73,6 +73,22 @@
                                 document.getElementById('photo').addEventListener('change', function(e) {
                                     const fileName = e.target.files[0]?.name || 'No file chosen';
                                     document.getElementById('file-name').textContent = fileName;
+                                    
+                                    // Preview uploaded image
+                                    if (e.target.files[0]) {
+                                        const reader = new FileReader();
+                                        reader.onload = function(e) {
+                                            const preview = document.getElementById('profile-preview');
+                                            preview.innerHTML = '';
+                                            preview.style.backgroundColor = '';
+
+                                            const img = document.createElement('img');
+                                            img.src = e.target.result;
+                                            img.className = 'w-full h-full object-cover';
+                                            preview.appendChild(img);
+                                        }
+                                        reader.readAsDataURL(e.target.files[0]);
+                                    }
                                 });
                             </script>
                         </div>
@@ -81,8 +97,15 @@
                     <!-- About Me -->
                     <div class="bg-gray-50 p-6 rounded-xl shadow-sm">
                         <h3 class="font-semibold text-lg mb-4">About Me</h3>
-                        <div class="text-sm text-gray-500 mt-1">
-                            Previous bio: {{ $coachProfile->description ?? 'No previous bio found' }}
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                            <textarea name="description" id="description" rows="4"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8C508F] focus:ring focus:ring-[#8C508F] focus:ring-opacity-50"
+                                placeholder="Tell us about yourself...">{{ old('description', $coachProfile->description ?? '') }}</textarea>
+                           
+                            @error('description')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 

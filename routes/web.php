@@ -120,3 +120,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/coach/profile/{profile}/edit', [CoachProfileController::class, 'edit'])
         ->name('coach.profile.edit');
 });
+
+// Training Notes Routes
+Route::resource('training-notes', 'App\Http\Controllers\TrainingNoteController');
