@@ -67,15 +67,12 @@
     {{-- Quick Access to Meal Plans --}}
     <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
         <h2 class="text-xl font-semibold mb-4 text-[#cf5b44]">My Meal Plans</h2>
-        {{-- Placeholder for meal plan list --}}
-        <ul class="list-disc list-inside text-gray-700">
-            <li><a href="#" class="text-[#8C508F] hover:underline">Sample Meal Plan 1</a></li>
-            <li><a href="#" class="text-[#8C508F] hover:underline">Sample Meal Plan 2</a></li>
-            {{-- Meal plans will be listed dynamically --}}
-        </ul>
+        
+        
         <div class="mt-4 flex justify-between items-center">
-            <a href="{{ route('diet.diet-plans.index') }}" class="text-[#0B2558] hover:underline font-semibold">View All Meal Plans</a>
-            <button id="openDietPlanModal" class="bg-[#cf5b44] text-white px-4 py-2 rounded-lg shadow hover:bg-[#b54a36] transition duration-200">Add Diet Plan</button>
+        <button onclick="window.location='{{ route('meal-plans.index') }}'" class="bg-[#cf5b44] text-white px-4 py-2 rounded-lg shadow hover:bg-[#b54a36] transition duration-200 float-left">View All Meal Plans</button>
+        <button id="openDietPlanModal" class="float-left bg-[#cf5b44] text-white px-4 py-2 rounded-lg shadow hover:bg-[#b54a36] transition duration-200 ">Add Meal Plan</button>
+            
         </div>
     </div>
 
@@ -85,8 +82,8 @@
         {{-- Placeholder for nutritional goals link --}}
         <p class="text-gray-700">Set and track your daily nutritional targets.</p>
         <div class="mt-4 flex justify-between items-center">
-            <a href="{{ route('diet.nutritional-goals.index') }}" class="text-[#0B2558] hover:underline font-semibold">Manage Nutritional Goals</a>
-            <button id="openNutritionalGoalModal" class="bg-[#cf5b44] text-white px-4 py-2 rounded-lg shadow hover:bg-[#b54a36] transition duration-200">Add Nutritional Goal</button>
+            <button onclick="window.location='{{ route('diet.nutritional-goals.index') }}" class="bg-[#cf5b44] text-white px-4 py-2 rounded-lg shadow hover:bg-[#b54a36] transition duration-200 float-left">Manage Nutritional Goals</button>
+            <button id="openNutritionalGoalModal" class="float-left bg-[#cf5b44] text-white px-4 py-2 rounded-lg shadow hover:bg-[#b54a36] transition duration-200 ">Add Nutritional Goal</button>
         </div>
     </div>
 </div>
@@ -172,7 +169,7 @@
     <div class="relative mx-auto p-0 w-full max-w-md shadow-xl rounded-2xl bg-white z-[60] overflow-hidden transform transition-all animate-fade-in" style="margin-top: 10vh;">
         <div class="bg-[#cf5b44] p-4 text-white">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold">Create Diet Plan</h3>
+                <h3 class="text-xl font-semibold">Create Meal Plan</h3>
                 <button class="close-modal text-white hover:text-gray-200 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />

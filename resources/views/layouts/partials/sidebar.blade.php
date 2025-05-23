@@ -52,6 +52,7 @@
                     <span class="text-xl">🏋️</span>
                     <span>Training Sets</span>
                 </a>
+
         @endif
 
         {{-- Dynamic Links passed from view --}}
@@ -66,7 +67,7 @@
         @endif
 
             {{-- Links for Admin, Coach, and Player --}}
-            {{-- Calendar Link --}
+            {{-- Calendar Link --}}
             <a href="{{ route('calendar') }}"
                class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors {{ request()->routeIs('calendar') ? 'bg-[#8C508F]' : '' }}">
                 <span class="text-xl">📅</span>
@@ -85,7 +86,7 @@
     @if(Auth::check())
         <form method="POST" action="{{ route('logout') }}" class="mt-auto">
             @csrf
-            <button type="submit" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors w-full text-left">
+            <button type="submit" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                 <span class="text-xl">🚪</span>
                 <span>Logout</span>
             </button>

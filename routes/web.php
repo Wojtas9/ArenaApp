@@ -85,7 +85,14 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
-    
+
+    // Diet and Meal Plan Routes (Accessible by coach and potentially player)
+    Route::middleware('role:coach|player')->group(function () {
+        Route::resource('meal-plans', \App\Http\Controllers\Diet\MealPlanController::class);
+        Route::resource('meal-plans.meals', \App\Http\Controllers\Diet\MealController::class)->shallow();
+        Route::resource('meals.food-items', \App\Http\Controllers\Diet\FoodItemController::class)->shallow();
+    });
+
     // Calendar route - accessible to all authenticated users
 Route::get('/calendar', function () {
     return view('calendar.index');
