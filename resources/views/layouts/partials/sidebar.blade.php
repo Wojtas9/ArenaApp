@@ -52,10 +52,21 @@
                     <span class="text-xl">🏋️</span>
                     <span>Training Sets</span>
                 </a>
-            @endif
+        @endif
+
+        {{-- Dynamic Links passed from view --}}
+        @if(isset($navLinks) && is_array($navLinks))
+            @foreach($navLinks as $link)
+                <a href="{{ $link['href'] }}"
+                   class="flex items-center gap-3 p-3 rounded hover:bg-[#24262b] transition-colors {{ request()->routeIs($link['active_check_route_name']) ? 'bg-[#24262b]' : '' }}">
+                    <span class="text-xl">{{ $link['icon'] }}</span>
+                    <span>{{ $link['text'] }}</span>
+                </a>
+            @endforeach
+        @endif
 
             {{-- Links for Admin, Coach, and Player --}}
-            {{-- Calendar Link --}}
+            {{-- Calendar Link --}
             <a href="{{ route('calendar') }}"
                class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors {{ request()->routeIs('calendar') ? 'bg-[#8C508F]' : '' }}">
                 <span class="text-xl">📅</span>

@@ -59,7 +59,32 @@ Route::middleware('auth')->group(function () {
     // Player routes
     Route::middleware('role:player')->group(function () {
         Route::get('/player/dashboard', [PlayerController::class, 'dashboard'])->name('player.dashboard');
+
+    // Diet and Nutritional Goals routes
+    Route::prefix('diet')->name('diet.')->group(function () {
+        Route::get('/', [App\Http\Controllers\DietController::class, 'index'])->name('index');
+
+        // Nutritional Goals routes
+        Route::prefix('nutritional-goals')->name('nutritional-goals.')->group(function () {
+            Route::get('/create', [App\Http\Controllers\DietController::class, 'createNutritionalGoal'])->name('create');
+            Route::get('/', [App\Http\Controllers\DietController::class, 'indexNutritionalGoals'])->name('index');
+            Route::post('/', [App\Http\Controllers\DietController::class, 'storeNutritionalGoal'])->name('store');
+            Route::get('/{nutritionalGoal}/edit', [App\Http\Controllers\DietController::class, 'editNutritionalGoal'])->name('edit');
+            Route::put('/{nutritionalGoal}', [App\Http\Controllers\DietController::class, 'updateNutritionalGoal'])->name('update');
+            Route::delete('/{nutritionalGoal}', [App\Http\Controllers\DietController::class, 'deleteNutritionalGoal'])->name('delete');
+        });
+
+        // Diet Plans routes
+        Route::prefix('diet-plans')->name('diet-plans.')->group(function () {
+            Route::get('/create', [App\Http\Controllers\DietController::class, 'createDietPlan'])->name('create');
+            Route::get('/', [App\Http\Controllers\DietController::class, 'indexDietPlans'])->name('index');
+            Route::post('/', [App\Http\Controllers\DietController::class, 'storeDietPlan'])->name('store');
+            Route::get('/{dietPlan}/edit', [App\Http\Controllers\DietController::class, 'editDietPlan'])->name('edit');
+            Route::put('/{dietPlan}', [App\Http\Controllers\DietController::class, 'updateDietPlan'])->name('update');
+            Route::delete('/{dietPlan}', [App\Http\Controllers\DietController::class, 'deleteDietPlan'])->name('delete');
+        });
     });
+});
     
     // Calendar route - accessible to all authenticated users
 Route::get('/calendar', function () {
