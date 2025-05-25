@@ -26,10 +26,7 @@
             'sidebarSubtitle' => ucfirst(Auth::user()->role),
             'navLinks' => [
                 ['icon' => '📊', 'text' => 'Dashboard', 'href' => route('admin.dashboard'), 'active_check_route_name' => 'admin.dashboard'],
-                ['icon' => '📁', 'text' => 'Folders', 'href' => '#', 'active_check_route_name' => 'admin.folders'], 
-                ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],
-                ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'admin.settings'] 
-            ]
+                ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],            ]
         ])
 
         <!-- Main Content -->

@@ -14,10 +14,7 @@
             'sidebarTitle' => Auth::user()->name,
             'sidebarSubtitle' => ucfirst(Auth::user()->role),
             'navLinks' => [
-                ['icon' => '📊', 'text' => 'Dashboard', 'href' => route('coach.dashboard'), 'active_check_route_name' => 'coach.dashboard'],
-                ['icon' => '👤', 'text' => 'My Profile', 'href' => route('coach-profiles.show', auth()->id()), 'active_check_route_name' => 'coach-profiles.show'],
-                ['icon' => '📩', 'text' => 'Messages', 'href' => route('messages.index'), 'active_check_route_name' => 'messages.index'],
-                ['icon' => '🏟️', 'text' => 'Sports Halls', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
+                ['icon' => '🍎', 'text' => 'My Diet', 'href' => route('diet.index'), 'active_check_route_name' => 'diet.index'],
             ]
         ])
 

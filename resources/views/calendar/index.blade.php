@@ -12,7 +12,6 @@
             'sidebarTitle' => Auth::user()->name,
             'sidebarSubtitle' => ucfirst(Auth::user()->role),
             'navLinks' => [
-                ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'settings']
             ]
         ])
 

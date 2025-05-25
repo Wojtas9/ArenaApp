@@ -13,10 +13,7 @@
             'sidebarTitle' => Auth::user()->name,
             'sidebarSubtitle' => ucfirst(Auth::user()->role),
             'navLinks' => [
-                ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],
-                ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
-                ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'admin.settings'] // Assuming a route name like admin.settings
-            ],
+                   ],
             // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
         ])
 

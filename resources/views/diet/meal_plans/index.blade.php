@@ -16,7 +16,6 @@
             'sidebarSubtitle' => ucfirst(Auth::user()->role),
             'navLinks' => [
                 ['icon' => '🍎', 'text' => 'My Diet', 'href' => route('diet.index'), 'active_check_route_name' => 'diet.index'],
-                ['icon' => '⚙️', 'text' => 'Settings', 'href' => '#', 'active_check_route_name' => 'settings'] // Placeholder link
             ]
         ])
 

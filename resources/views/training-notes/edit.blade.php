@@ -9,7 +9,11 @@
     <div class="fixed inset-0 bg-black/50 z-10"></div>
     <div class="flex h-270 max-w-[1400px] mx-auto gap-6 relative z-20">
         <!-- Sidebar -->
-        @include('layouts.partials.sidebar')
+        @include('layouts.partials.sidebar', [
+            'sidebarIcon' => '🏃',
+            'sidebarTitle' => Auth::user()->name,
+            'sidebarSubtitle' => ucfirst(Auth::user()->role),
+        ])
 
         <!-- Main Content -->
         <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg">

@@ -15,11 +15,8 @@
                 'sidebarTitle' => Auth::user()->name,
                 'sidebarSubtitle' => ucfirst(Auth::user()->role),
                 'navLinks' => [
-                    ['icon' => '📊', 'text' => 'Dashboard', 'href' => route('coach.dashboard'), 'active_check_route_name' => 'coach.dashboard'],
                     ['icon' => '👤', 'text' => 'My Profile', 'href' => route('coach-profiles.show', auth()->id()), 'active_check_route_name' => 'coach-profiles.show'],
-                    ['icon' => '📩', 'text' => 'Messages', 'href' => route('messages.index'), 'active_check_route_name' => 'messages.index'],
                     ['icon' => '🏟️', 'text' => 'Sports Halls', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
-                    ['icon' => '📚', 'text' => 'Training Programs', 'href' => route('training-programs.index'), 'active_check_route_name' => 'training-programs.index']
                 ]
             ])
 
@@ -30,7 +27,7 @@
                     <div class="flex items-center gap-4">
                         @if(Auth::check() && Auth::id() == $coach->id)
 
-                        <a href="{{ route('coach-profiles.edit', $coach->coachProfile->id) }}"
+                        <a href="{{ route('coach-profiles.edit', $coach->coachProfile ? $coach->coachProfile->id : $coach->id) }}" 
                             class="bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                             <span class="text-xl">✏️</span>
                             <span>Edit Profile</span>

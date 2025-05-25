@@ -42,18 +42,27 @@
                     <span class="text-xl">👤</span>
                     <span>My Profile</span>
                 </a>
-                <a href="{{ route('spots.index') }}"
-                   class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('spots.index') ? 'bg-[#0B2558]' : '' }}">
-                    <span class="text-xl">🏟️</span>
-                    <span>Spot Management</span>
-                </a>
                 <a href="{{ route('training-programs.index') }}"
                    class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('training-programs.index') ? 'bg-[#0B2558]' : '' }}">
                     <span class="text-xl">🏋️</span>
-                    <span>Training Sets</span>
+                    <span>Training Programs</span>
                 </a>
 
         @endif
+   
+             {{-- Player Links --}} 
+             @if(Auth::user()->role == 'player') 
+                 <a href="{{ route('training-notes.index') }}" 
+                    class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('training-notes.index') ? 'bg-[#0B2558]' : '' }}"> 
+                     <span class="text-xl">📝</span> 
+                     <span>Training Notes</span> 
+                 </a> 
+                 <a href="{{ route('coach-profiles.search') }}" 
+                 class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('training-notes.index')? 'bg-[#0B2558]' : '' }}"> 
+                  <span class="text-xl">👨‍🏫</span> 
+                  <span>Find Coaches</span> 
+              </a> 
+             @endif
 
         {{-- Dynamic Links passed from view --}}
         @if(isset($navLinks) && is_array($navLinks))

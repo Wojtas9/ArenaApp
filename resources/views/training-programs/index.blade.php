@@ -15,9 +15,7 @@
             'sidebarSubtitle' => ucfirst(Auth::user()->role),
             'navLinks' => [
                 ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],
-                ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
-                ['icon' => '📚', 'text' => 'Training Programs', 'href' => '#', 'active_check_route_name' => 'training-programs.settings'] 
-            ],
+                ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],            ],
             // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
         ])
 

@@ -38,10 +38,6 @@
                     <span class="text-xl">👥</span>
                     <span>User Management</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
-                    <span class="text-xl">5</span>
-                    <span>Settings</span>
-                </a>
             </nav>
 
             <div class="mt-8 p-4 border border-[#8C508F] rounded-lg">
