@@ -52,22 +52,19 @@
                     <span class="text-xl">🏋️</span>
                     <span>Training Sets</span>
                 </a>
-               
-            @endif
 
-            {{-- Player Links --}}
-            @if(Auth::user()->role == 'player')
-                <a href="{{ route('training-notes.index') }}"
-                   class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('training-notes.index') ? 'bg-[#0B2558]' : '' }}">
-                    <span class="text-xl">📝</span>
-                    <span>Training Notes</span>
+        @endif
+
+        {{-- Dynamic Links passed from view --}}
+        @if(isset($navLinks) && is_array($navLinks))
+            @foreach($navLinks as $link)
+                <a href="{{ $link['href'] }}"
+                   class="flex items-center gap-3 p-3 rounded hover:bg-[#24262b] transition-colors {{ request()->routeIs($link['active_check_route_name']) ? 'bg-[#24262b]' : '' }}">
+                    <span class="text-xl">{{ $link['icon'] }}</span>
+                    <span>{{ $link['text'] }}</span>
                 </a>
-                <a href="{{ route('coach-profiles.search') }}"
-                class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('training-notes.index')? 'bg-[#0B2558]' : '' }}">
-                 <span class="text-xl">👨‍🏫</span>
-                 <span>Find Coaches</span>
-             </a>
-            @endif
+            @endforeach
+        @endif
 
             {{-- Links for Admin, Coach, and Player --}}
             {{-- Calendar Link --}}
@@ -89,7 +86,7 @@
     @if(Auth::check())
         <form method="POST" action="{{ route('logout') }}" class="mt-auto">
             @csrf
-            <button type="submit" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors w-full text-left">
+            <button type="submit" class="flex items-center gap-3 p-3 rounded hover:bg-[#8C508F] transition-colors">
                 <span class="text-xl">🚪</span>
                 <span>Logout</span>
             </button>

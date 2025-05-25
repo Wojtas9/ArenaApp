@@ -40,6 +40,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get the meal plans for the user.
+     */
+    public function mealPlans()
+    {
+        return $this->hasMany(\App\Models\DietPlan::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
