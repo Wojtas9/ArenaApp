@@ -12,6 +12,7 @@ class TrainingNote extends Model
     protected $fillable = [
         'user_id',
         'title',
+        'description',
         'training_date',
         'duration',
         'intensity',

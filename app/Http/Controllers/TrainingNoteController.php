@@ -15,7 +15,7 @@ class TrainingNoteController extends Controller
      */
     public function index()
     {
-        $trainingNotes = TrainingNote::where('user_id', Auth::id())->latest()->get();
+        $trainingNotes = TrainingNote::where('user_id', Auth::id())->latest()->paginate(10); // Change 10 to your desired number of items per page
         return view('training-notes.index', compact('trainingNotes'));
     }
 
@@ -100,6 +100,7 @@ class TrainingNoteController extends Controller
             'training_date' => 'required|date',
             'duration' => 'nullable|integer',
             'intensity' => 'nullable|string|max:50',
+            'description' => 'nullable|string', // Add this line
             'exercises' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);

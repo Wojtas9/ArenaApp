@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
+            $table->text('exercises')->nullable(); // Add this field
             $table->date('training_date');
             $table->integer('duration')->nullable()->comment('Duration in minutes');
             $table->enum('intensity', ['low', 'medium', 'high'])->default('medium');

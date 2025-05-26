@@ -73,21 +73,6 @@
                             @enderror
                         </div>
                         
-                        <!-- Mood -->
-                        <div class="col-span-1">
-                            <label for="mood" class="block text-sm font-medium text-gray-700 mb-1">Mood</label>
-                            <select name="mood" id="mood" 
-                                class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8C508F]">
-                                <option value="great" {{ $trainingNote->mood === 'great' ? 'selected' : '' }}>Great</option>
-                                <option value="good" {{ $trainingNote->mood === 'good' ? 'selected' : '' }}>Good</option>
-                                <option value="neutral" {{ $trainingNote->mood === 'neutral' ? 'selected' : '' }}>Neutral</option>
-                                <option value="tired" {{ $trainingNote->mood === 'tired' ? 'selected' : '' }}>Tired</option>
-                                <option value="exhausted" {{ $trainingNote->mood === 'exhausted' ? 'selected' : '' }}>Exhausted</option>
-                            </select>
-                            @error('mood')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
                     </div>
                     
                     <!-- Title -->

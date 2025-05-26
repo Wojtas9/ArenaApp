@@ -68,6 +68,15 @@
                 </div>
                 @endif
 
+                @if($trainingNote->exercises)
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-2">Exercises</h3>
+                    <div class="p-4 bg-white rounded-lg shadow-sm">
+                        {!! nl2br(e($trainingNote->exercises)) !!}
+                    </div>
+                </div>
+                @endif
+
                 @if($trainingNote->notes)
                 <div>
                     <h3 class="font-semibold mb-2">Additional Notes</h3>

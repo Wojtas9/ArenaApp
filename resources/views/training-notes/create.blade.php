@@ -82,6 +82,16 @@
                     @enderror
                 </div>
                 
+                <!-- Exercises Field -->
+                <div>
+                    <label for="exercises" class="block text-sm font-medium text-gray-700 mb-1">Exercises (one per line)</label>
+                    <textarea name="exercises" id="exercises" rows="5"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8C508F]">{{ old('exercises') }}</textarea>
+                    @error('exercises')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                
                 <div>
                     <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Additional Notes</label>
                     <textarea name="notes" id="notes" rows="5"
