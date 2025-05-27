@@ -59,32 +59,34 @@ Route::middleware('auth')->group(function () {
     // Player routes
     Route::middleware('role:player')->group(function () {
         Route::get('/player/dashboard', [PlayerController::class, 'dashboard'])->name('player.dashboard');
+        Route::resource('messages', MessageController::class)->except(['update']);
 
-    // Diet and Nutritional Goals routes
-    Route::prefix('diet')->name('diet.')->group(function () {
-        Route::get('/', [App\Http\Controllers\DietController::class, 'index'])->name('index');
 
-        // Nutritional Goals routes
-        Route::prefix('nutritional-goals')->name('nutritional-goals.')->group(function () {
-            Route::get('/create', [App\Http\Controllers\DietController::class, 'createNutritionalGoal'])->name('create');
-            Route::get('/', [App\Http\Controllers\DietController::class, 'indexNutritionalGoals'])->name('index');
-            Route::post('/', [App\Http\Controllers\DietController::class, 'storeNutritionalGoal'])->name('store');
-            Route::get('/{nutritionalGoal}/edit', [App\Http\Controllers\DietController::class, 'editNutritionalGoal'])->name('edit');
-            Route::put('/{nutritionalGoal}', [App\Http\Controllers\DietController::class, 'updateNutritionalGoal'])->name('update');
-            Route::delete('/{nutritionalGoal}', [App\Http\Controllers\DietController::class, 'deleteNutritionalGoal'])->name('delete');
-        });
+        // Diet and Nutritional Goals routes
+        Route::prefix('diet')->name('diet.')->group(function () {
+            Route::get('/', [App\Http\Controllers\DietController::class, 'index'])->name('index');
 
-        // Diet Plans routes
-        Route::prefix('diet-plans')->name('diet-plans.')->group(function () {
-            Route::get('/create', [App\Http\Controllers\DietController::class, 'createDietPlan'])->name('create');
-            Route::get('/', [App\Http\Controllers\DietController::class, 'indexDietPlans'])->name('index');
-            Route::post('/', [App\Http\Controllers\DietController::class, 'storeDietPlan'])->name('store');
-            Route::get('/{dietPlan}/edit', [App\Http\Controllers\DietController::class, 'editDietPlan'])->name('edit');
-            Route::put('/{dietPlan}', [App\Http\Controllers\DietController::class, 'updateDietPlan'])->name('update');
-            Route::delete('/{dietPlan}', [App\Http\Controllers\DietController::class, 'deleteDietPlan'])->name('delete');
+            // Nutritional Goals routes
+            Route::prefix('nutritional-goals')->name('nutritional-goals.')->group(function () {
+                Route::get('/create', [App\Http\Controllers\DietController::class, 'createNutritionalGoal'])->name('create');
+                Route::get('/', [App\Http\Controllers\DietController::class, 'indexNutritionalGoals'])->name('index');
+                Route::post('/', [App\Http\Controllers\DietController::class, 'storeNutritionalGoal'])->name('store');
+                Route::get('/{nutritionalGoal}/edit', [App\Http\Controllers\DietController::class, 'editNutritionalGoal'])->name('edit');
+                Route::put('/{nutritionalGoal}', [App\Http\Controllers\DietController::class, 'updateNutritionalGoal'])->name('update');
+                Route::delete('/{nutritionalGoal}', [App\Http\Controllers\DietController::class, 'deleteNutritionalGoal'])->name('delete');
+            });
+
+            // Diet Plans routes
+            Route::prefix('diet-plans')->name('diet-plans.')->group(function () {
+                Route::get('/create', [App\Http\Controllers\DietController::class, 'createDietPlan'])->name('create');
+                Route::get('/', [App\Http\Controllers\DietController::class, 'indexDietPlans'])->name('index');
+                Route::post('/', [App\Http\Controllers\DietController::class, 'storeDietPlan'])->name('store');
+                Route::get('/{dietPlan}/edit', [App\Http\Controllers\DietController::class, 'editDietPlan'])->name('edit');
+                Route::put('/{dietPlan}', [App\Http\Controllers\DietController::class, 'updateDietPlan'])->name('update');
+                Route::delete('/{dietPlan}', [App\Http\Controllers\DietController::class, 'deleteDietPlan'])->name('delete');
+            });
         });
     });
-});
 
     // Diet and Meal Plan Routes (Accessible by coach and potentially player)
     Route::middleware('role:coach|player')->group(function () {
@@ -94,33 +96,33 @@ Route::middleware('auth')->group(function () {
     });
 
     // Calendar route - accessible to all authenticated users
-Route::get('/calendar', function () {
-    return view('calendar.index');
-})->name('calendar');
+    Route::get('/calendar', function () {
+        return view('calendar.index');
+    })->name('calendar');
 
-// Calendar API routes
-Route::middleware('auth')->group(function () {
-    // Event routes
-    Route::get('/api/events', [\App\Http\Controllers\EventController::class, 'index']);
-    Route::post('/api/events', [\App\Http\Controllers\EventController::class, 'store']);
-    Route::get('/api/events/{event}', [\App\Http\Controllers\EventController::class, 'show']);
-    Route::put('/api/events/{event}', [\App\Http\Controllers\EventController::class, 'update']);
-    Route::delete('/api/events/{event}', [\App\Http\Controllers\EventController::class, 'destroy']);
-    
-    // Category routes
-    Route::get('/api/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
-    Route::post('/api/categories', [\App\Http\Controllers\CategoryController::class, 'store']);
-    Route::get('/api/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show']);
-    Route::put('/api/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'update']);
-    Route::delete('/api/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
-    
-    // Spot routes
-    Route::get('/api/spots', [\App\Http\Controllers\SpotController::class, 'apiIndex']);
-    
-    // Instructor routes
-    Route::get('/api/instructors', [\App\Http\Controllers\AdminController::class, 'getCoaches']);
-});
-    
+    // Calendar API routes
+    Route::middleware('auth')->group(function () {
+        // Event routes
+        Route::get('/api/events', [\App\Http\Controllers\EventController::class, 'index']);
+        Route::post('/api/events', [\App\Http\Controllers\EventController::class, 'store']);
+        Route::get('/api/events/{event}', [\App\Http\Controllers\EventController::class, 'show']);
+        Route::put('/api/events/{event}', [\App\Http\Controllers\EventController::class, 'update']);
+        Route::delete('/api/events/{event}', [\App\Http\Controllers\EventController::class, 'destroy']);
+
+        // Category routes
+        Route::get('/api/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
+        Route::post('/api/categories', [\App\Http\Controllers\CategoryController::class, 'store']);
+        Route::get('/api/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show']);
+        Route::put('/api/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'update']);
+        Route::delete('/api/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
+
+        // Spot routes
+        Route::get('/api/spots', [\App\Http\Controllers\SpotController::class, 'apiIndex']);
+
+        // Instructor routes
+        Route::get('/api/instructors', [\App\Http\Controllers\AdminController::class, 'getCoaches']);
+    });
+
     // Generic dashboard route that redirects based on role
     Route::get('/dashboard', function () {
         if (auth()->user()->isAdmin()) {

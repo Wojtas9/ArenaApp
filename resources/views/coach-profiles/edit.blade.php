@@ -15,12 +15,13 @@
                 'sidebarTitle' => Auth::user()->name,
                 'sidebarSubtitle' => ucfirst(Auth::user()->role),
                 'navLinks' => [
-                    ['icon' => '📊', 'text' => 'Dashboard', 'href' => route('coach.dashboard'), 'active_check_route_name' => 'coach.dashboard'],
-                    ['icon' => '👤', 'text' => 'My Profile', 'href' => route('coach-profiles.show', auth()->id()), 'active_check_route_name' => 'coach-profiles.show'],
-                    ['icon' => '📩', 'text' => 'Messages', 'href' => route('messages.index'), 'active_check_route_name' => 'messages.index'],
-                    ['icon' => '🏟️', 'text' => 'Sports Halls', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
-                    ['icon' => '📚', 'text' => 'Training Programs', 'href' => route('training-programs.index'), 'active_check_route_name' => 'training-programs.index']
-                ]
+                    [
+                        'icon' => '🏟️',
+                        'text' => 'Spots',
+                        'href' => route('spots.index'),
+                        'active_check_route_name' => 'spots.index',
+                    ],
+                ],
             ])
 
             <!-- Main Content -->
@@ -73,7 +74,7 @@
                                 document.getElementById('photo').addEventListener('change', function(e) {
                                     const fileName = e.target.files[0]?.name || 'No file chosen';
                                     document.getElementById('file-name').textContent = fileName;
-                                    
+
                                     // Preview uploaded image
                                     if (e.target.files[0]) {
                                         const reader = new FileReader();
@@ -102,7 +103,7 @@
                             <textarea name="description" id="description" rows="4"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8C508F] focus:ring focus:ring-[#8C508F] focus:ring-opacity-50"
                                 placeholder="Tell us about yourself...">{{ old('description', $coachProfile->description ?? '') }}</textarea>
-                           
+
                             @error('description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -176,7 +177,7 @@
                     </div>
             </div>
 
-          
+
             </form>
         </div>
     </div>

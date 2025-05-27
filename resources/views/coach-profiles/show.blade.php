@@ -15,9 +15,13 @@
                 'sidebarTitle' => Auth::user()->name,
                 'sidebarSubtitle' => ucfirst(Auth::user()->role),
                 'navLinks' => [
-                    ['icon' => '👤', 'text' => 'My Profile', 'href' => route('coach-profiles.show', auth()->id()), 'active_check_route_name' => 'coach-profiles.show'],
-                    ['icon' => '🏟️', 'text' => 'Sports Halls', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
-                ]
+                    [
+                        'icon' => '🏟️',
+                        'text' => 'Spots',
+                        'href' => route('spots.index'),
+                        'active_check_route_name' => 'spots.index',
+                    ],
+                ],
             ])
 
             <!-- Main Content -->
@@ -25,13 +29,12 @@
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-2xl font-bold text-gray-900">Coach Profile</h1>
                     <div class="flex items-center gap-4">
-                        @if(Auth::check() && Auth::id() == $coach->id)
-
-                        <a href="{{ route('coach-profiles.edit', $coach->coachProfile ? $coach->coachProfile->id : $coach->id) }}" 
-                            class="bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
-                            <span class="text-xl">✏️</span>
-                            <span>Edit Profile</span>
-                        </a>
+                        @if (Auth::check() && Auth::id() == $coach->id)
+                            <a href="{{ route('coach-profiles.edit', $coach->coachProfile ? $coach->coachProfile->id : $coach->id) }}"
+                                class="bg-[#8C508F] hover:bg-[#734072] text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                                <span class="text-xl">✏️</span>
+                                <span>Edit Profile</span>
+                            </a>
                         @endif
                     </div>
                 </div>
@@ -52,7 +55,7 @@
                                 @endif
                                 <h2 class="text-xl font-bold">{{ $coach->name }}</h2>
                                 @if ($coach->coachProfile)
-                                    @if($coach->coachProfile->title)
+                                    @if ($coach->coachProfile->title)
                                         <p class="text-gray-600 mt-2">{{ $coach->coachProfile->title }}</p>
                                     @endif
                                     <p class="text-gray-600 mt-1">{{ $coach->email }}</p>

@@ -14,7 +14,15 @@
                 'sidebarIcon' => '👨‍💼',
                 'sidebarTitle' => Auth::user()->name,
                 'sidebarSubtitle' => ucfirst(Auth::user()->role),
-                'navLinks' => [],
+                'navLinks' => [
+                    [
+                        'icon' => '🏟️',
+                        'text' => 'Spots',
+                        'href' => route('spots.index'),
+                        'active_check_route_name' => 'spots.index'
+                    ]
+                ]
+                // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
             ])
 
             <!-- Main Content -->

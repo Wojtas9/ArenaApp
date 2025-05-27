@@ -11,11 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PlayerController extends Controller
 {
-    /**
-     * Display the player dashboard.
-     *
-     * @return \Illuminate\View\View
-     */
+    // Player Dashboard
     public function dashboard()
     {
         $userId = Auth::id();

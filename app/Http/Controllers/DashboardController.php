@@ -38,7 +38,6 @@ class DashboardController extends Controller
         $stats = [
             'trainingNotes' => TrainingNote::where('user_id', $userId)->count(),
             'trainers' => User::where('role', 'coach')->count(),
-            'coaches' => User::where('role', 'coach')->count(), // Same as trainers in this context
             'messages' => Message::where('recipient_id', $userId)->count(),
             'events' => Event::where('instructor_id', $userId)->count()
         ];

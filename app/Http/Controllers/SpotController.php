@@ -9,12 +9,9 @@ use Intervention\Image\Facades\Image;
 
 class SpotController extends Controller
 {
-    /**
-     * Display a listing of the spots.
-     */
     public function index()
     {
-        $spots = Spot::all();
+        $spots = Spot::paginate(10);
         return view('spots.index', compact('spots'));
     }
     

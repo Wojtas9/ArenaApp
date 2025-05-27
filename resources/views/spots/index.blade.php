@@ -13,17 +13,23 @@
             'sidebarTitle' => Auth::user()->name,
             'sidebarSubtitle' => ucfirst(Auth::user()->role),
             'navLinks' => [
-                   ],
-            // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
-        ])
+                    [
+                        'icon' => '🏟️',
+                        'text' => 'Spots',
+                        'href' => route('spots.index'),
+                        'active_check_route_name' => 'spots.index'
+                    ]
+                ]
+                // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
+            ])
 
         <!-- Main Content -->
         <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg">
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Sports Halls</h1>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Spots</h1>
                 <div class="flex items-center gap-4">
                     <a href="{{ route('spots.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                        Add New Sports Hall
+                        Add New Spot
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -45,7 +51,7 @@
                             <th class="py-3 px-4 text-left">Name</th>
                             <th class="py-3 px-4 text-left">Location</th>
                             <th class="py-3 px-4 text-left">Capacity</th>
-                            <th class="py-3 px-4 text-left">Actions</th>
+                            <th class="py-3 px-4 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,7 +67,7 @@
                             <td class="py-3 px-4">{{ $spot->name }}</td>
                             <td class="py-3 px-4">{{ $spot->location }}</td>
                             <td class="py-3 px-4">{{ $spot->capacity }}</td>
-                            <td class="py-3 px-4 flex space-x-2">
+                            <td class="py-3 px-4 flex justify-center space-x-2">
                                 <a href="{{ route('spots.edit', $spot) }}" class="text-blue-600 hover:text-blue-800">Edit</a>
                                 <form action="{{ route('spots.destroy', $spot) }}" method="POST" class="inline">
                                     @csrf
@@ -72,13 +78,17 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="py-3 px-4 text-center">No sports halls found</td>
+                            <td colspan="4" class="py-3 px-4 text-center">No spot found</td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-
+            
+            <!-- Pagination -->
+            <div class="mt-4">
+                {{ $spots->links() }}
+            </div>
         </div>
     </div>
 </div>

@@ -13,14 +13,20 @@
             'sidebarTitle' => Auth::user()->name,
             'sidebarSubtitle' => ucfirst(Auth::user()->role),
             'navLinks' => [
-            ],
-            // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
-        ])
+                    [
+                        'icon' => '🏟️',
+                        'text' => 'Spots',
+                        'href' => route('spots.index'),
+                        'active_check_route_name' => 'spots.index'
+                    ]
+                ]
+                // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
+            ])
             
         <!-- Main Content -->
         <div class="flex-1 p-8 bg-white rounded-4xl shadow-lg drop-shadow-xl/50">
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Edit Sports Hall</h1>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Edit Sport</h1>
                 <a href="{{ route('spots.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
                     Back to List
                 </a>
