@@ -38,6 +38,55 @@
             </div>
 
             <!-- Dashboard Content -->
+            <!-- Quick Stats Section -->
+            <div class="mb-8 bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-xl border border-gray-100 w-full">
+                <h2 class="text-3xl font-bold mb-8 text-gray-800 flex items-center gap-3 border-b pb-4">
+                    <span class="text-4xl">📊</span> Quick Stats Overview
+                    <span class="text-base font-normal text-gray-500 ml-auto">Your Performance at a Glance</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500 transform hover:scale-105 transition-all hover:shadow-2xl group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-lg font-semibold text-blue-600 group-hover:text-blue-700">Total Programs</p>
+                                <p class="text-4xl font-bold text-gray-800 mt-3">{{ \App\Models\TrainingProgram::where('coach_id', auth()->id())->count() }}</p>
+                            </div>
+                            <span class="text-4xl text-blue-500 group-hover:scale-110 transition-transform">📚</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl shadow-lg border-l-4 border-purple-500 transform hover:scale-105 transition-all hover:shadow-2xl group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-lg font-semibold text-purple-600 group-hover:text-purple-700">Active Programs</p>
+                                <p class="text-4xl font-bold text-gray-800 mt-3">{{ \App\Models\TrainingProgram::where('coach_id', auth()->id())->where('status', 'active')->count() }}</p>
+                            </div>
+                            <span class="text-4xl text-purple-500 group-hover:scale-110 transition-transform">🎯</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-yellow-50 to-white p-6 rounded-xl shadow-lg border-l-4 border-yellow-500 transform hover:scale-105 transition-all hover:shadow-2xl group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-lg font-semibold text-yellow-600 group-hover:text-yellow-700">Messages-received</p>
+                                <p class="text-4xl font-bold text-gray-800 mt-3">{{ \App\Models\Message::where('recipient_id', auth()->id())->count() }}</p>
+                            </div>
+                            <span class="text-4xl text-yellow-500 group-hover:scale-110 transition-transform">✉️</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-red-50 to-white p-6 rounded-xl shadow-lg border-l-4 border-red-500 transform hover:scale-105 transition-all hover:shadow-2xl group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-lg font-semibold text-red-600 group-hover:text-red-700">Calendar Events</p>
+                                <p class="text-4xl font-bold text-gray-800 mt-3">{{ \App\Models\Event::where('instructor_id', auth()->id())->count() }}</p>
+                            </div>
+                            <span class="text-4xl text-red-500 group-hover:scale-110 transition-transform">📅</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Quick Stats Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <!-- Quick Stats -->
                 <div class="p-6 bg-gray-50 rounded-xl shadow-sm">
