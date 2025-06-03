@@ -1,58 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management - Admin Dashboard</title>
-    @vite('resources/css/app.css')
-    <style>
-        .filter-btn.active {
-            outline: 2px solid white;
-            transform: scale(1.05);
-        }
-    </style>
-</head>
-<body class="bg-[#ebebeb] mt-25 p-6 relative overflow-hidden">
-    <!-- Video Background -->
-    <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-0" style="min-width:100vw;min-height:100vh;">
-        <source src="/movies/hero_animation.mp4" type="video/mp4">
-    </video>
-    <div class="fixed inset-0 bg-black/50 z-10"></div>
-    <div class="flex mb-30 h-240 max-w-[1400px] mx-auto gap-6 relative z-20">
-        <!-- Sidebar -->
-        @include('layouts.partials.sidebar', [
-            'sidebarIcon' => '👨‍💼',
-            'sidebarTitle' => Auth::user()->name,
-            'sidebarSubtitle' => ucfirst(Auth::user()->role),
-            'navLinks' => [
-                ['icon' => '📊', 'text' => 'Dashboard', 'href' => route('admin.dashboard'), 'active_check_route_name' => 'admin.dashboard'],
-                ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],            ]
-        ])
+@extends('layouts.app')
 
-        <!-- Main Content -->
-        <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg">
-            <!-- Top Bar -->
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-2xl font-bold">User Management</h1>
-                <div class="flex items-center gap-4">
-                    <div class="relative">
-                        <input type="text" id="searchInput" placeholder="Search users..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-200">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2">🔍</span>
-                    </div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">Logout</button>
-                    </form>
+@section('content')
+<div class="flex mb-30 h-240 max-w-[1400px] mx-auto gap-6 relative z-20">
+    <!-- Sidebar -->
+    @include('layouts.partials.sidebar', [
+        'sidebarIcon' => '👨‍💼',
+        'sidebarTitle' => Auth::user()->name,
+        'sidebarSubtitle' => ucfirst(Auth::user()->role),
+        'navLinks' => [
+            ['icon' => '📊', 'text' => 'Dashboard', 'href' => route('admin.dashboard'), 'active_check_route_name' => 'admin.dashboard'],
+            ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],            ]
+    ])
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg">
+        <!-- Top Bar -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold">User Management</h1>
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="Search users..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-200">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2">🔍</span>
                 </div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">Logout</button>
+                </form>
             </div>
-            
-            <!-- Role Filter Buttons -->
-            <div class="flex gap-3 mb-6">
-                <button id="show-all" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg filter-btn active">Show All</button>
-                <button id="show-admins" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg filter-btn">Show Admins</button>
-                <button id="show-coachs" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg filter-btn">Show Coaches</button>
-                <button id="show-players" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg filter-btn">Show Players</button>
-            </div>
+        </div>
+        
+        <!-- Rest of your content -->
+        <div class="flex gap-3 mb-6">
+            <button id="show-all" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg filter-btn active">Show All</button>
+            <button id="show-admins" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg filter-btn">Show Admins</button>
+            <button id="show-coachs" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg filter-btn">Show Coaches</button>
+            <button id="show-players" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg filter-btn">Show Players</button>
+        </div>
 
             <!-- Flash Messages -->
             @if(session('success'))

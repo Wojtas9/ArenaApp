@@ -16,12 +16,7 @@
                 'sidebarTitle' => Auth::user()->name,
                 'sidebarSubtitle' => ucfirst(Auth::user()->role),
                 'navLinks' => [
-                    [
-                        'icon' => '🍎',
-                        'text' => 'My Diet',
-                        'href' => route('diet.index'),
-                        'active_check_route_name' => 'diet.index',
-                    ],
+              
                 ],
                 // 'additionalLinks' => [] // Add if there are specific additional links for admin not covered by navLinks
             ])

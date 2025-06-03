@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -24,9 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-
         'is_blocked',
-
     ];
 
     /**
@@ -40,14 +37,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the meal plans for the user.
-     */
-    public function mealPlans()
-    {
-        return $this->hasMany(\App\Models\DietPlan::class);
-    }
-
-    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -59,7 +48,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    
+
     /**
      * Check if the user has a specific role using the 'role' column
      * This is a custom method that checks the role column directly
@@ -71,7 +60,7 @@ class User extends Authenticatable
     {
         return $this->role === $roleName;
     }
-    
+
     /**
      * Check if the user is an admin
      *
@@ -81,7 +70,7 @@ class User extends Authenticatable
     {
         return $this->hasRoleAttribute('admin');
     }
-    
+
     /**
      * Check if the user is a coach
      *
@@ -91,7 +80,7 @@ class User extends Authenticatable
     {
         return $this->hasRoleAttribute('coach');
     }
-    
+
     /**
      * Check if the user is a player
      *
@@ -106,15 +95,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(CoachProfile::class);
     }
-
-    public function nutritionalGoals()
-    {
-        return $this->hasMany(NutritionalGoal::class);
-    }
-
-    public function dietPlans()
-    {
-        return $this->hasMany(DietPlan::class);
-    }
-
 }

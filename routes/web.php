@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AdminController;
@@ -9,7 +8,6 @@ use App\Http\Controllers\CoachController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\SpotController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TrainingProgramsController;
 use App\Http\Controllers\CoachProfileController;
 
@@ -60,39 +58,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:player')->group(function () {
         Route::get('/player/dashboard', [PlayerController::class, 'dashboard'])->name('player.dashboard');
         Route::resource('messages', MessageController::class)->except(['update']);
-
-
-        // Diet and Nutritional Goals routes
-        Route::prefix('diet')->name('diet.')->group(function () {
-            Route::get('/', [App\Http\Controllers\DietController::class, 'index'])->name('index');
-
-            // Nutritional Goals routes
-            Route::prefix('nutritional-goals')->name('nutritional-goals.')->group(function () {
-                Route::get('/create', [App\Http\Controllers\DietController::class, 'createNutritionalGoal'])->name('create');
-                Route::get('/', [App\Http\Controllers\DietController::class, 'indexNutritionalGoals'])->name('index');
-                Route::post('/', [App\Http\Controllers\DietController::class, 'storeNutritionalGoal'])->name('store');
-                Route::get('/{nutritionalGoal}/edit', [App\Http\Controllers\DietController::class, 'editNutritionalGoal'])->name('edit');
-                Route::put('/{nutritionalGoal}', [App\Http\Controllers\DietController::class, 'updateNutritionalGoal'])->name('update');
-                Route::delete('/{nutritionalGoal}', [App\Http\Controllers\DietController::class, 'deleteNutritionalGoal'])->name('delete');
-            });
-
-            // Diet Plans routes
-            Route::prefix('diet-plans')->name('diet-plans.')->group(function () {
-                Route::get('/create', [App\Http\Controllers\DietController::class, 'createDietPlan'])->name('create');
-                Route::get('/', [App\Http\Controllers\DietController::class, 'indexDietPlans'])->name('index');
-                Route::post('/', [App\Http\Controllers\DietController::class, 'storeDietPlan'])->name('store');
-                Route::get('/{dietPlan}/edit', [App\Http\Controllers\DietController::class, 'editDietPlan'])->name('edit');
-                Route::put('/{dietPlan}', [App\Http\Controllers\DietController::class, 'updateDietPlan'])->name('update');
-                Route::delete('/{dietPlan}', [App\Http\Controllers\DietController::class, 'deleteDietPlan'])->name('delete');
-            });
-        });
-    });
-
-    // Diet and Meal Plan Routes (Accessible by coach and potentially player)
-    Route::middleware('role:coach|player')->group(function () {
-        Route::resource('meal-plans', \App\Http\Controllers\Diet\MealPlanController::class);
-        Route::resource('meal-plans.meals', \App\Http\Controllers\Diet\MealController::class)->shallow();
-        Route::resource('meals.food-items', \App\Http\Controllers\Diet\FoodItemController::class)->shallow();
     });
 
     // Calendar route - accessible to all authenticated users
@@ -122,17 +87,6 @@ Route::middleware('auth')->group(function () {
         // Instructor routes
         Route::get('/api/instructors', [\App\Http\Controllers\AdminController::class, 'getCoaches']);
     });
-
-    // Generic dashboard route that redirects based on role
-    Route::get('/dashboard', function () {
-        if (auth()->user()->isAdmin()) {
-            return redirect()->route('admin.dashboard');
-        } elseif (auth()->user()->isCoach()) {
-            return redirect()->route('coach.dashboard');
-        } else {
-            return redirect()->route('player.dashboard');
-        }
-    })->name('dashboard');
 
     // Message routes (available to all authenticated users)
     Route::resource('messages', MessageController::class)->except(['edit', 'update']);
