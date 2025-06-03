@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\MealPlan; // Assuming a MealPlan model exists
+use App\Models\Meal; // Assuming a MealPlan model exists
 
 class MealPlanController extends Controller
 {
@@ -15,7 +15,7 @@ class MealPlanController extends Controller
     public function index()
     {
         // Fetch meal plans here
-        $mealPlans = MealPlan::all();
+        $mealPlans = Meal::all();
 
         return view('diet.meal_plans.index', compact('mealPlans'));
     }

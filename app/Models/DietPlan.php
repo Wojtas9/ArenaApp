@@ -8,6 +8,7 @@ class DietPlan extends Model
 {
     protected $fillable = [
         'user_id',
+        'nutritional_goal_id',  
         'name',
         'description',
         'start_date',

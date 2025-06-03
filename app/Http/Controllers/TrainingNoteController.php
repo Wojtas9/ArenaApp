@@ -100,7 +100,7 @@ class TrainingNoteController extends Controller
             'training_date' => 'required|date',
             'duration' => 'nullable|integer',
             'intensity' => 'nullable|string|max:50',
-            'description' => 'nullable|string', // Add this line
+            'description' => 'nullable|string', 
             'exercises' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);

@@ -16,8 +16,8 @@ class DietController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $nutritionalGoals = $user->nutritionalGoals()->latest()->get();
-        $dietPlans = $user->dietPlans()->with('meals.foodItems')->latest()->get();
+        $nutritionalGoals = NutritionalGoal::where('user_id', $user->id)->latest()->get();
+        $dietPlans = DietPlan::where('user_id', $user->id)->with('meals.foodItems')->latest()->get();
 
         return view('diet.index', compact('nutritionalGoals', 'dietPlans'));
     }
@@ -25,7 +25,7 @@ class DietController extends Controller
     public function indexNutritionalGoals()
     {
         $user = Auth::user();
-        $nutritionalGoals = $user->nutritionalGoals()->latest()->get();
+        $nutritionalGoals = NutritionalGoal::where('user_id', $user->id)->latest()->get();
         return view('diet.nutritional-goals.index', compact('nutritionalGoals'));
     }
 
@@ -37,29 +37,56 @@ class DietController extends Controller
     public function storeNutritionalGoal(Request $request)
     {
         $validated = $request->validate([
-            'target_calories' => 'required|integer|min:0',
-            'target_proteins' => 'required|numeric|min:0',
-            'target_carbohydrates' => 'required|numeric|min:0',
-            'target_fats' => 'required|numeric|min:0',
+            'daily_calories_target' => 'required|integer|min:0',
+            'daily_proteins_target' => 'required|numeric|min:0',
+            'daily_carbohydrates_target' => 'required|numeric|min:0',
+            'daily_fats_target' => 'required|numeric|min:0',
+            'daily_fiber_target' => 'nullable|numeric|min:0',
+            'dietary_restrictions' => 'nullable|string',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after:start_date',
             'notes' => 'nullable|string'
         ]);
 
-        $nutritionalGoal = Auth::user()->nutritionalGoals()->create($validated);
+        $nutritionalGoal = NutritionalGoal::create(array_merge($validated, ['user_id' => Auth::id()]));
 
         return redirect()->route('diet.index')->with('success', 'Nutritional goal created successfully.');
     }
 
+    public function updateNutritionalGoal(Request $request, NutritionalGoal $nutritionalGoal)
+    {
+if (Auth::id() !== $nutritionalGoal->user_id) {
+    abort(403, 'Unauthorized action.');
+}
+        
+        $validated = $request->validate([
+            'daily_calories_target' => 'required|integer|min:0',
+            'daily_proteins_target' => 'required|numeric|min:0',
+            'daily_carbohydrates_target' => 'required|numeric|min:0',
+            'daily_fats_target' => 'required|numeric|min:0',
+            'daily_fiber_target' => 'nullable|numeric|min:0',
+            'dietary_restrictions' => 'nullable|string',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after:start_date',
+            'notes' => 'nullable|string'
+        ]);
+    
+        $nutritionalGoal->update($validated);
+    
+        return redirect()->route('diet.index')->with('success', 'Nutritional goal updated successfully.');
+    }
+
     public function editNutritionalGoal(NutritionalGoal $nutritionalGoal)
     {
-        $this->authorize('update', $nutritionalGoal);
+if (Auth::id() !== $nutritionalGoal->user_id) {
+    abort(403, 'Unauthorized action.');
+}
         return view('diet.nutritional-goals.edit', compact('nutritionalGoal'));
     }
 
     public function createDietPlan()
     {
-        $nutritionalGoals = Auth::user()->nutritionalGoals()->latest()->get();
+        $nutritionalGoals = NutritionalGoal::where('user_id', Auth::id())->latest()->get();
         return view('diet.diet-plans.create', compact('nutritionalGoals'));
     }
 
@@ -73,28 +100,9 @@ class DietController extends Controller
             'end_date' => 'nullable|date|after:start_date'
         ]);
 
-        $dietPlan = Auth::user()->dietPlans()->create($validated);
+        $dietPlan = DietPlan::create(array_merge($validated, ['user_id' => Auth::id()]));
 
         return redirect()->route('diet.index')->with('success', 'Diet plan created successfully.');
-    }
-
-    public function updateNutritionalGoal(Request $request, NutritionalGoal $nutritionalGoal)
-    {
-        $this->authorize('update', $nutritionalGoal);
-
-        $validated = $request->validate([
-            'target_calories' => 'required|integer|min:0',
-            'target_proteins' => 'required|numeric|min:0',
-            'target_carbohydrates' => 'required|numeric|min:0',
-            'target_fats' => 'required|numeric|min:0',
-            'end_date' => 'nullable|date|after:start_date',
-            'notes' => 'nullable|string',
-            'status' => 'required|in:active,completed,archived'
-        ]);
-
-        $nutritionalGoal->update($validated);
-
-        return redirect()->route('diet.index')->with('success', 'Nutritional goal updated successfully.');
     }
 
     public function indexDietPlans()
@@ -122,8 +130,10 @@ class DietController extends Controller
 
     public function editDietPlan(DietPlan $dietPlan)
     {
-        $this->authorize('update', $dietPlan);
-        $nutritionalGoals = Auth::user()->nutritionalGoals()->latest()->get();
+if (Auth::id() !== $dietPlan->user_id) {
+    abort(403, 'Unauthorized action.');
+}
+        $nutritionalGoals = NutritionalGoal::where('user_id', Auth::id())->latest()->get();
         return view('diet.diet-plans.edit', compact('dietPlan', 'nutritionalGoals'));
     }
 

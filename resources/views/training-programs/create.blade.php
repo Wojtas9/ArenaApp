@@ -127,7 +127,7 @@
         const form = document.getElementById('program-form');
         form.addEventListener('submit', function() {
             document.getElementById('description').value = quill.root.innerHTML;
-            updateTodoListInput(); // Add this line to ensure todo list is updated before submission
+            updateTodoListInput();
         });
         
         // Todo List Functionality
