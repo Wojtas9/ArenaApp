@@ -1,15 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex mb-30 h-240 max-w-[1400px] mx-auto gap-6 relative z-20">
+<div class="bg-[#ebebeb] mt-25 p-6 relative overflow-hidden min-h-screen">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-0"
+        style="min-width:100vw;min-height:100vh;">
+        <source src="/movies/hero_animation.mp4" type="video/mp4">
+    </video>
+    <div class="fixed inset-0 bg-black/50 z-10"></div>
+    <div class="flex flex-col md:flex-row max-w-[1400px] mx-auto gap-6 relative z-20">
     <!-- Sidebar -->
     @include('layouts.partials.sidebar', [
         'sidebarIcon' => '👨‍💼',
         'sidebarTitle' => Auth::user()->name,
         'sidebarSubtitle' => ucfirst(Auth::user()->role),
-        'navLinks' => [
-            ['icon' => '📊', 'text' => 'Dashboard', 'href' => route('admin.dashboard'), 'active_check_route_name' => 'admin.dashboard'],
-            ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],            ]
+        'navLinks' => []
     ])
 
     <!-- Main Content -->
@@ -165,5 +170,6 @@
             });
         });
     </script>
-</body>
-</html>
+    </div>
+</div>
+@endsection

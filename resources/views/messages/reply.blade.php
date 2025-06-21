@@ -1,8 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+<div class="bg-[#ebebeb] mt-25 p-6 relative overflow-hidden min-h-screen">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-0"
+        style="min-width:100vw;min-height:100vh;">
+        <source src="/movies/hero_animation.mp4" type="video/mp4">
+    </video>
+    <div class="fixed inset-0 bg-black/50 z-10"></div>
+    <div class="flex flex-col md:flex-row max-w-[1400px] mx-auto gap-6 relative z-20">
+    <!-- Sidebar -->
+    @include('layouts.partials.sidebar', [
+        'sidebarIcon' => '💬',
+        'sidebarTitle' => Auth::user()->name,
+        'sidebarSubtitle' => ucfirst(Auth::user()->role),
+        'navLinks' => []
+    ])
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Reply to Message</h1>
             <a href="{{ route('messages.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
@@ -55,6 +71,7 @@
                 </button>
             </div>
         </form>
+    </div>
     </div>
 </div>
 @endsection

@@ -28,11 +28,11 @@
                     <span class="text-xl">👥</span>
                     <span>User Management</span>
                 </a>
-                <a href="{{ route('spots.index') }}"
+                {{-- <a href="{{ route('spots.index') }}"
                    class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('spots.index') ? 'bg-[#0B2558]' : '' }}">
                     <span class="text-xl">🏟️</span>
                     <span>Spot Management</span>
-                </a>
+                </a> --}}
             @endif
 
             {{-- Coach Links --}}
@@ -58,7 +58,7 @@
                      <span>Training Notes</span> 
                  </a> 
                  <a href="{{ route('coach-profiles.search') }}" 
-                 class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('training-notes.index')? 'bg-[#0B2558]' : '' }}"> 
+                 class="flex items-center gap-3 p-3 rounded hover:bg-[#0B2558] transition-colors {{ request()->routeIs('coach-profiles.search') ? 'bg-[#0B2558]' : '' }}"> 
                   <span class="text-xl">👨‍🏫</span> 
                   <span>Find Coaches</span> 
               </a> 

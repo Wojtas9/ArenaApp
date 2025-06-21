@@ -107,7 +107,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         
         // Prevent deleting yourself
-        if ($user->id === auth()->id()) {
+        if ($user->id === auth()->guard()->id()) {
             return redirect()->route('admin.users')->with('error', 'You cannot delete your own account');
         }
         
@@ -127,7 +127,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         
         // Prevent blocking yourself
-        if ($user->id === auth()->id()) {
+        if ($user->id === auth()->guard()->id()) {
             return redirect()->route('admin.users')->with('error', 'You cannot block your own account');
         }
         
@@ -137,6 +137,6 @@ class AdminController extends Controller
         $message = $user->is_blocked ? 'User blocked successfully' : 'User unblocked successfully';
         return redirect()->route('admin.users')->with('success', $message);
 
-        return view('dashboard.admin');
+       // return view('dashboard.admin');
     }
 }

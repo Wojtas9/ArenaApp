@@ -15,8 +15,7 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        // Use the hasRole method from Spatie's HasRoles trait
-        // This checks against the roles in the role_has_permissions table
+        // Uses Spatie's hasRole method
         if (!$request->user() || !$request->user()->hasRole($role)) {
             return redirect()->route('home')->with('error', 'You do not have permission to access this page.');
         }

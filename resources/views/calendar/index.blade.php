@@ -17,7 +17,7 @@
 
 
     <!-- Main Content -->
-    <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg drop-shadow-xl/50 flex flex-col h-full">
+    <div class="flex-1 p-4 bg-white rounded-2xl shadow-lg drop-shadow-xl/50 flex flex-col h-full">
         <div class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-2">
@@ -33,9 +33,9 @@
             </button>
         </div>
 
-        <div class="grid grid-cols-4 gap-6 flex-1 min-h-0">
+        <div class="grid grid-cols-5 gap-4 flex-1 min-h-0">
             <!-- Main Calendar -->
-            <div class="col-span-3 h-full">
+            <div class="col-span-4 h-full">
                 <div id="calendar" class="h-full"></div>
                 
             </div>

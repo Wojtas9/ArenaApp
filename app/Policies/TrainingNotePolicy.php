@@ -31,7 +31,8 @@ class TrainingNotePolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === 'player';
+       
+        return $user->hasRole('player');
     }
 
     /**
