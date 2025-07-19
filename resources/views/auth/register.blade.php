@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Register - ArenApp</title>
+    <title>Register - ArenaApp</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
@@ -172,7 +172,7 @@
         </a>
         <div class="login-form-section">
             <div class="form-container">
-                <h1 class="text-2xl font-bold mb-6">ArenApp</h1>
+                <h1 class="text-2xl font-bold mb-6">ArenaApp</h1>
                 <h2 class="text-xl font-bold mb-2">Create your account</h2>
                 <p class="text-gray-400 mb-6">We take your security very seriously</p>
                 

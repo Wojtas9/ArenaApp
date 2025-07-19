@@ -341,6 +341,9 @@
                 return response.json();
             })
             .then(categories => {
+                // Store categories globally
+                window.categories = categories;
+                
                 // Populate categories in the sidebar
                 const categoriesContainer = document.getElementById('categories-container');
                 categoriesContainer.innerHTML = '';

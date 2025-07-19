@@ -23,7 +23,7 @@
                     ],
                     [
                         'icon' => '🏟️',
-                        'text' => 'Spots Management',
+                        'text' => 'Spots',
                         'href' => route('spots.index'),
                         'active_check_route_name' => 'spots.index',
                     ],

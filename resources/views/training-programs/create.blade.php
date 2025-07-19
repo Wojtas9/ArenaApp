@@ -15,7 +15,7 @@
             'sidebarSubtitle' => ucfirst(Auth::user()->role),
             'navLinks' => [
                 ['icon' => '👥', 'text' => 'User Management', 'href' => route('admin.users'), 'active_check_route_name' => 'admin.users'],
-                ['icon' => '🏟️', 'text' => 'Spots Management', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
+                ['icon' => '🏟️', 'text' => 'Spots', 'href' => route('spots.index'), 'active_check_route_name' => 'spots.index'],
             ],
         ])
         

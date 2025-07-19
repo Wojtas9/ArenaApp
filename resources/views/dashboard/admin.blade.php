@@ -36,7 +36,7 @@
                 <div class="flex-1 p-8 bg-white rounded-2xl shadow-lg drop-shadow-xl/50">
                     <!-- Top Bar -->
                     <div class="flex justify-between items-center mb-8">
-                        <h1 class="text-2xl font-bold">Coach Dashboard</h1>
+                        <h1 class="text-2xl font-bold">Admin Dashboard</h1>
                         <div class="flex items-center gap-4">
                             <div class="relative">
                                 <input type="text" placeholder="Search..."
@@ -114,13 +114,11 @@
                             </div>
                             <div class="relative w-64 h-64 mx-auto mb-6">
                                 <canvas id="rolesChart"></canvas>
-
                             </div>
                             <div class="space-y-4">
                                 <div class="flex justify-between items-center">
                                     <span class="flex items-center gap-2">
                                         <span class="w-3 h-3 rounded-full bg-[#CF5B44]"></span>
-
                                         <span>Admin</span>
                                     </span>
                                     <span>{{ $roleStats['admin'] }} users</span>

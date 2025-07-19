@@ -112,21 +112,25 @@
         const eventForm = document.getElementById('event-form');
         const notification = document.getElementById('success-notification');
         
-        // Use the global calendar instance
-        
-        // Load categories
-        fetch('/api/categories')
-            .then(response => response.json())
-            .then(categories => {
-                const categorySelect = document.getElementById('event-category');
-                categories.forEach(category => {
+        // Use the global calendar instance and categories
+        function loadCategories() {
+            const categorySelect = document.getElementById('event-category');
+            // Clear existing options except the first one
+            while (categorySelect.options.length > 1) {
+                categorySelect.remove(1);
+            }
+            
+            // Use the categories that were already loaded in the main calendar view
+            if (window.categories) {
+                window.categories.forEach(category => {
                     const option = document.createElement('option');
                     option.value = category.id;
                     option.textContent = category.name;
                     option.dataset.color = category.color;
                     categorySelect.appendChild(option);
                 });
-            });
+            }
+        }
         
         // Load spots (venues)
         fetch('/api/spots')
@@ -158,6 +162,9 @@
         createButton.addEventListener('click', function() {
             modal.classList.remove('hidden');
             document.getElementById('calendar').classList.add('blur-effect');
+            
+            // Load categories when opening the modal
+            loadCategories();
             
             // Set default start and end times
             const now = new Date();
