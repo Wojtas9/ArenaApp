@@ -1,9 +1,24 @@
-Paleta kolorów 
+Aplikacja do zarządzania wynajmem hal sportowych i organizacji treningów zespołowych. Projekt oparty na Laravel 12, wykorzystujący wzorzec MVC.
 
-#E2EFFE
-#EAAD59
-#CF5B44
-#8C508F
-#0B2558
+Główne funkcjonalności
+- Rejestracja i logowanie użytkowników (Laravel Breeze)
+- Role: administrator, trener, uczestnik (Spatie Permissions)
+- Dodawanie i zarządzanie obiektami sportowymi
+- Tworzenie programów treningowych
+- Kalendarz treningów (FullCalendar)
 
-C:\inz_new\arenapp\public\example\color_scheme.md
+Wymagania systemowe
+- PHP >= 8.2
+- Composer
+- Node.js & npm
+- MySQL
+
+Instrukcja instalacji (dev)
+git clone https://github.com/twoj-user/ArenaApp.git
+cd ArenaApp
+composer install
+npm install && npm run dev
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan serve
